@@ -12,6 +12,8 @@ HRESULT terrainTile::init(int xIndex, int yIndex, bool walkable, float moveRatio
 	setIndex(xIndex, yIndex);
 
 	_isPicked = false; 
+	_onUnit = NULL;
+
 	return S_OK;
 }
 

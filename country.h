@@ -29,4 +29,5 @@ public:
 	void render();
 
 	void addUnit(unit* newUnit);
+	vector<unit*>* getUnitList() { return &_unitList; }
 };

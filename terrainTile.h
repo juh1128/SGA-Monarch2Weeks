@@ -13,6 +13,9 @@ private:
 	int			_height;
 
 	bool		_isPicked;
+
+	//자기 타일 위에 있는 유닛
+	unit*	_onUnit;
 	
 public:
 	terrainTile() {}
@@ -34,4 +37,7 @@ public:
 
 	void setPicked(bool pick) { _isPicked = pick; }
 	bool isPicked() { return _isPicked; }
+
+	unit* getUnitOnTile() { return _onUnit; }
+	void setUnitOnTile(unit* onUnit) { _onUnit = onUnit; }
 };
