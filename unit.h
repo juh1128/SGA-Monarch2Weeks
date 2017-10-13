@@ -4,6 +4,7 @@
 
 class unit : public gameObject
 {
+private:
 public:
 	unit();
 	~unit();

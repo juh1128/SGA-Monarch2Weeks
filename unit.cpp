@@ -13,7 +13,7 @@ unit::~unit()
 
 HRESULT unit::init()
 {
-	gameObject::init("РЏДж", "unit");
+	gameObject::init("unit","greenKing");
 
 	return S_OK;
 }

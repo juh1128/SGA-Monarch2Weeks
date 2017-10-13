@@ -88,13 +88,11 @@
     <Filter Include="2DGameFramework\sceneBase\tileMap">
       <UniqueIdentifier>{f5679087-a897-4267-8209-85b0c93b0bbd}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
     <Filter Include="playGround\unit">
       <UniqueIdentifier>{089597ad-3f0d-4ac4-a728-efd40739a14e}</UniqueIdentifier>
-=======
+      </Filter>
     <Filter Include="playGround\country">
       <UniqueIdentifier>{0f495e24-fc80-4890-bf04-801b8a438f61}</UniqueIdentifier>
->>>>>>> 9d47e3899f651facaadc19ff643018ef3f226d48
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -200,16 +198,14 @@
     <ClInclude Include="tileMap.h">
       <Filter>2DGameFramework\sceneBase\tileMap</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="unit.h">
       <Filter>playGround\unit</Filter>
     </ClInclude>
     <ClInclude Include="king.h">
       <Filter>playGround\unit</Filter>
-=======
+      </ClInclude>
     <ClInclude Include="country.h">
       <Filter>playGround\country</Filter>
->>>>>>> 9d47e3899f651facaadc19ff643018ef3f226d48
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -306,16 +302,14 @@
     <ClCompile Include="tileMap.cpp">
       <Filter>2DGameFramework\sceneBase\tileMap</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="unit.cpp">
       <Filter>playGround\unit</Filter>
     </ClCompile>
     <ClCompile Include="king.cpp">
       <Filter>playGround\unit</Filter>
-=======
+      </ClCompile>
     <ClCompile Include="country.cpp">
       <Filter>playGround\country</Filter>
->>>>>>> 9d47e3899f651facaadc19ff643018ef3f226d48
     </ClCompile>
   </ItemGroup>
 </Project>
