@@ -50,10 +50,10 @@ public:
 	//피킹 관련
 	static vector2D getTileIndexFromPos(vector2D pos, int height = 0);
 	static vector2D getTilePosFromIndex(vector2D index, int height = 0);
-	//현재 마우스 위치에 있는 타일을 반환한다.
-	terrainTile* getTileFromMousePos();
 
 	terrainTile* getTile(int x, int y) { return _terrainTiles[y][x]; }
+	terrainTile* getPickedTile() { return _pickedTile; }
+	
 
 private:
 	static vector2D getHeightTableIndexFromPos(vector2D pos);
@@ -62,4 +62,7 @@ private:
 
 	static bool _isLoadedTile;
 	static void loadTileResource();
+
+	//현재 마우스 위치에 있는 타일을 반환한다.
+	terrainTile* getTileFromMousePos();
 };
