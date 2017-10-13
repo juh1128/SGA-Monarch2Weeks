@@ -4,7 +4,7 @@
 HINSTANCE	_hInstance;		//APP 고유번호
 HWND		_hWnd;			//조작질
 
-LPTSTR _lpszClass = TEXT("Omicron 다이렉트2D");
+LPTSTR _lpszClass = TEXT("SGA 모나크모나크");
 
 POINT _ptMouse;
 bool  _isDebugMode;

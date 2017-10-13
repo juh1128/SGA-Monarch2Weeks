@@ -114,6 +114,11 @@ void tileMap::render()
 		vector2D right = this->getHeightTablePosFromIndex(vector2D(index.x + 1, index.y));
 		vector2D bottom = this->getHeightTablePosFromIndex(vector2D(index.x + 1, index.y + 1));
 
+		top = CAMERA->getRelativeVector2D(top);
+		left = CAMERA->getRelativeVector2D(left);
+		right = CAMERA->getRelativeVector2D(right);
+		bottom = CAMERA->getRelativeVector2D(bottom);
+
 		IMAGEMANAGER->drawLine(top, left, DefaultBrush::yello);
 		IMAGEMANAGER->drawLine(left, bottom, DefaultBrush::yello);
 		IMAGEMANAGER->drawLine(bottom, right, DefaultBrush::yello);
@@ -341,6 +346,9 @@ void tileMap::loadTileResource()
 			} while (_findnext(handle, &fd) == 0);
 			_findclose(handle);
 		}
+		
+		IMAGEMANAGER->addFrameImage("≥Ù¿Ã∏ ", L"resource/tiles/heightMap.png", 10, 1);
 	}
+
 	_isLoadedTile = true;
 }

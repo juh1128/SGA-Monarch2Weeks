@@ -19,5 +19,5 @@
 *.out
 *.app
 .vs/
-.debug/
-.release/
+Debug/
+Release/

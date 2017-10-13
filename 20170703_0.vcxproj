@@ -15,7 +15,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>My20170703_0</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
-    <ProjectName>3단레이어 맵툴</ProjectName>
+    <ProjectName>모나크모나크</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -86,6 +86,7 @@
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="country.h" />
     <ClInclude Include="effect.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
@@ -132,6 +133,7 @@
     </ClCompile>
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="character.cpp" />
+    <ClCompile Include="country.cpp" />
     <ClCompile Include="effect.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>

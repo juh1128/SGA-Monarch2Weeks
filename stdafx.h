@@ -48,7 +48,7 @@ using namespace UTIL;
 // ## 디파인 문 ## 17.07.03 ##
 //========================================
 
-#define WINNAME (LPTSTR)(TEXT("Omicron 다이렉트2D"))
+#define WINNAME (LPTSTR)(TEXT("SGA 모나크모나크"))
 #define WINSTARTX 80
 #define WINSTARTY 0
 #define WINSIZEX 1024
