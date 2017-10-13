@@ -99,6 +99,7 @@
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="json.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="king.h" />
     <ClInclude Include="objectFactory.h" />
     <ClInclude Include="pathFinder.h" />
     <ClInclude Include="playGround.h" />
@@ -120,6 +121,7 @@
     <ClInclude Include="trigger.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="unit.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="vector2D.h" />
     <ClInclude Include="world.h" />
@@ -144,6 +146,7 @@
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="json.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="king.cpp" />
     <ClCompile Include="objectFactory.cpp" />
     <ClCompile Include="pathFinder.cpp" />
     <ClCompile Include="playGround.cpp" />
@@ -166,6 +169,7 @@
     <ClCompile Include="trigger.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="unit.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="winMain.cpp" />

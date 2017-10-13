@@ -17,6 +17,7 @@ HRESULT playGround::init(void)
 
 	//초기 시작 씬 생성
 	SCENEMANAGER->pushScene(new testScene);
+	IMAGEMANAGER->addFrameImage("unit", L"resource/unit/greenLv1.png",8,1,false);
 
 	return S_OK;
 }
