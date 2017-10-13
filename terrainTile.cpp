@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "terrainTile.h"
-
+#include "unit.h"
 
 HRESULT terrainTile::init(int xIndex, int yIndex, bool walkable, float moveRatio, string key)
 {
@@ -26,6 +26,16 @@ void terrainTile::setIndex(int x, int y)
 vector2D terrainTile::getCenterPos()
 {
 	return std::move(vector2D(_pos.x, _pos.y + (tileMap::getTileSize().y*0.5f)));
+}
+
+unit * terrainTile::getUnitOnTile()
+{
+	return _onUnit; 
+}
+
+void terrainTile::setUnitOnTile(unit * onUnit)
+{
+	_onUnit = onUnit;
 }
 
 void terrainTile::release()

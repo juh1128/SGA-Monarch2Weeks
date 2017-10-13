@@ -1,5 +1,6 @@
 #pragma once
 
+class unit;
 
 class terrainTile : public gameObject
 {
@@ -38,6 +39,6 @@ public:
 	void setPicked(bool pick) { _isPicked = pick; }
 	bool isPicked() { return _isPicked; }
 
-	unit* getUnitOnTile() { return _onUnit; }
-	void setUnitOnTile(unit* onUnit) { _onUnit = onUnit; }
+	unit* getUnitOnTile();
+	void setUnitOnTile(unit* onUnit);
 };

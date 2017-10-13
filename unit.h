@@ -9,7 +9,7 @@
 
 class unit : public gameObject
 {
-private
+private:
 	vector2D _index;
 public:
 	unit();

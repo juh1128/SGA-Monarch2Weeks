@@ -36,7 +36,7 @@ void unit::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
-		POINT temp = WORLD->getMap()->getTileFromMousePos()->getIndex();
+		POINT temp = WORLD->getMap()->getPickedTile()->getIndex();
 		this->sendMessage("move", 0, 0, 0, (POINT)temp);
 	}
 }
