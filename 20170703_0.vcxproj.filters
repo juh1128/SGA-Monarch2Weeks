@@ -88,6 +88,9 @@
     <Filter Include="2DGameFramework\sceneBase\tileMap">
       <UniqueIdentifier>{f5679087-a897-4267-8209-85b0c93b0bbd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\country">
+      <UniqueIdentifier>{0f495e24-fc80-4890-bf04-801b8a438f61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -192,6 +195,9 @@
     <ClInclude Include="tileMap.h">
       <Filter>2DGameFramework\sceneBase\tileMap</Filter>
     </ClInclude>
+    <ClInclude Include="country.h">
+      <Filter>playGround\country</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -286,6 +292,9 @@
     </ClCompile>
     <ClCompile Include="tileMap.cpp">
       <Filter>2DGameFramework\sceneBase\tileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="country.cpp">
+      <Filter>playGround\country</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

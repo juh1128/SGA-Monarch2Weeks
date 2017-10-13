@@ -86,6 +86,7 @@
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="country.h" />
     <ClInclude Include="effect.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
@@ -130,6 +131,7 @@
     </ClCompile>
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="character.cpp" />
+    <ClCompile Include="country.cpp" />
     <ClCompile Include="effect.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
