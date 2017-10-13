@@ -1,13 +1,20 @@
 #pragma once
 #include "tileMap.h"
+#include "country.h"
 
 #define MAX_LAYER 5
+
+class unit;
 
 //씬 내에서 오브젝트들을 총괄하는 클래스다.
 class world
 {
 private:
+	//오브젝트 리스트
 	vector<gameObject*> _objectList[MAX_LAYER];
+
+	//국가 리스트 (유닛 관리)
+	country*			_country[CountryColor::END];
 
 	//타일맵 정보
 	tileMap*			_tileMap;
@@ -29,6 +36,13 @@ public:
 	vector<gameObject*> findObjects(string name);
 	
 	vector<gameObject*> findObjects(string name, int priorityNum);
+
+
+	//===============================================
+	// ## 유닛, 국가 관련 ##
+	//===============================================
+	void addUnit(unit* newUnit, CountryColor::Enum countryColor);
+	country* getCountry(CountryColor::Enum color);
 
 
 	//===============================================

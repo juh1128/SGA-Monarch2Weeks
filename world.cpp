@@ -1,16 +1,30 @@
 #include "stdafx.h"
 #include "world.h"
+#include "unit.h"
 
 void world::init()
 {
 	_tileMap = NULL;
+	for (int i = 0; i < CountryColor::END; ++i)
+	{
+		_country[i] = NULL;
+	}
 }
 
 void world::update()
 {
+	//Å¸ÀÏ¸Ê ¾÷µ¥ÀÌÆ®
 	if (_tileMap)
 		_tileMap->update();
 
+	//À¯´Ö ¾÷µ¥ÀÌÆ®
+	for (int i = 0; i < CountryColor::END; ++i)
+	{
+		if(_country[i])
+			_country[i]->update();
+	}
+
+	//¿ÀºêÁ§Æ® ¾÷µ¥ÀÌÆ®
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
 		for (unsigned int j = 0; j < _objectList[i].size(); ++j)
@@ -41,6 +55,13 @@ void world::render()
 	//Å¸ÀÏ¸Ê ·»´õ¸µ
 	if(_tileMap)
 		_tileMap->render();
+
+	//À¯´Ö ·»´õ¸µ
+	for (int i = 0; i < CountryColor::END; ++i)
+	{
+		if (_country[i])
+			_country[i]->render();
+	}
 
 	//¿ÀºêÁ§Æ® ·»´õ¸µ
 	for (int i = 0; i < MAX_LAYER; ++i)
@@ -122,8 +143,19 @@ vector<gameObject*> world::findObjects(string name, int priorityNum)
 	return std::move(result);
 }
 
+void world::addUnit(unit * newUnit, CountryColor::Enum countryColor)
+{
+	_country[countryColor]->addUnit(newUnit);
+}
+
+country * world::getCountry(CountryColor::Enum color)
+{
+	return _country[color];
+}
+
 void world::release()
 {
+	//¿ÀºêÁ§Æ® ÇØÁ¦
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
 		for (int j = (int)_objectList[i].size() - 1; j >= 0; --j)
@@ -133,6 +165,17 @@ void world::release()
 			_objectList[i].pop_back();
 		}
 	}
+
+	//±¹°¡ ÇØÁ¦
+	for (int i = 0; i < CountryColor::END; ++i)
+	{
+		_country[i]->release();
+		delete _country[i];
+		_country[i] = NULL;
+	}
+
+
+	//Å¸ÀÏ¸Ê ÇØÁ¦
 	releaseTiles();
 }
 
