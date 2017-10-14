@@ -5,7 +5,6 @@
 //static vector2D down(-2, 1);
 //static vector2D right(2,1);
 //static vector2D left(-2,-1);
-
 class unitState;
 
 class unit : public gameObject
@@ -31,7 +30,7 @@ public:
 	void update();
 	void render();
 
-	void moveCallBack(gameObject* dset);
+	void moveCallBack(POINT directionTile,gameObject* dest);
 	void changeState(unitState* newstate);
 };
 
@@ -60,12 +59,15 @@ class unitOneStep : public unitState
 private:
 	vector2D _destPos;
 	terrainTile* _destTile;
+	vector2D _directionIndex;
 	int _destheight;
 	float _moveRatio;
 public:
-	unitOneStep(terrainTile* tile)
+	unitOneStep(terrainTile* tile,POINT direction)
 	{
 		_destTile = tile;
+		_directionIndex.x = direction.x;
+		_directionIndex.y = direction.y;
 	}
 	virtual void enter(unit& unit);
 	virtual void update(unit& unit);
