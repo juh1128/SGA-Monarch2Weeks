@@ -97,21 +97,22 @@ void unit::update()
 		this->sendMessage("move", 0, 0, 0, destp, vr);
 		vr.clear();
 	}
+
 	_unitState->update(*this);
 }
 
 void unit::render()
 {
+	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
+	int height = tile->getHeight();
+	float heightUnit = tileMap::getTileSize().y * 0.5f;
 
-	//높이보정
-	//terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
-	//_pos = WORLD->getMap()->getTilePosFromIndex(_index, tile->getHeight());
 	_scale = vector2D(CAMERA->getZoom(), CAMERA->getZoom());
 	if (_image)
 	{
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
-		_image->frameRender(_pos.x*CAMERA->getZoom(), _pos.y*CAMERA->getZoom(), 0, 0, _pivot);
+		_image->frameRender(_pos.x*CAMERA->getZoom(), (_pos.y-height*heightUnit)*CAMERA->getZoom(), 0, 0, _pivot);
 	}
 
 }
@@ -120,7 +121,7 @@ void unit::moveCallBack(POINT directionTile, gameObject* dest)
 {
 	if (directionTile.x < 0 ||
 		directionTile.y < 0 
-		
+		//추가해야됨 타일최대 갯수
 		)
 	{
 		return changeState(new unitNoneState);
@@ -146,17 +147,21 @@ void unitOneStep::enter(unit & unit)
 	//목적지를 못받아옴 에러 or 이상한곳찍음
 	if (!_destTile) return unit.changeState(new unitNoneState);
 	if(abs(_destTile->getHeight()-WORLD->getMap()->getTile(unit._index.x,unit._index.y)->getHeight())>=2) return unit.changeState(new unitNoneState);
+	
 	_zoom = CAMERA->getZoom();
-	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex())/_zoom;
+	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex()) / _zoom;
+	
 }
 
 void unitOneStep::update(unit & unit)
 {
+	//줌이 바뀌면 목적pos를 다시 계산
 	if (_zoom != CAMERA->getZoom())
 	{
 		_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex()) / CAMERA->getZoom();
 		_zoom = CAMERA->getZoom();
 	}
+
 	vector2D dis = _destPos - unit._pos;
 	_moveRatio = WORLD->getTileMoveRatio(unit._index.x, unit._index.y);
 
@@ -173,6 +178,7 @@ void unitOneStep::update(unit & unit)
 	else
 	{
 		unit._pos = unit._pos + dis.normalize()*unit._moveSpeed*_moveRatio;
+
 
 	}
 	
