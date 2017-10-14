@@ -65,6 +65,7 @@ private:
 	vector2D _directionIndex;
 	int _destheight;
 	float _moveRatio;
+	float _zoom;
 public:
 	unitOneStep(terrainTile* tile,POINT direction)
 	{

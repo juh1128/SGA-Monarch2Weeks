@@ -146,12 +146,17 @@ void unitOneStep::enter(unit & unit)
 	//목적지를 못받아옴 에러 or 이상한곳찍음
 	if (!_destTile) return unit.changeState(new unitNoneState);
 	if(abs(_destTile->getHeight()-WORLD->getMap()->getTile(unit._index.x,unit._index.y)->getHeight())>=2) return unit.changeState(new unitNoneState);
-	
-	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex());
+	_zoom = CAMERA->getZoom();
+	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex())/_zoom;
 }
 
 void unitOneStep::update(unit & unit)
 {
+	if (_zoom != CAMERA->getZoom())
+	{
+		_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex()) / CAMERA->getZoom();
+		_zoom = CAMERA->getZoom();
+	}
 	vector2D dis = _destPos - unit._pos;
 	_moveRatio = WORLD->getTileMoveRatio(unit._index.x, unit._index.y);
 
