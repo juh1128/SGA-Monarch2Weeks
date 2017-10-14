@@ -90,7 +90,7 @@
     </Filter>
     <Filter Include="playGround\unit">
       <UniqueIdentifier>{089597ad-3f0d-4ac4-a728-efd40739a14e}</UniqueIdentifier>
-      </Filter>
+    </Filter>
     <Filter Include="playGround\country">
       <UniqueIdentifier>{0f495e24-fc80-4890-bf04-801b8a438f61}</UniqueIdentifier>
     </Filter>
@@ -203,7 +203,7 @@
     </ClInclude>
     <ClInclude Include="king.h">
       <Filter>playGround\unit</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="country.h">
       <Filter>playGround\country</Filter>
     </ClInclude>
@@ -307,7 +307,7 @@
     </ClCompile>
     <ClCompile Include="king.cpp">
       <Filter>playGround\unit</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="country.cpp">
       <Filter>playGround\country</Filter>
     </ClCompile>

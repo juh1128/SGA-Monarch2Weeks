@@ -1,10 +1,10 @@
 #pragma once
+#include "sceneBase.h"
 #include "unit.h"
 
 class testScene : public sceneBase
 {
 private:
-	unit* _unitOne;
 
 public:
 	virtual HRESULT init();
