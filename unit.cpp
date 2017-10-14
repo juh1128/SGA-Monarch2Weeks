@@ -19,7 +19,7 @@ HRESULT unit::init()
 
 	this->addCallback("move", [&](tagMessage msg)
 	{
-		this->moveCallBack(msg.targetList[0]);
+		this->moveCallBack(msg.ptData,msg.targetList[0]);
 	});
 	
 	_unitState = new unitNoneState;
@@ -35,13 +35,18 @@ void unit::update()
 {
 	gameObject::update();
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
-		gameObject* temp = WORLD->getMap()->getPickedTile();
-	
+		//gameObject* temp = WORLD->getMap()->getPickedTile();
+		vector2D right(1, 0);
+		vector2D dest = _index + right;
+		POINT destp;
+		destp.x = dest.x;
+		destp.y = dest.y;
+		gameObject* temp = WORLD->getMap()->getTile(dest.x, dest.y);
 		vector<gameObject*> vr;
 		vr.push_back(temp);
-		this->sendMessage("move", 0, 0, 0, POINT(),vr);
+		this->sendMessage("move", 0, 0, 0, destp,vr);
 		vr.clear();
 	}
 	_unitState->update(*this);
@@ -50,18 +55,17 @@ void unit::update()
 void unit::render()
 {
 	//높이보정
-	vector2D temp(_index.x, _index.y);
-	terrainTile* tile = WORLD->getMap()->getTilePosFromIndex(_index.x, _index.y);
-	_pos = WORLD->
+	//terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
+	//_pos = WORLD->getMap()->getTilePosFromIndex(_index, tile->getHeight());
 
 	_scale = vector2D(CAMERA->getZoom(),CAMERA->getZoom());
 	gameObject::frameRender(0,0);
 
 }
 
-void unit::moveCallBack(gameObject* dest)
+void unit::moveCallBack(POINT directionTile, gameObject* dest)
 {
-	changeState(new unitOneStep((terrainTile*)dest));
+	changeState(new unitOneStep((terrainTile*)dest, directionTile));
 
 }
 
@@ -92,6 +96,7 @@ void unitOneStep::update(unit & unit)
 	if (dis.getLength() <= unit._moveSpeed * _moveRatio)
 	{
 		unit._pos = _destPos;
+		unit._index = _directionIndex;
 		unit.changeState(new unitNoneState);
 	}
 	else
@@ -99,4 +104,5 @@ void unitOneStep::update(unit & unit)
 		unit._pos = unit._pos + dis.normalize()*unit._moveSpeed*_moveRatio;
 
 	}
+	
 }
