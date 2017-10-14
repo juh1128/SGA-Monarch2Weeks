@@ -24,6 +24,8 @@ HRESULT unit::init()
 	
 	_unitState = new unitNoneState;
 	_moveSpeed = 3.0f;
+	_livedTime = 0;
+
 	return S_OK;
 }
 
@@ -34,6 +36,8 @@ void unit::release()
 void unit::update()
 {
 	gameObject::update();
+
+	_livedTime += TIMEMANAGER->getElapsedTime();
 
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
@@ -92,6 +96,9 @@ void unitOneStep::update(unit & unit)
 {
 	vector2D dis = _destPos - unit._pos;
 	_moveRatio = WORLD->getTileMoveRatio(unit._index.x, unit._index.y);
+
+	//여기서 프레임계산
+	unitdirection(unit);
 
 	if (dis.getLength() <= unit._moveSpeed * _moveRatio)
 	{

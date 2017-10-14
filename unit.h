@@ -16,6 +16,9 @@ private:
 
 	float _moveSpeed;
 	int _imageFrameX;
+	int _imageFrameY;
+
+	float _livedTime;
 
 	friend class unitNoneState;
 	friend class unitOneStep;
