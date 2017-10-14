@@ -15,8 +15,10 @@ HRESULT unit::init()
 {
 	gameObject::init("unit","greenKing");
 
-	_pos.x = _pos.y = _index.x = _index.y = 0;
-
+	_index.y = 0;
+	_index.x = 0;
+	_pos.x = _pos.y = 0;
+	
 	this->addCallback("move", [&](tagMessage msg)
 	{
 		this->moveCallBack(msg.ptData,msg.targetList[0]);
@@ -53,22 +55,76 @@ void unit::update()
 		this->sendMessage("move", 0, 0, 0, destp,vr);
 		vr.clear();
 	}
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+	{
+		//gameObject* temp = WORLD->getMap()->getPickedTile();
+		vector2D left(-1, 0);
+		vector2D dest = _index + left;
+		POINT destp;
+		destp.x = dest.x;
+		destp.y = dest.y;
+		gameObject* temp = WORLD->getMap()->getTile(dest.x, dest.y);
+		vector<gameObject*> vr;
+		vr.push_back(temp);
+		this->sendMessage("move", 0, 0, 0, destp, vr);
+		vr.clear();
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	{
+		//gameObject* temp = WORLD->getMap()->getPickedTile();
+		vector2D up(0, -1);
+		vector2D dest = _index + up;
+		POINT destp;
+		destp.x = dest.x;
+		destp.y = dest.y;
+		gameObject* temp = WORLD->getMap()->getTile(dest.x, dest.y);
+		vector<gameObject*> vr;
+		vr.push_back(temp);
+		this->sendMessage("move", 0, 0, 0, destp, vr);
+		vr.clear();
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	{
+		//gameObject* temp = WORLD->getMap()->getPickedTile();
+		vector2D down(0, 1);
+		vector2D dest = _index + down;
+		POINT destp;
+		destp.x = dest.x;
+		destp.y = dest.y;
+		gameObject* temp = WORLD->getMap()->getTile(dest.x, dest.y);
+		vector<gameObject*> vr;
+		vr.push_back(temp);
+		this->sendMessage("move", 0, 0, 0, destp, vr);
+		vr.clear();
+	}
 	_unitState->update(*this);
 }
 
 void unit::render()
 {
+
 	//높이보정
 	//terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
 	//_pos = WORLD->getMap()->getTilePosFromIndex(_index, tile->getHeight());
-
-	_scale = vector2D(CAMERA->getZoom(),CAMERA->getZoom());
-	gameObject::frameRender(0,0);
+	_scale = vector2D(CAMERA->getZoom(), CAMERA->getZoom());
+	if (_image)
+	{
+		_image->setAlphaOption(_alpha);
+		_image->setScaleOption(_scale);
+		_image->frameRender(_pos.x*CAMERA->getZoom(), _pos.y*CAMERA->getZoom(), 0, 0, _pivot);
+	}
 
 }
 
 void unit::moveCallBack(POINT directionTile, gameObject* dest)
 {
+	if (directionTile.x < 0 ||
+		directionTile.y < 0 
+		
+		)
+	{
+		return changeState(new unitNoneState);
+	}
 	changeState(new unitOneStep((terrainTile*)dest, directionTile));
 
 }
@@ -86,9 +142,11 @@ void unitNoneState::update(unit & unit)
 
 void unitOneStep::enter(unit & unit)
 {
+	
 	//목적지를 못받아옴 에러 or 이상한곳찍음
-	if (!_destTile) unit.changeState(new unitNoneState);
-
+	if (!_destTile) return unit.changeState(new unitNoneState);
+	if(abs(_destTile->getHeight()-WORLD->getMap()->getTile(unit._index.x,unit._index.y)->getHeight())>=2) return unit.changeState(new unitNoneState);
+	
 	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex());
 }
 
@@ -105,6 +163,7 @@ void unitOneStep::update(unit & unit)
 		unit._pos = _destPos;
 		unit._index = _directionIndex;
 		unit.changeState(new unitNoneState);
+		
 	}
 	else
 	{
