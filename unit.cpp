@@ -13,17 +13,17 @@ unit::~unit()
 
 HRESULT unit::init()
 {
-	gameObject::init("unit","greenKing");
+	gameObject::init("unit", "greenKing");
 
 	_index.y = 0;
 	_index.x = 0;
 	_pos.x = _pos.y = 0;
-	
+
 	this->addCallback("move", [&](tagMessage msg)
 	{
-		this->moveCallBack(msg.ptData,msg.targetList[0]);
+		this->moveCallBack(msg.ptData, msg.targetList[0]);
 	});
-	
+
 	_unitState = new unitNoneState;
 	_moveSpeed = 3.0f;
 	_livedTime = 0;
@@ -52,7 +52,7 @@ void unit::update()
 		gameObject* temp = WORLD->getMap()->getTile(dest.x, dest.y);
 		vector<gameObject*> vr;
 		vr.push_back(temp);
-		this->sendMessage("move", 0, 0, 0, destp,vr);
+		this->sendMessage("move", 0, 0, 0, destp, vr);
 		vr.clear();
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
@@ -103,15 +103,17 @@ void unit::update()
 void unit::render()
 {
 
-	//높이보정
-	//terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
-	//_pos = WORLD->getMap()->getTilePosFromIndex(_index, tile->getHeight());
+	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
+	int height = tile->getHeight();
+	float heightUnit = tileMap::getTileSize().y * 0.5f;
+
 	_scale = vector2D(CAMERA->getZoom(), CAMERA->getZoom());
+
 	if (_image)
 	{
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
-		_image->frameRender(_pos.x*CAMERA->getZoom(), _pos.y*CAMERA->getZoom(), 0, 0, _pivot);
+		_image->frameRender(_pos.x*CAMERA->getZoom(), (_pos.y - height*heightUnit)*CAMERA->getZoom(), 0, 0, _pivot);
 	}
 
 }
@@ -119,8 +121,8 @@ void unit::render()
 void unit::moveCallBack(POINT directionTile, gameObject* dest)
 {
 	if (directionTile.x < 0 ||
-		directionTile.y < 0 
-		
+		directionTile.y < 0
+		//최대타일 갯수 추가해야됨
 		)
 	{
 		return changeState(new unitNoneState);
@@ -142,12 +144,12 @@ void unitNoneState::update(unit & unit)
 
 void unitOneStep::enter(unit & unit)
 {
-	
+
 	//목적지를 못받아옴 에러 or 이상한곳찍음
 	if (!_destTile) return unit.changeState(new unitNoneState);
-	if(abs(_destTile->getHeight()-WORLD->getMap()->getTile(unit._index.x,unit._index.y)->getHeight())>=2) return unit.changeState(new unitNoneState);
+	if (abs(_destTile->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2) return unit.changeState(new unitNoneState);
 	_zoom = CAMERA->getZoom();
-	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex())/_zoom;
+	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex()) / _zoom;
 }
 
 void unitOneStep::update(unit & unit)
@@ -166,14 +168,19 @@ void unitOneStep::update(unit & unit)
 	if (dis.getLength() <= unit._moveSpeed * _moveRatio)
 	{
 		unit._pos = _destPos;
-		unit._index = _directionIndex;
 		unit.changeState(new unitNoneState);
-		
+
 	}
 	else
 	{
 		unit._pos = unit._pos + dis.normalize()*unit._moveSpeed*_moveRatio;
 
+		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
+		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() / 4)
+		{
+			unit._index = _directionIndex;
+
+		}
 	}
-	
+
 }
