@@ -16,6 +16,7 @@ private:
 	unitState* _unitState;
 
 	float _moveSpeed;
+	int _imageFrameX;
 
 	friend class unitNoneState;
 	friend class unitOneStep;
@@ -68,5 +69,5 @@ public:
 	}
 	virtual void enter(unit& unit);
 	virtual void update(unit& unit);
-
+	void unitdirection(unit& unit);
 };

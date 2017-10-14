@@ -38,6 +38,7 @@ void unit::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		gameObject* temp = WORLD->getMap()->getPickedTile();
+	
 		vector<gameObject*> vr;
 		vr.push_back(temp);
 		this->sendMessage("move", 0, 0, 0, POINT(),vr);
@@ -48,6 +49,11 @@ void unit::update()
 
 void unit::render()
 {
+	//높이보정
+	vector2D temp(_index.x, _index.y);
+	terrainTile* tile = WORLD->getMap()->getTilePosFromIndex(_index.x, _index.y);
+	_pos = WORLD->
+
 	_scale = vector2D(CAMERA->getZoom(),CAMERA->getZoom());
 	gameObject::frameRender(0,0);
 
@@ -82,6 +88,7 @@ void unitOneStep::update(unit & unit)
 {
 	vector2D dis = _destPos - unit._pos;
 	_moveRatio = WORLD->getTileMoveRatio(unit._index.x, unit._index.y);
+
 	if (dis.getLength() <= unit._moveSpeed * _moveRatio)
 	{
 		unit._pos = _destPos;
