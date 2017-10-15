@@ -148,6 +148,8 @@ void unitOneStep::enter(unit & unit)
 	if (abs(_destTile->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2) return unit.changeState(new unitNoneState);
 	_zoom = CAMERA->getZoom();
 	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex()) / _zoom;
+
+	WORLD->getMap()->getTile(_directionIndex.x, _directionIndex.y)->addUnitOnTile(&unit);
 }
 
 void unitOneStep::update(unit & unit)
@@ -180,7 +182,7 @@ void unitOneStep::update(unit & unit)
 			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->deleteUnitOnTile(&unit);
 			unit._index = _directionIndex;
 			//이동한 타일에 등록
-			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->addUnitOnTile(&unit);
+			//WORLD->getMap()->getTile(unit._index.x, unit._index.y)->addUnitOnTile(&unit);
 		}
 	}
 
