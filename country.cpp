@@ -46,14 +46,16 @@ void country::update()
 
 void country::render()
 {
-	//유닛 리스트를 순회하면서 렌더링
-	for (size_t i = 0; i < _unitList.size(); ++i)
-	{
-		if (_unitList[i]->isActiveObject())
-		{
-			_unitList[i]->render();
-		}
-	}
+	//* 17.19.15 country에서 렌더링하지 않고, 타일에서 자기 타일 위에 있는 유닛을 렌더링해준다. *//
+
+	////유닛 리스트를 순회하면서 렌더링
+	//for (size_t i = 0; i < _unitList.size(); ++i)
+	//{
+	//	if (_unitList[i]->isActiveObject())
+	//	{
+	//		_unitList[i]->render();
+	//	}
+	//}
 }
 
 void country::addUnit(unit * newUnit)

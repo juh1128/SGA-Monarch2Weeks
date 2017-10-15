@@ -28,7 +28,8 @@ HRESULT unit::init()
 	_unitState = new unitNoneState;
 	_moveSpeed = 3.0f;
 	_livedTime = 0;
-	
+
+	WORLD->getMap()->getTile(_index.x, _index.y)->addUnitOnTile(this);
 	return S_OK;
 }
 
@@ -178,7 +179,6 @@ void unitOneStep::update(unit & unit)
 			//일단 지금타일에서 나감을 알려주고
 			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->deleteUnitOnTile(&unit);
 			unit._index = _directionIndex;
-
 			//이동한 타일에 등록
 			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->addUnitOnTile(&unit);
 		}
