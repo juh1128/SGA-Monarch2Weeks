@@ -26,11 +26,13 @@ HRESULT unit::init()
 		this->moveCallBack(msg.ptData, msg.targetList[0]);
 	});
 
+	_isAuto = true;
 	_unitState = new unitNoneState;
 	_moveSpeed = 3.0f;
 	_livedTime = 0;
-
 	WORLD->getMap()->getTile(_index.x, _index.y)->addUnitOnTile(this);
+	changeState(new unitNoneState);
+
 	return S_OK;
 }
 
@@ -121,13 +123,13 @@ void unit::render()
 
 void unit::moveCallBack(POINT directionTile, gameObject* dest)
 {
-	if (directionTile.x < 0 ||
-		directionTile.y < 0 ||
-		directionTile.x >= WORLD->getMap()->getTileCount().x ||
-		directionTile.y >= WORLD->getMap()->getTileCount().y	)
-	{
-		return changeState(new unitNoneState);
-	}
+	//if (directionTile.x < 0 ||
+	//	directionTile.y < 0 ||
+	//	directionTile.x >= WORLD->getMap()->getTileCount().x ||
+	//	directionTile.y >= WORLD->getMap()->getTileCount().y	)
+	//{
+	//	return changeState(new unitNoneState);
+	//}
 	changeState(new unitOneStep((terrainTile*)dest, directionTile));
 
 }
@@ -139,8 +141,60 @@ void unit::changeState(unitState* newstate)
 	_unitState->enter(*this);
 }
 
+vector2D unit::getunitDirection(void)
+{
+	vector2D direction;
+
+	switch (_unitDirection)
+	{
+	case UnitDirection::UNIT_LEFT: direction = vector2D(-1, 0);
+		break;
+	case UnitDirection::UNIT_UP: direction = vector2D(0, -1);
+		break;
+	case UnitDirection::UNIT_RIGHT:	direction = vector2D(1, 0);
+		break;
+	case UnitDirection::UNIT_DOWN: direction = vector2D(0, 1);
+		break;
+	}
+	return direction;
+}
+
 void unitNoneState::enter(unit & unit)
 {
+	if (unit._isAuto)
+	{
+		//방향에 따른 타일 두칸검출
+		terrainTile* tile[2];
+		vector2D direction = unit.getunitDirection();
+		vector2D temp = unit._index + direction;
+		vector2D temp2 = unit._index + direction*2;
+		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
+		tile[1] = WORLD->getMap()->getTile(temp2.x,temp2.y);
+
+		for (int i = 0; i < 2; ++i)
+		{
+			
+		}
+
+		//아무것도 못하면 이동한다
+		vector2D dest = unit._index + direction;
+		POINT destp;
+		destp.x = dest.x;
+		destp.y = dest.y;
+
+		if (dest.x < 0 || dest.y < 0 || dest.x >= WORLD->getMap()->getTileCount().x || dest.y >= WORLD->getMap()->getTileCount().y ||
+			abs(tile[0]->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2)
+		{
+			unit._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0,3);
+			unit.changeState(new unitNoneState());
+			return;
+		}
+		gameObject* desttile = WORLD->getMap()->getTile(dest.x, dest.y);
+		vector<gameObject*> vr;
+		vr.push_back(desttile);
+		unit.sendMessage("move", 0, 0, 0, destp, vr);
+		vr.clear();
+	}
 }
 
 void unitNoneState::update(unit & unit)
@@ -151,8 +205,12 @@ void unitOneStep::enter(unit & unit)
 {
 
 	//목적지를 못받아옴 에러 or 이상한곳찍음
-	if (!_destTile) return unit.changeState(new unitNoneState);
+	if (!_destTile)
+	{
+		return unit.changeState(new unitNoneState);
+	}
 	if (abs(_destTile->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2) return unit.changeState(new unitNoneState);
+
 	_zoom = CAMERA->getZoom();
 	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex()) / _zoom;
 	_oldIndex.x = unit._index.x;

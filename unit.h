@@ -49,6 +49,7 @@ public:
 	void moveCallBack(POINT directionTile,gameObject* dest);
 	void changeState(unitState* newstate);
 	void imageFrame(void);
+	vector2D getunitDirection(void);
 };
 
 class unitState

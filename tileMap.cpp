@@ -7,6 +7,7 @@ bool tileMap::_isLoadedTile = false;
 
 void tileMap::init(string directory)
 {
+	ZeroMemory(_terrainTiles, sizeof(_terrainTiles));
 	//타일 리소스 로드
 	loadTileResource();
 
