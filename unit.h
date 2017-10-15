@@ -73,9 +73,11 @@ private:
 	vector2D _destPos;
 	terrainTile* _destTile;
 	vector2D _directionIndex;
+	vector2D _oldIndex;
 	int _destheight;
 	float _moveRatio;
 	float _zoom;
+
 public:
 	unitOneStep(terrainTile* tile,POINT direction)
 	{

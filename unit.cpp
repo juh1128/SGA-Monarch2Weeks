@@ -43,6 +43,8 @@ void unit::update()
 
 	_livedTime += TIMEMANAGER->getElapsedTime();
 
+	imageFrame();
+
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
 		vector2D right(1, 0);
@@ -148,7 +150,8 @@ void unitOneStep::enter(unit & unit)
 	if (abs(_destTile->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2) return unit.changeState(new unitNoneState);
 	_zoom = CAMERA->getZoom();
 	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex()) / _zoom;
-
+	_oldIndex.x = unit._index.x;
+	_oldIndex.y = unit._index.y;
 	WORLD->getMap()->getTile(_directionIndex.x, _directionIndex.y)->addUnitOnTile(&unit);
 }
 
@@ -167,8 +170,11 @@ void unitOneStep::update(unit & unit)
 
 	if (dis.getLength() <= unit._moveSpeed * _moveRatio)
 	{
+
+		WORLD->getMap()->getTile(_oldIndex.x, _oldIndex.y)->deleteUnitOnTile(&unit);
 		unit._pos = _destPos;
 		unit.changeState(new unitNoneState);
+		
 
 	}
 	else
@@ -178,11 +184,7 @@ void unitOneStep::update(unit & unit)
 		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
 		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() / 4)
 		{
-			//일단 지금타일에서 나감을 알려주고
-			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->deleteUnitOnTile(&unit);
 			unit._index = _directionIndex;
-			//이동한 타일에 등록
-			//WORLD->getMap()->getTile(unit._index.x, unit._index.y)->addUnitOnTile(&unit);
 		}
 	}
 
