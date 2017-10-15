@@ -171,6 +171,7 @@
     </ClCompile>
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unitDirection.cpp" />
+    <ClCompile Include="unitImageFrame.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="winMain.cpp" />
