@@ -12,7 +12,6 @@ HRESULT terrainTile::init(int xIndex, int yIndex, bool walkable, float moveRatio
 	setIndex(xIndex, yIndex);
 
 	_isPicked = false; 
-	_onUnit = NULL;
 
 	return S_OK;
 }
@@ -90,6 +89,12 @@ void terrainTile::render()
 			_image->setScaleOption(vector2D(CAMERA->getZoom(), CAMERA->getZoom()));
 			_image->render(renderPosition.x, renderPosition.y - (_height * heightUnit), Pivot::TOP);
 		}
+	}
+
+	//자기 타일 위에 있는 유닛 렌더링
+	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	{
+		_onUnitList[i]->render();
 	}
 
 
