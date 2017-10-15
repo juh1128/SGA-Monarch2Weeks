@@ -111,7 +111,7 @@ void unit::render()
 	{
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
-		_image->frameRender(_pos.x*CAMERA->getZoom(), (_pos.y - height*heightUnit)*CAMERA->getZoom(), 0, 0, _pivot);
+		_image->frameRender(_pos.x*CAMERA->getZoom(), (_pos.y - height*heightUnit)*CAMERA->getZoom(), _imageFrameX, _imageFrameY, _pivot);
 	}
 
 }
