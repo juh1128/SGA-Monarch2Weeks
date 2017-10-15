@@ -8,6 +8,8 @@ void world::init()
 	for (int i = 0; i < CountryColor::END; ++i)
 	{
 		_country[i] = NULL;
+		_country[i] = new country;
+		_country[i]->init(CountryColor::Enum(i), 4000, 0);
 	}
 }
 

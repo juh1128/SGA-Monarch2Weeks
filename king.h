@@ -1,5 +1,6 @@
 #pragma once
 #include "gameObject.h"
+#include "country.h"
 
 class king : public gameObject
 {

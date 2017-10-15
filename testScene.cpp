@@ -12,9 +12,6 @@ HRESULT testScene::init()
 	vector2D mapSize = WORLD->getMapSize();
 	CAMERA->setMapSize(mapSize.x, mapSize.y);
 
-	_unitOne = new unit;
-	_unitOne->init();
-
 	return S_OK;
 }
 
@@ -31,7 +28,15 @@ void testScene::update()
 {
 	sceneBase::update();
 
-	_unitOne->update();
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	{
+		cout << "À¯´ÖÃâ·Â" << endl;
+		unit* _unit = new unit;
+		_unit->init();
+		WORLD->addUnit(_unit, CountryColor::RED);
+	}
+	
+
 	//if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	//{
 	//	this->sendMessage("disableWorld");
@@ -46,6 +51,4 @@ void testScene::update()
 void testScene::render()
 {
 	sceneBase::render();
-
-	_unitOne->render();
 }

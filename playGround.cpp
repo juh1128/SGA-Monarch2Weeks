@@ -17,7 +17,14 @@ HRESULT playGround::init(void)
 
 	//초기 시작 씬 생성
 	SCENEMANAGER->pushScene(new testScene);
-	IMAGEMANAGER->addFrameImage("unit", L"resource/unit/greenLv1.png",8,1,false);
+	IMAGEMANAGER->addFrameImage("greenKing", L"resource/unit/greenKing.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("greenLv1", L"resource/unit/greenLv1.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("greenLv2", L"resource/unit/greenLv2.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("greenLv3", L"resource/unit/greenLv3.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("redKing", L"resource/unit/orangeKing.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("redLv1", L"resource/unit/orangeLv1.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("redLv2", L"resource/unit/orangeLv2.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("redLv3", L"resource/unit/orangeLv3.png", 2, 4, false);
 
 	return S_OK;
 }
