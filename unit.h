@@ -8,10 +8,10 @@ namespace UnitDirection
 {
 	enum DIRECTION
 	{
-		UNIT_UP,
-		UNIT_DOWN,
-		UNIT_RIGHT,
 		UNIT_LEFT,
+		UNIT_UP,
+		UNIT_RIGHT,
+		UNIT_DOWN,
 		UNIT_END
 	};
 
@@ -25,9 +25,13 @@ private:
 
 	float _moveSpeed;
 	int _imageFrameX;
-	int _imageFrameY;
 
 	float _livedTime;
+
+	//자동 상태인가
+	bool _isAuto;
+
+	UnitDirection::DIRECTION _unitDirection;
 
 	friend class unitNoneState;
 	friend class unitOneStep;
@@ -62,7 +66,7 @@ class unitNoneState : public unitState
 private:
 public:
 
-	virtual void enter(unit& unit) {}
+	virtual void enter(unit& unit);
 	virtual void update(unit& unit);
 
 };

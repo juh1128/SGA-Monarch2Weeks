@@ -18,7 +18,8 @@ HRESULT unit::init()
 	_index.y = 0;
 	_index.x = 0;
 	_pos.x = _pos.y = 0;
-	_imageFrameX = _imageFrameY = 0;
+	_imageFrameX = 0;
+	_unitDirection = (UnitDirection::DIRECTION)0;
 
 	this->addCallback("move", [&](tagMessage msg)
 	{
@@ -113,7 +114,7 @@ void unit::render()
 	{
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
-		_image->frameRender(_pos.x*CAMERA->getZoom(), (_pos.y - height*heightUnit)*CAMERA->getZoom(), _imageFrameX, _imageFrameY, _pivot);
+		_image->frameRender(_pos.x*CAMERA->getZoom(), (_pos.y - height*heightUnit)*CAMERA->getZoom(), _imageFrameX, _unitDirection, _pivot);
 	}
 
 }
@@ -136,6 +137,10 @@ void unit::changeState(unitState* newstate)
 	SAFE_DELETE(_unitState);
 	_unitState = newstate;
 	_unitState->enter(*this);
+}
+
+void unitNoneState::enter(unit & unit)
+{
 }
 
 void unitNoneState::update(unit & unit)
