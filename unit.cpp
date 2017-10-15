@@ -121,9 +121,9 @@ void unit::render()
 void unit::moveCallBack(POINT directionTile, gameObject* dest)
 {
 	if (directionTile.x < 0 ||
-		directionTile.y < 0
-		//최대타일 갯수 추가해야됨
-		)
+		directionTile.y < 0 ||
+		directionTile.x >= WORLD->getMap()->getTileCount().x ||
+		directionTile.y >= WORLD->getMap()->getTileCount().y	)
 	{
 		return changeState(new unitNoneState);
 	}
@@ -179,7 +179,7 @@ void unitOneStep::update(unit & unit)
 		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() / 4)
 		{
 			unit._index = _directionIndex;
-
+			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->setUnitOnTile(&unit);
 		}
 	}
 
