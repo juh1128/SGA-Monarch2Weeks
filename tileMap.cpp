@@ -33,13 +33,6 @@ void tileMap::release()
 			_terrainTiles[i][j]->release();
 			delete _terrainTiles[i][j];
 			_terrainTiles[i][j] = NULL;
-
-			//if (_objectList[i][j])
-			//{
-			//	_objectList[i][j]->release();
-			//	delete _objectList[i][j];
-			//	_objectList[i][j] = NULL;
-			//}
 		}
 	}
 }
@@ -74,15 +67,12 @@ void tileMap::render()
 	_backgroundImage->setSizeOption(vector2D(WINSIZEX, WINSIZEY));
 	_backgroundImage->render(0, 0, Pivot::LEFT_TOP, false);
 
-	//타일 렌더링
 	for (int i = 0; i < _tileCount.y; ++i)
 	{
 		for (int j = 0; j < _tileCount.x; ++j)
 		{
 			if (_terrainTiles[i][j])
 				_terrainTiles[i][j]->render();
-			//if (_objectList[i][j])
-			//	_objectList[i][j]->render();
 		}
 	}
 
