@@ -6,7 +6,7 @@ HRESULT testScene::init()
 	sceneBase::init();
 
 	//타일맵 로드
-	WORLD->loadTiles("resource/mapData/test.map");
+	WORLD->loadTiles("resource/mapData/stage1.map");
 
 	//카메라 설정
 	vector2D mapSize = WORLD->getMapSize();
