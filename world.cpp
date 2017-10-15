@@ -49,7 +49,6 @@ void world::update()
 			}
 		}
 	}
-
 }
 
 void world::render()

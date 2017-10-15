@@ -16,7 +16,7 @@ private:
 	bool		_isPicked;
 
 	//자기 타일 위에 있는 유닛
-	unit*	_onUnit;
+	vector<unit*>	_onUnitList;
 	
 public:
 	terrainTile() {}
@@ -39,6 +39,8 @@ public:
 	void setPicked(bool pick) { _isPicked = pick; }
 	bool isPicked() { return _isPicked; }
 
-	unit* getUnitOnTile();
-	void setUnitOnTile(unit* onUnit);
+	vector<unit*> getUnitOnTile();
+	void deleteUnitOnTile(unit* onUnit);
+	void addUnitOnTile(unit* onUnit);
+	
 };

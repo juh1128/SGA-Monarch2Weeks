@@ -28,15 +28,28 @@ vector2D terrainTile::getCenterPos()
 	return std::move(vector2D(_pos.x, _pos.y + (tileMap::getTileSize().y*0.5f)));
 }
 
-unit * terrainTile::getUnitOnTile()
+vector<unit*> terrainTile::getUnitOnTile()
 {
-	return _onUnit; 
+	return _onUnitList; 
 }
 
-void terrainTile::setUnitOnTile(unit * onUnit)
+void terrainTile::deleteUnitOnTile(unit * onUnit)
 {
-	_onUnit = onUnit;
+	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	{
+		if (onUnit == _onUnitList[i])
+		{
+			_onUnitList.erase(_onUnitList.begin() + i);
+			break;
+		}
+	}
 }
+
+void terrainTile::addUnitOnTile(unit * onUnit)
+{
+	_onUnitList.push_back(onUnit);
+}
+
 
 void terrainTile::release()
 {
