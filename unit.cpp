@@ -18,6 +18,7 @@ HRESULT unit::init()
 	_index.y = 0;
 	_index.x = 0;
 	_pos.x = _pos.y = 0;
+	_imageFrameX = _imageFrameY = 0;
 
 	this->addCallback("move", [&](tagMessage msg)
 	{
@@ -27,7 +28,7 @@ HRESULT unit::init()
 	_unitState = new unitNoneState;
 	_moveSpeed = 3.0f;
 	_livedTime = 0;
-
+	
 	return S_OK;
 }
 
@@ -43,7 +44,6 @@ void unit::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
-		//gameObject* temp = WORLD->getMap()->getPickedTile();
 		vector2D right(1, 0);
 		vector2D dest = _index + right;
 		POINT destp;
@@ -57,7 +57,6 @@ void unit::update()
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
-		//gameObject* temp = WORLD->getMap()->getPickedTile();
 		vector2D left(-1, 0);
 		vector2D dest = _index + left;
 		POINT destp;
@@ -71,7 +70,6 @@ void unit::update()
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
-		//gameObject* temp = WORLD->getMap()->getPickedTile();
 		vector2D up(0, -1);
 		vector2D dest = _index + up;
 		POINT destp;
@@ -85,7 +83,6 @@ void unit::update()
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
-		//gameObject* temp = WORLD->getMap()->getPickedTile();
 		vector2D down(0, 1);
 		vector2D dest = _index + down;
 		POINT destp;
@@ -178,8 +175,12 @@ void unitOneStep::update(unit & unit)
 		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
 		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() / 4)
 		{
+			//일단 지금타일에서 나감을 알려주고
+			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->deleteUnitOnTile(&unit);
 			unit._index = _directionIndex;
-			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->setUnitOnTile(&unit);
+
+			//이동한 타일에 등록
+			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->addUnitOnTile(&unit);
 		}
 	}
 
