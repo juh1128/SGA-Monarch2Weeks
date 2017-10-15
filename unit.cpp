@@ -28,6 +28,8 @@ HRESULT unit::init()
 	_moveSpeed = 3.0f;
 	_livedTime = 0;
 
+	WORLD->getMap()->getTile(_index.x, _index.y)->addUnitOnTile(this);
+
 	return S_OK;
 }
 
@@ -179,7 +181,7 @@ void unitOneStep::update(unit & unit)
 		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() / 4)
 		{
 			unit._index = _directionIndex;
-			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->setUnitOnTile(&unit);
+			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->addUnitOnTile(&unit);
 		}
 	}
 

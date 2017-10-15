@@ -46,6 +46,14 @@ void terrainTile::deleteUnitOnTile(unit * onUnit)
 
 void terrainTile::addUnitOnTile(unit * onUnit)
 {
+	//중복 확인
+	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	{
+		if (onUnit == _onUnitList[i])
+		{
+			return;
+		}
+	}
 	_onUnitList.push_back(onUnit);
 }
 
