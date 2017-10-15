@@ -73,25 +73,54 @@ void tileMap::render()
 	//타일 렌더링
 	int x = 0, y = 0;
 	int temp = 0;
-	while (true)
+	//bool max = false;
+	//while (true)
+	//{
+	//	if (temp == _tileCount.y) max = true;
+	//	if (!max)
+	//	{
+	//		for (int i = 0; i <= temp; i++)
+	//		{
+	//			if (_terrainTiles[i][temp - i])
+	//			{
+	//				_terrainTiles[i][temp - i]->render();
+	//			}
+
+	//		}
+
+	//		temp++;
+	//	}
+	//	else
+	//	{
+	//		for (int i =_tileCount.x-temp; i < temp; ++i)
+	//		{
+	//			//바꺼야됨
+	//			if (_terrainTiles[i][temp-i])
+	//			{
+	//				_terrainTiles[i][temp-i]->render();
+	//			}
+
+	//		}
+	//		temp--;
+	//	}
+	//	if (max && temp == 0) break;
+	//}
+
+	// 맵전체가 n by n 이면 _tileCount x,y 상관 없음
+	for (int temp = 0; temp < _tileCount.x; temp++)
 	{
 		for (x = temp; x < _tileCount.x; x++)
 		{
 			if (_terrainTiles[temp][x])
 				_terrainTiles[temp][x]->render();
 		}
-		x = temp;
-		for (y = temp+1; y < _tileCount.y; ++y)
+		for (y = temp + 1; y < _tileCount.y; ++y)
 		{
 			if (_terrainTiles[y][temp])
 				_terrainTiles[y][temp]->render();
 		}
-		temp++;
 
-		if (_tileCount.y  == temp)
-			break;
 	}
-
 
 	//for (int i = 0; i < _tileCount.y; ++i)
 	//{
