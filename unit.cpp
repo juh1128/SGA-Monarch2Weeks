@@ -180,6 +180,7 @@ void unitOneStep::update(unit & unit)
 		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
 		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() / 4)
 		{
+			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->deleteUnitOnTile(&unit);
 			unit._index = _directionIndex;
 			WORLD->getMap()->getTile(unit._index.x, unit._index.y)->addUnitOnTile(&unit);
 		}
