@@ -1,12 +1,21 @@
 #pragma once
 #include "gameObject.h"
 #include <vector>
-//static vector2D up(2, -1);
-//static vector2D down(-2, 1);
-//static vector2D right(2,1);
-//static vector2D left(-2,-1);
+
 class unitState;
 
+namespace UnitDirection
+{
+	enum DIRECTION
+	{
+		UNIT_UP,
+		UNIT_DOWN,
+		UNIT_RIGHT,
+		UNIT_LEFT,
+		UNIT_END
+	};
+
+}
 class unit : public gameObject
 {
 private:
