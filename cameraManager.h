@@ -4,7 +4,7 @@
 class gameObject;
 
 #define MAX_ZOOM 5.0f
-#define MIN_ZOOM 0.2f
+#define MIN_ZOOM 0.5f
 
 class cameraManager : public singletonBase<cameraManager>
 {

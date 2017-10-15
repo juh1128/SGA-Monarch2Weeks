@@ -68,14 +68,40 @@ void tileMap::render()
 	_backgroundImage->setSizeOption(vector2D(WINSIZEX, WINSIZEY));
 	_backgroundImage->render(0, 0, Pivot::LEFT_TOP, false);
 
-	for (int i = 0; i < _tileCount.y; ++i)
+	
+
+	//타일 렌더링
+	int x = 0, y = 0;
+	int temp = 0;
+	while (true)
 	{
-		for (int j = 0; j < _tileCount.x; ++j)
+		for (x = temp; x < _tileCount.x; x++)
 		{
-			if (_terrainTiles[i][j])
-				_terrainTiles[i][j]->render();
+			if (_terrainTiles[temp][x])
+				_terrainTiles[temp][x]->render();
 		}
+		x = temp;
+		for (y = temp+1; y < _tileCount.y; ++y)
+		{
+			if (_terrainTiles[y][temp])
+				_terrainTiles[y][temp]->render();
+		}
+		temp++;
+
+		if (_tileCount.y  == temp)
+			break;
 	}
+
+
+	//for (int i = 0; i < _tileCount.y; ++i)
+	//{
+	//	for (int j = 0; j < _tileCount.x; ++j)
+	//	{
+	//		if (_terrainTiles[i][j])
+	//			_terrainTiles[i][j]->render();
+	//		
+	//	}
+	//}
 
 	//높이 테이블 렌더링
 	if (_isDebugMode)
@@ -269,6 +295,27 @@ terrainTile * tileMap::getTileFromMousePos()
 
 	//마우스 위치의 타일을 찾는다.
 	vector2D tileIndex = this->getTileIndexFromPos(mousePos, height);
+	if (tileIndex.x < 0 || tileIndex.y < 0 || tileIndex.x >= _tileCount.x || tileIndex.y >= _tileCount.y)
+		return NULL;
+
+	terrainTile* tile = _terrainTiles[(int)tileIndex.y][(int)tileIndex.x];
+
+	//타일의 높이값 검증
+	if (tile->getHeight() != height)
+		return NULL;
+
+	return tile;
+}
+
+terrainTile * tileMap::getTileFromPos(vector2D pos)
+{
+	vector2D index = getHeightTableIndexFromPos(pos);
+
+	//높이 테이블에서 위치의 높이값을 얻어온다.
+	int height = _heightTable[(int)index.y][(int)index.x];
+
+	//위치의 타일을 찾는다.
+	vector2D tileIndex = this->getTileIndexFromPos(pos, height);
 	if (tileIndex.x < 0 || tileIndex.y < 0 || tileIndex.x >= _tileCount.x || tileIndex.y >= _tileCount.y)
 		return NULL;
 

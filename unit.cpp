@@ -15,6 +15,7 @@ HRESULT unit::init()
 {
 	gameObject::init("unit", "greenKing");
 
+
 	_index.y = 0;
 	_index.x = 0;
 	_pos.x = _pos.y = 0;
@@ -26,7 +27,7 @@ HRESULT unit::init()
 		this->moveCallBack(msg.ptData, msg.targetList[0]);
 	});
 
-	_isAuto = true;
+	_isAuto = 0;
 	_unitState = new unitNoneState;
 	_moveSpeed = 3.0f;
 	_livedTime = 0;
@@ -116,7 +117,7 @@ void unit::render()
 	{
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
-		_image->frameRender(_pos.x*CAMERA->getZoom(), (_pos.y - height*heightUnit)*CAMERA->getZoom(), _imageFrameX, _unitDirection, _pivot);
+		_image->frameRender(_pos.x*CAMERA->getZoom(), _pos.y*CAMERA->getZoom() - height*heightUnit, _imageFrameX, _unitDirection, _pivot);
 	}
 
 }
@@ -231,6 +232,7 @@ void unitOneStep::update(unit & unit)
 	//여기서 프레임계산
 	unitdirection(unit);
 
+	//목적지 도착
 	if (dis.getLength() <= unit._moveSpeed * _moveRatio)
 	{
 
@@ -240,9 +242,12 @@ void unitOneStep::update(unit & unit)
 		
 
 	}
+	//가는 중
 	else
 	{
 		unit._pos = unit._pos + dis.normalize()*unit._moveSpeed*_moveRatio;
+
+		//WORLD->getMap()->getTileIndexFromPos(unit._pos, );
 
 		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
 		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() / 4)

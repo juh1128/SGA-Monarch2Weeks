@@ -54,10 +54,12 @@ public:
 	terrainTile* getTile(int x, int y) { return _terrainTiles[y][x]; }
 	terrainTile* getPickedTile() { return _pickedTile; }
 	
+	terrainTile* getTileFromPos(vector2D pos);
 
 private:
 	static vector2D getHeightTableIndexFromPos(vector2D pos);
 	static vector2D getHeightTablePosFromIndex(vector2D index);
+
 	void load(string directory);
 
 	static bool _isLoadedTile;
