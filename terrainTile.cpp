@@ -12,7 +12,6 @@ HRESULT terrainTile::init(int xIndex, int yIndex, bool walkable, float moveRatio
 	setIndex(xIndex, yIndex);
 
 	_isPicked = false; 
-	_onUnit = NULL;
 
 	return S_OK;
 }
@@ -28,15 +27,36 @@ vector2D terrainTile::getCenterPos()
 	return std::move(vector2D(_pos.x, _pos.y + (tileMap::getTileSize().y*0.5f)));
 }
 
-unit * terrainTile::getUnitOnTile()
+vector<unit*> terrainTile::getUnitOnTile()
 {
-	return _onUnit; 
+	return _onUnitList; 
 }
 
-void terrainTile::setUnitOnTile(unit * onUnit)
+void terrainTile::deleteUnitOnTile(unit * onUnit)
 {
-	_onUnit = onUnit;
+	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	{
+		if (onUnit == _onUnitList[i])
+		{
+			_onUnitList.erase(_onUnitList.begin() + i);
+			break;
+		}
+	}
 }
+
+void terrainTile::addUnitOnTile(unit * onUnit)
+{
+	//중복 확인
+	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	{
+		if (onUnit == _onUnitList[i])
+		{
+			return;
+		}
+	}
+	_onUnitList.push_back(onUnit);
+}
+
 
 void terrainTile::release()
 {
@@ -77,6 +97,12 @@ void terrainTile::render()
 			_image->setScaleOption(vector2D(CAMERA->getZoom(), CAMERA->getZoom()));
 			_image->render(renderPosition.x, renderPosition.y - (_height * heightUnit), Pivot::TOP);
 		}
+	}
+
+	//자기 타일 위에 있는 유닛 렌더링
+	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	{
+		_onUnitList[i]->render();
 	}
 
 

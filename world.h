@@ -10,7 +10,7 @@ class unit;
 class world
 {
 private:
-	//오브젝트 리스트
+	//오브젝트 리스트(돌, 나무, 목책, 마을, 밭)
 	vector<gameObject*> _objectList[MAX_LAYER];
 
 	//국가 리스트 (유닛 관리)
@@ -43,6 +43,8 @@ public:
 	//===============================================
 	void addUnit(unit* newUnit, CountryColor::Enum countryColor);
 	country* getCountry(CountryColor::Enum color);
+
+	
 
 
 	//===============================================

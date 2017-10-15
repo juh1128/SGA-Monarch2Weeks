@@ -49,21 +49,13 @@ void world::update()
 			}
 		}
 	}
-
 }
 
 void world::render()
 {
-	//Å¸ÀÏ¸Ê ·»´õ¸µ
+	//Å¸ÀÏ¸Ê + À¯´Ö ·»´õ¸µ
 	if(_tileMap)
 		_tileMap->render();
-
-	//À¯´Ö ·»´õ¸µ
-	for (int i = 0; i < CountryColor::END; ++i)
-	{
-		if (_country[i])
-			_country[i]->render();
-	}
 
 	//¿ÀºêÁ§Æ® ·»´õ¸µ
 	for (int i = 0; i < MAX_LAYER; ++i)

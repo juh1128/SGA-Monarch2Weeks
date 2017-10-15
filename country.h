@@ -14,10 +14,10 @@ class country
 {
 private:
 	CountryColor::Enum			_countryColor;
-	int							_gold;
-	float						_income;
+	int							_gold;   //µ·
+	float						_income; //¼¼À²
 
-	vector<unit*>				_unitList;
+	vector<unit*>				_unitList; //À¯´Ö¸®½ºÆ®
 
 public:
 	country() {}
