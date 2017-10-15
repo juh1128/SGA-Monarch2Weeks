@@ -314,5 +314,8 @@
     <ClCompile Include="unitDirection.cpp">
       <Filter>playGround\unit</Filter>
     </ClCompile>
+    <ClCompile Include="unitImageFrame.cpp">
+      <Filter>playGround\unit</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
