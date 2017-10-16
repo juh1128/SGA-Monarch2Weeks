@@ -17,6 +17,8 @@ private:
 
 	//자기 타일 위에 있는 유닛
 	vector<unit*>	_onUnitList;
+	//유닛 Z오더 전용 벡터
+	vector<unit*>	_renderUnitList;
 	
 public:
 	terrainTile() {}
@@ -42,5 +44,7 @@ public:
 	vector<unit*> getUnitOnTile();
 	void deleteUnitOnTile(unit* onUnit);
 	void addUnitOnTile(unit* onUnit);
+
+	void requestRender(unit* onUnit);
 	
 };

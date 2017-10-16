@@ -30,9 +30,8 @@ void testScene::update()
 
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
-		cout << "À¯´ÖÃâ·Â" << endl;
 		unit* _unit = new unit;
-		_unit->init();
+		_unit->init(vector2D(4,8), 0);
 		WORLD->addUnit(_unit, CountryColor::RED);
 	}
 	

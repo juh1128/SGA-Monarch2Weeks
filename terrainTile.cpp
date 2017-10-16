@@ -57,6 +57,10 @@ void terrainTile::addUnitOnTile(unit * onUnit)
 	_onUnitList.push_back(onUnit);
 }
 
+void terrainTile::requestRender(unit * onUnit)
+{
+	_renderUnitList.push_back(onUnit);
+}
 
 void terrainTile::release()
 {
@@ -99,12 +103,13 @@ void terrainTile::render()
 		}
 	}
 
-	//자기 타일 위에 있는 유닛 렌더링
-	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	//렌더링 요청 들어온 유닛을 렌더링한다.
+	for (size_t i = 0; i < _renderUnitList.size(); ++i)
 	{
-		_onUnitList[i]->render();
+		_renderUnitList[i]->render();
 	}
-
+	//렌더링 요청 초기화
+	_renderUnitList.clear();
 
 
 	//마우스 오버 시
@@ -125,4 +130,14 @@ void terrainTile::render()
 		IMAGEMANAGER->drawLine(bottom, right, DefaultBrush::red, 2);
 		IMAGEMANAGER->drawLine(right, top, DefaultBrush::red, 2);
 	}
+
+	//디버그 모드
+	//if (_isDebugMode)
+	//{
+	//	vector2D pos = tileMap::getTilePosFromIndex(vector2D(_index.x, _index.y), _height);
+	//	pos = CAMERA->getRelativeVector2D(pos);
+	//	char buf[20] = "";
+	//	wsprintf(buf, "%d, %d", _index.x, _index.y);
+	//	IMAGEMANAGER->drawText(pos.x, pos.y, UTIL::string_to_wstring(buf), 12);
+	//}
 }

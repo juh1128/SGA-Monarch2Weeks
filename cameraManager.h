@@ -36,6 +36,7 @@ public:
 	RECT getRelativeRect(RECT rc);
 	POINT getRelativePoint(POINT pt);
 	vector2D getRelativeVector2D(vector2D v);
+	vector2D getZoomedPos(vector2D v);
 	POINT getMousePos();
 
 	void setZoom(float zoom)

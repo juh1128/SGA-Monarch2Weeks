@@ -14,14 +14,24 @@ namespace UnitDirection
 		UNIT_DOWN,
 		UNIT_END
 	};
-
 }
+
+namespace UnitState
+{
+	enum Enum
+	{
+		None, MoveOneStep, End
+	};
+}
+
 class unit : public gameObject
 {
 private:
 	vector2D _index;
+	int		 _height;
 
-	unitState* _unitState;
+	UnitState::Enum _state;
+	unitState*		_unitState;
 
 	float _moveSpeed;
 	int _imageFrameX;
@@ -41,7 +51,7 @@ public:
 	unit();
 	~unit();
 
-	HRESULT init();
+	HRESULT init(vector2D index, int height);
 	void release();
 	void update();
 	void render();
@@ -49,7 +59,11 @@ public:
 	void moveCallBack(POINT directionTile,gameObject* dest);
 	void changeState(unitState* newstate);
 	void imageFrame(void);
-	vector2D getunitDirection(void);
+
+	vector2D getDirection(UnitDirection::DIRECTION dir);
+
+	void syncIndexFromPos();
+	void requestRender();
 };
 
 class unitState

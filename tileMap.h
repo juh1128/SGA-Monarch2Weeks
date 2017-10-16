@@ -50,16 +50,15 @@ public:
 	//피킹 관련
 	static vector2D getTileIndexFromPos(vector2D pos, int height = 0);
 	static vector2D getTilePosFromIndex(vector2D index, int height = 0);
+	static vector2D getHeightTableIndexFromPos(vector2D pos);
+	static vector2D getHeightTablePosFromIndex(vector2D index);
+	int getHeightFromTableIndex(int x, int y) { return _heightTable[y][x]; }
 
 	terrainTile* getTile(int x, int y) { return _terrainTiles[y][x]; }
 	terrainTile* getPickedTile() { return _pickedTile; }
-	
-	terrainTile* getTileFromPos(vector2D pos);
+
 
 private:
-	static vector2D getHeightTableIndexFromPos(vector2D pos);
-	static vector2D getHeightTablePosFromIndex(vector2D index);
-
 	void load(string directory);
 
 	static bool _isLoadedTile;

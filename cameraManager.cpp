@@ -71,6 +71,11 @@ vector2D cameraManager::getRelativeVector2D(vector2D v)
 	return std::move(v);
 }
 
+vector2D cameraManager::getZoomedPos(vector2D v)
+{
+	return v*_zoom;
+}
+
 POINT cameraManager::getMousePos()
 {
 	POINT pt = { _ptMouse.x + _pos.x, _ptMouse.y + _pos.y };
