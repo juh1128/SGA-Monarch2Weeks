@@ -51,7 +51,7 @@ public:
 	unit();
 	~unit();
 
-	HRESULT init(vector2D index, int height);
+	HRESULT init(vector2D index, int height,CountryColor::Enum country);
 	void release();
 	void update();
 	void render();

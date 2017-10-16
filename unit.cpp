@@ -11,9 +11,31 @@ unit::~unit()
 {
 }
 
-HRESULT unit::init(vector2D index, int height)
+HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 {
-	gameObject::init("unit", "greenKing", tileMap::getTilePosFromIndex(index, height), Pivot::CENTER);
+	string color;
+	//색깔검사
+	switch (country)
+	{
+	case CountryColor::RED:
+		color = "red";
+		break;
+	case CountryColor::WHITE:
+		color = "white";
+		break;
+	case CountryColor::BLUE:
+		color = "blue";
+		break;
+	case CountryColor::GREEN:
+		color = "green";
+		break;
+	case CountryColor::END:
+		break;
+	default:
+		break;
+	}
+
+	gameObject::init("unit", color + "Lv1", tileMap::getTilePosFromIndex(index, height), Pivot::CENTER);
 
 	_pos = _pos / CAMERA->getZoom();
 	_index = index;
@@ -200,7 +222,20 @@ void unitNoneState::enter(unit & unit)
 
 		for (int i = 0; i < 2; ++i)
 		{
-			
+			////처음엔 지을수 있다고 판정을 해놓고
+			//bool _isCanBuild = true;
+			////타일검출을통한 유닛의 행동명령
+			//for (int j = 0; j < 3; j++)
+			//{
+			//	for (int k = 0; k < 3; k++)
+			//	{
+			//		//앞칸에서 근처8칸을 탐색하는데 건물이 있다면 지을수 없다는 값을 준다.
+			//		if (WORLD->getMap()->getTile(temp.x - 1 + k,temp.y - 1 + j).)
+			//		{
+
+			//		}
+			//	}
+			//}
 		}
 
 		//아무것도 못하면 이동한다
@@ -210,7 +245,9 @@ void unitNoneState::enter(unit & unit)
 		destp.y = dest.y;
 
 		if (dest.x < 0 || dest.y < 0 || dest.x >= WORLD->getMap()->getTileCount().x || dest.y >= WORLD->getMap()->getTileCount().y ||
-			abs(tile[0]->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2)
+			abs(tile[0]->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2
+			//|| !WORLD->getMap()->getTile(destp.x,destp.y)->isWalkable())
+			)
 		{
 			unit._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0,3);
 			unit.changeState(new unitNoneState());

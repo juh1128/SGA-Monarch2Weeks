@@ -31,8 +31,8 @@ void testScene::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
 		unit* _unit = new unit;
-		_unit->init(vector2D(4,8), 0);
-		WORLD->addUnit(_unit, CountryColor::RED);
+		_unit->init(vector2D(4,8), 0,CountryColor::GREEN);
+		WORLD->addUnit(_unit, CountryColor::GREEN);
 	}
 	
 
