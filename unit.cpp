@@ -220,23 +220,36 @@ void unitNoneState::enter(unit & unit)
 		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
 		tile[1] = WORLD->getMap()->getTile(temp2.x,temp2.y);
 
-		for (int i = 0; i < 2; ++i)
-		{
-			////처음엔 지을수 있다고 판정을 해놓고
-			//bool _isCanBuild = true;
-			////타일검출을통한 유닛의 행동명령
-			//for (int j = 0; j < 3; j++)
-			//{
-			//	for (int k = 0; k < 3; k++)
-			//	{
-			//		//앞칸에서 근처8칸을 탐색하는데 건물이 있다면 지을수 없다는 값을 준다.
-			//		if (WORLD->getMap()->getTile(temp.x - 1 + k,temp.y - 1 + j).)
-			//		{
+		//순서 도망->건설->공격
 
-			//		}
-			//	}
-			//}
-		}
+		//도망가는 상황
+		//자신으로부터 25칸(상하좌우대각으로 2칸씩)
+		//별달린 에너미가 있다면 도망가는 함수실행
+		//for (int i = 0; i < 5; i++)
+		//{
+		//	for (int j = 0; j < 5; j++)
+		//	{
+		//
+		//	}
+		//}
+
+		//건물짓는 상황
+		//tile[0]번의 상하좌우대각 한칸씩을 탐색하여 건물이 없다면 건설함수 실행
+		//for (int j = 0; j < 3; j++)
+		//{
+		//	for (int k = 0; k < 3; k++)
+		//	{
+		//		
+		//
+		//	}
+		//}
+
+
+		//tile를 검출하여 적이나 파괴가능한 오브젝트가 있다면 공격함수 실행
+		//for (int i = 0; i < 2; i++)
+		//{
+		//
+		//}
 
 		//아무것도 못하면 이동한다
 		vector2D dest = unit._index + direction;
