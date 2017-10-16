@@ -75,7 +75,7 @@ void unit::update()
 
 	auto keyboardTest = [&](UnitDirection::DIRECTION dir)
 	{
-		vector2D right = getDirection(dir);
+		vector2D right = getDirectionVector(dir);
 		vector2D dest = _index + right;
 
 		gameObject* temp = WORLD->getMap()->getTile(dest.x, dest.y);
@@ -145,7 +145,7 @@ void unit::changeState(unitState* newstate)
 	_unitState->enter(*this);
 }
 
-vector2D unit::getDirection(UnitDirection::DIRECTION dir)
+vector2D unit::getDirectionVector(UnitDirection::DIRECTION dir)
 {
 	vector2D direction;
 
@@ -214,7 +214,7 @@ void unitNoneState::enter(unit & unit)
 	{
 		//방향에 따른 타일 두칸검출
 		terrainTile* tile[2];
-		vector2D direction = unit.getDirection(unit._unitDirection);
+		vector2D direction = unit.getDirectionVector(unit._unitDirection);
 		vector2D temp = unit._index + direction;
 		vector2D temp2 = unit._index + direction*2;
 		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
