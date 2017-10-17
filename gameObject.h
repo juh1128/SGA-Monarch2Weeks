@@ -2,6 +2,13 @@
 #include "gameNode.h"
 #include <functional>
 
+namespace Direction
+{
+	enum Enum
+	{
+		Right, Left, Up, Down, End
+	};
+}
 
 class gameObject : public gameNode
 {

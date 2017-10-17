@@ -101,7 +101,6 @@
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="json.h" />
     <ClInclude Include="keyManager.h" />
-    <ClInclude Include="king.h" />
     <ClInclude Include="objectFactory.h" />
     <ClInclude Include="pathFinder.h" />
     <ClInclude Include="playGround.h" />
@@ -154,7 +153,6 @@
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="json.cpp" />
     <ClCompile Include="keyManager.cpp" />
-    <ClCompile Include="king.cpp" />
     <ClCompile Include="objectFactory.cpp" />
     <ClCompile Include="pathFinder.cpp" />
     <ClCompile Include="playGround.cpp" />

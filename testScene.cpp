@@ -12,6 +12,9 @@ HRESULT testScene::init()
 	vector2D mapSize = WORLD->getMapSize();
 	CAMERA->setMapSize(mapSize.x, mapSize.y);
 
+	//¹è°æÀ½¾Ç Àç»ı
+	SOUNDMANAGER->play("bgm", 0.5f);
+
 	return S_OK;
 }
 

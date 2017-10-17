@@ -4,6 +4,7 @@
 //오브젝트 클래스
 #include "rock.h"
 #include "tree.h"
+#include "castle.h"
 
 
 
@@ -23,7 +24,67 @@ gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 		newObj = new rock;
 		((rock*)newObj)->init(xIndex, yIndex);
 	}
+	else
+	{
+		newObj = createCastle(xIndex, yIndex, name);
+	}
 
 
 	return newObj;
+}
+
+gameObject * objectFactory::createCastle(int xIndex, int yIndex, string name)
+{
+	gameObject* _castle = NULL;
+	//성 만들기 ( 국가 색상 + King + 방향 )
+	//0: left, 1: down, 2: right, 3: up
+
+
+	//블루
+	if (name == "blueKing0")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::BLUE, Direction::Left);
+	}
+	else if (name == "blueKing1")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::BLUE, Direction::Down);
+	}
+	else if (name == "blueKing2")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::BLUE, Direction::Right);
+	}
+	else if (name == "blueKing3")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::BLUE, Direction::Up);
+	}
+
+
+	//레드
+	if (name == "redKing0")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::RED, Direction::Left);
+	}
+	else if (name == "redKing1")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::RED, Direction::Down);
+	}
+	else if (name == "redKing2")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::RED, Direction::Right);
+	}
+	else if (name == "redKing3")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::RED, Direction::Up);
+	}
+
+	
+	return _castle;
 }

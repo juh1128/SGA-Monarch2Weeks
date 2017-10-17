@@ -35,6 +35,9 @@ HRESULT playGround::init(void)
 	IMAGEMANAGER->addImage("rock", L"resource/object/rock.png");
 	IMAGEMANAGER->addImage("weed", L"resource/object/weed.png");
 
+	// - 배경음악
+	SOUNDMANAGER->addSound("bgm", "resource/bgm/field.mp3", true, true);
+
 
 	//초기 시작 씬 생성
 	SCENEMANAGER->pushScene(new testScene);
