@@ -80,9 +80,12 @@ void tileMap::render()
 		{
 			char buf[128] = "";
 			mncObjectBase* obj = (mncObjectBase*)_pickedTile->getObjectOnTile();
-			wsprintf(buf, "[%s] DP %d", obj->_name.c_str(), obj->getHp());
-			IMAGEMANAGER->fillRectangle(RectMakeCenter(tilePos.x - 8, tilePos.y + 16, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
-			IMAGEMANAGER->drawText(tilePos.x - strlen(buf)*9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
+			if (obj->_name != "µ¹")
+			{
+				wsprintf(buf, "[%s] DP %d", obj->_name.c_str(), obj->getHp());
+				IMAGEMANAGER->fillRectangle(RectMake(tilePos.x - strlen(buf) * 5 - 8, tilePos.y + 4, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
+				IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
+			}
 		}
 	}
 
