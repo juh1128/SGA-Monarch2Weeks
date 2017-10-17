@@ -1,19 +1,36 @@
 #include "stdafx.h"
 #include "town.h"
 
-HRESULT castle::init()
+HRESULT town::init()
 {
 	return E_NOTIMPL;
 }
 
-void castle::release()
+void town::release()
 {
 }
 
-void castle::update()
+void town::update()
 {
 }
 
-void castle::render()
+void town::render()
+{
+}
+
+HRESULT farmLand::init()
+{
+	return E_NOTIMPL;
+}
+
+void farmLand::release()
+{
+}
+
+void farmLand::update()
+{
+}
+
+void farmLand::render()
 {
 }

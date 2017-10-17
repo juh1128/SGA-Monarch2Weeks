@@ -94,6 +94,9 @@
     <Filter Include="playGround\country">
       <UniqueIdentifier>{0f495e24-fc80-4890-bf04-801b8a438f61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\object">
+      <UniqueIdentifier>{e09a8a13-4e37-4c54-ad41-e0a56040f03b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -207,6 +210,24 @@
     <ClInclude Include="country.h">
       <Filter>playGround\country</Filter>
     </ClInclude>
+    <ClInclude Include="tree.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="rock.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="castle.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="town.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="wall.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="bridge.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -316,6 +337,24 @@
     </ClCompile>
     <ClCompile Include="unitImageFrame.cpp">
       <Filter>playGround\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="tree.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="rock.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="castle.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="town.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="wall.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="bridge.cpp">
+      <Filter>playGround\object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

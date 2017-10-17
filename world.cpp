@@ -53,23 +53,25 @@ void world::update()
 
 void world::render()
 {
-	//Å¸ÀÏ¸Ê + À¯´Ö ·»´õ¸µ
-	if(_tileMap)
-		_tileMap->render();
-
-	//¿ÀºêÁ§Æ® ·»´õ¸µ
-	for (int i = 0; i < MAX_LAYER; ++i)
+	//Å¸ÀÏ + ¿ÀºêÁ§Æ® + À¯´Ö ·»´õ¸µ
+	if (_tileMap)
 	{
-		unsigned int size = _objectList[i].size();
-		for (unsigned int j = 0; j<size; ++j)
-		{
-			gameObject* object = _objectList[i][j];
-			if (object->isActiveObject())
-			{
-				object->render();
-			}
-		}
+		_tileMap->render();
 	}
+
+	////¿ÀºêÁ§Æ® ·»´õ¸µ
+	//for (int i = 0; i < MAX_LAYER; ++i)
+	//{
+	//	unsigned int size = _objectList[i].size();
+	//	for (unsigned int j = 0; j<size; ++j)
+	//	{
+	//		gameObject* object = _objectList[i][j];
+	//		if (object->isActiveObject())
+	//		{
+	//			object->render();
+	//		}
+	//	}
+	//}
 }
 
 void world::addObject(gameObject* obj, int renderPriority)

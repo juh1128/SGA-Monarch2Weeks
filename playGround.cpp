@@ -15,8 +15,8 @@ HRESULT playGround::init(void)
 {
 	gameNode::init(true);
 
-	//초기 시작 씬 생성
-	SCENEMANAGER->pushScene(new testScene);
+	//리소스 로드
+	// - 유닛
 	IMAGEMANAGER->addFrameImage("greenKing", L"resource/unit/greenKing.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("greenLv1", L"resource/unit/greenLv1.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("greenLv2", L"resource/unit/greenLv2.png", 2, 4, false);
@@ -25,6 +25,19 @@ HRESULT playGround::init(void)
 	IMAGEMANAGER->addFrameImage("redLv1", L"resource/unit/orangeLv1.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("redLv2", L"resource/unit/orangeLv2.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("redLv3", L"resource/unit/orangeLv3.png", 2, 4, false);
+	// - 오브젝트
+	IMAGEMANAGER->addFrameImage("bridge", L"resource/object/bridge.png", 2, 1);
+	IMAGEMANAGER->addFrameImage("castle", L"resource/object/castle.png", 4, 1);
+	IMAGEMANAGER->addFrameImage("farmLand", L"resource/object/farmLand.png", 4, 1);
+	IMAGEMANAGER->addFrameImage("town", L"resource/object/town.png", 4, 1);
+	IMAGEMANAGER->addFrameImage("tree", L"resource/object/tree.png", 3, 1);
+	IMAGEMANAGER->addFrameImage("wall", L"resource/object/wall.png", 3, 1);
+	IMAGEMANAGER->addImage("rock", L"resource/object/rock.png");
+	IMAGEMANAGER->addImage("weed", L"resource/object/weed.png");
+
+
+	//초기 시작 씬 생성
+	SCENEMANAGER->pushScene(new testScene);
 
 	return S_OK;
 }

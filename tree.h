@@ -5,12 +5,15 @@
 class tree : public gameObject
 {
 private:
+	POINT			_index;
+	int				_height;
+	int				_frame;
 
 public:
 	tree() {}
 	virtual ~tree() {}
 
-	HRESULT init();
+	HRESULT init(int xIndex, int yIndex);
 	void release();
 	void update();
 	void render();

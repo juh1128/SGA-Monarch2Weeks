@@ -5,12 +5,14 @@
 class rock : public gameObject
 {
 private:
+	POINT			_index;
+	int				_height;
 
 public:
 	rock() {}
 	virtual ~rock() {}
 
-	HRESULT init();
+	HRESULT init(int xIndex, int yIndex);
 	void release();
 	void update();
 	void render();

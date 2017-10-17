@@ -83,7 +83,9 @@
     <ClInclude Include="attackHitbox.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="bridge.h" />
     <ClInclude Include="cameraManager.h" />
+    <ClInclude Include="castle.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="country.h" />
@@ -107,6 +109,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="randomFunction.h" />
+    <ClInclude Include="rock.h" />
     <ClInclude Include="sceneBase.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
@@ -118,12 +121,15 @@
     <ClInclude Include="tileMap.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
+    <ClInclude Include="town.h" />
+    <ClInclude Include="tree.h" />
     <ClInclude Include="trigger.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="unit.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="vector2D.h" />
+    <ClInclude Include="wall.h" />
     <ClInclude Include="world.h" />
   </ItemGroup>
   <ItemGroup>
@@ -131,7 +137,9 @@
     <ClCompile Include="attackHitbox.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="bridge.cpp" />
     <ClCompile Include="cameraManager.cpp" />
+    <ClCompile Include="castle.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="country.cpp" />
     <ClCompile Include="effect.cpp">
@@ -153,6 +161,7 @@
     <ClCompile Include="progressBar.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="rock.cpp" />
     <ClCompile Include="sceneBase.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="soundManager.cpp" />
@@ -166,6 +175,8 @@
     <ClCompile Include="tileMap.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
+    <ClCompile Include="town.cpp" />
+    <ClCompile Include="tree.cpp" />
     <ClCompile Include="trigger.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -174,6 +185,7 @@
     <ClCompile Include="unitImageFrame.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2D.cpp" />
+    <ClCompile Include="wall.cpp" />
     <ClCompile Include="winMain.cpp" />
     <ClCompile Include="world.cpp" />
   </ItemGroup>

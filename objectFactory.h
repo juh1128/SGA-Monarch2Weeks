@@ -5,11 +5,10 @@
 class objectFactory
 {
 private:
-	gameObject*		_object;
 
 public:
-	objectFactory() : _object(NULL) {}
+	objectFactory() {}
 	virtual ~objectFactory() {}
 
-	gameObject*	createObject(string name);
+	gameObject*	createObject(int xIndex, int yIndex, string name);
 };

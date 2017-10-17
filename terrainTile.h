@@ -17,6 +17,9 @@ private:
 
 	//자기 타일 위에 있는 유닛
 	vector<unit*>	_onUnitList;
+	//자기 타일 위에 있는 오브젝트
+	gameObject*		_onObject;
+
 	//유닛 Z오더 전용 벡터
 	vector<unit*>	_renderUnitList;
 	
@@ -44,6 +47,10 @@ public:
 	vector<unit*> getUnitOnTile();
 	void deleteUnitOnTile(unit* onUnit);
 	void addUnitOnTile(unit* onUnit);
+
+	void setObjectOnTile(gameObject* obj);
+	void removeObjectOnTile();
+	gameObject* getObjectOnTile();
 
 	void requestRender(unit* onUnit);
 	

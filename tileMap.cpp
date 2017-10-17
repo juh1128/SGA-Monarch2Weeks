@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "tileMap.h"
 #include <io.h>
+#include "objectFactory.h"
 
 vector2D tileMap::_tileSize = vector2D(128, 64);
 bool tileMap::_isLoadedTile = false;
@@ -68,66 +69,12 @@ void tileMap::render()
 	_backgroundImage->setSizeOption(vector2D(WINSIZEX, WINSIZEY));
 	_backgroundImage->render(0, 0, Pivot::LEFT_TOP, false);
 
-	
-
-	//타일 렌더링
-	//int x = 0, y = 0;
-	//int temp = 0;
-	//bool max = false;
-	//while (true)
-	//{
-	//	if (temp == _tileCount.y) max = true;
-	//	if (!max)
-	//	{
-	//		for (int i = 0; i <= temp; i++)
-	//		{
-	//			if (_terrainTiles[i][temp - i])
-	//			{
-	//				_terrainTiles[i][temp - i]->render();
-	//			}
-
-	//		}
-
-	//		temp++;
-	//	}
-	//	else
-	//	{
-	//		for (int i =_tileCount.x-temp; i < temp; ++i)
-	//		{
-	//			//바꺼야됨
-	//			if (_terrainTiles[i][temp-i])
-	//			{
-	//				_terrainTiles[i][temp-i]->render();
-	//			}
-
-	//		}
-	//		temp--;
-	//	}
-	//	if (max && temp == 0) break;
-	//}
-
-	// 맵전체가 n by n 이면 _tileCount x,y 상관 없음
-	//for (int temp = 0; temp < _tileCount.x; temp++)
-	//{
-	//	for (x = temp; x < _tileCount.x; x++)
-	//	{
-	//		if (_terrainTiles[temp][x])
-	//			_terrainTiles[temp][x]->render();
-	//	}
-	//	for (y = temp + 1; y < _tileCount.y; ++y)
-	//	{
-	//		if (_terrainTiles[y][temp])
-	//			_terrainTiles[y][temp]->render();
-	//	}
-	//}
-
 	for (int i = 0; i < _tileCount.y; ++i)
 	{
 		for (int j = 0; j < _tileCount.x; ++j)
 		{
 			if (_terrainTiles[i][j])
-				_terrainTiles[i][j]->render();
-			
+				_terrainTiles[i][j]->render();		
 		}
 	}
 
@@ -201,15 +148,24 @@ void tileMap::load(string directory)
 		_terrainAtt.emplace_back(tile);
 	}
 
-	//vector<mapObject>	_objAtt;
-	//for (auto iter = d["오브젝트테이블"].Begin(); iter != d["오브젝트테이블"].End(); ++iter)
-	//{
-	//	mapObject mapObj;
-	//	Value obj(kObjectType);
-	//	obj = *iter;
-	//	mapObj.init(PointMake(0, 0), obj["key"].GetString());
-	//	_objAtt.emplace_back(mapObj);
-	//}
+	struct objectInfo
+	{
+		POINT index;
+		string key;
+	};
+	vector<objectInfo>	_objAtt;
+	for (auto iter = d["오브젝트테이블"].Begin(); iter != d["오브젝트테이블"].End(); ++iter)
+	{
+		objectInfo mapObj;
+		Value obj(kObjectType);
+		obj = *iter;
+
+		mapObj.index = PointMake(0, 0);
+		mapObj.key = obj["key"].GetString();
+		mapObj.key = mapObj.key.substr(0, mapObj.key.length() - 4);
+
+		_objAtt.emplace_back(mapObj);
+	}
 
 	//3. 지형 정보를 읽어온다.
 	int index = -1;
@@ -236,22 +192,20 @@ void tileMap::load(string directory)
 	}
 
 	//4. 오브젝트 정보를 읽어온다.
-	//for (int i = 0; i < _tileCnt.y; ++i)
-	//{
-	//	for (int j = 0; j < _tileCnt.x; ++j)
-	//	{
-	//		index = d["오브젝트"][i][j].GetInt();
-	//		if (index != -1)
-	//		{
-	//			_objectList[i][j] = new mapObject(_objAtt[index]);
-	//			_objectList[i][j]->setIndex(j, i);
-	//		}
-	//		else
-	//		{
-	//			_objectList[i][j] = NULL;
-	//		}
-	//	}
-	//}
+	objectFactory objFactory;
+	for (int i = 0; i < _tileCount.y; ++i)
+	{
+		for (int j = 0; j < _tileCount.x; ++j)
+		{
+			index = d["오브젝트"][i][j].GetInt();
+			if (index != -1)
+			{
+				gameObject* newObject = objFactory.createObject(j, i, _objAtt[index].key);
+				if(newObject)
+					WORLD->addObject(newObject);
+			}
+		}
+	}
 }
 
 void tileMap::updateHeightTable()
