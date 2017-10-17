@@ -5,12 +5,18 @@
 class farmLand : public gameObject
 {
 private:
+	POINT			_index;
+	int				_height;
+	int				_frame;
+
+	int				_hp;
+	CountryColor::Enum	_countryColor;
 
 public:
 	farmLand() {}
 	virtual ~farmLand() {}
 
-	HRESULT init();
+	HRESULT init(int xIndex, int yIndex, CountryColor::Enum color);
 	void release();
 	void update();
 	void render();
@@ -19,12 +25,18 @@ public:
 class town : public gameObject
 {
 private:
+	POINT			_index;
+	int				_height;
+	int				_frame;
+
+	int				_hp;
+	CountryColor::Enum	_countryColor;
 
 public:
 	town() {}
 	virtual ~town() {}
 
-	HRESULT init();
+	HRESULT init(int xIndex, int yIndex, CountryColor::Enum color);
 	void release();
 	void update();
 	void render();
