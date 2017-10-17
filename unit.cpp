@@ -235,6 +235,10 @@ void unitNoneState::enter(unit & unit)
 		vector2D direction = unit.getDirectionVector(unit._unitDirection);
 		vector2D temp = unit._index + direction;
 		vector2D temp2 = unit._index + direction*2;
+		if (temp.x == 6 && temp.y == 17)
+		{
+			cout << "stop" << endl;
+		}
 		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
 		tile[1] = WORLD->getMap()->getTile(temp2.x,temp2.y);
 

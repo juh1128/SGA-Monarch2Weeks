@@ -1,7 +1,6 @@
 #pragma once
 #include "gameObject.h"
 
-
 class farmLand : public gameObject
 {
 private:
@@ -29,8 +28,10 @@ private:
 	int				_height;
 	int				_frame;
 
-	int				_hp;
+	int					_hp;
 	CountryColor::Enum	_countryColor;
+
+	float			_farmTimer;
 
 public:
 	town() {}

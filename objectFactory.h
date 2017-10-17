@@ -11,5 +11,7 @@ public:
 	virtual ~objectFactory() {}
 
 	gameObject*	createObject(int xIndex, int yIndex, string name);
+
+private:
 	gameObject* createCastle(int xIndex, int yIndex,string name);
 };
