@@ -60,6 +60,10 @@ public:
 	void changeState(unitState* newstate);
 	void imageFrame(void);
 
+	void build();
+	void attack();
+	void run();
+
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
 
 	void syncIndexFromPos();

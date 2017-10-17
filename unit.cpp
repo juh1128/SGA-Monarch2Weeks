@@ -207,6 +207,24 @@ void unit::requestRender()
 	WORLD->getMap()->getTile(maxIndex.x, maxIndex.y)->requestRender(this);
 }
 
+void unit::build()
+{
+	//건설을 담당하는 함수
+}
+
+void unit::attack()
+{
+	//공격을 담당하는 함수
+}
+
+void unit::run()
+{
+	//도망가는 함수
+
+
+
+}
+
 void unitNoneState::enter(unit & unit)
 {
 	unit._state = UnitState::None;
@@ -259,8 +277,8 @@ void unitNoneState::enter(unit & unit)
 
 		if (dest.x < 0 || dest.y < 0 || dest.x >= WORLD->getMap()->getTileCount().x || dest.y >= WORLD->getMap()->getTileCount().y ||
 			abs(tile[0]->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2
-			//|| !WORLD->getMap()->getTile(destp.x,destp.y)->isWalkable())
-			)
+			|| !WORLD->getMap()->getTile(destp.x,destp.y)->isWalkable())
+			
 		{
 			unit._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0,3);
 			unit.changeState(new unitNoneState());

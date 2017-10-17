@@ -75,7 +75,7 @@
         {
             "key": "ISO_Tile_Water_01.png",
             "height": 1,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
@@ -96,14 +96,14 @@
         {
             "key": "ISO_Tile_Water_01.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_2S1C_03.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
@@ -117,14 +117,14 @@
         {
             "key": "ISO_Tile_Water_01.png",
             "height": 7,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_01.png",
             "height": 4,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
@@ -145,49 +145,49 @@
         {
             "key": "ISO_Tile_Water_01.png",
             "height": 5,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_01.png",
             "height": 3,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_01.png",
             "height": 2,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_1S2C_01.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_1S2C_02.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_2S_01.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_1S1C_08.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
@@ -201,14 +201,14 @@
         {
             "key": "ISO_Tile_Water_Shore_1S1C_03.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_1S1C_02.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
@@ -229,7 +229,7 @@
         {
             "key": "ISO_Tile_Water_Shore_1S_03.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
@@ -257,35 +257,35 @@
         {
             "key": "ISO_Tile_Water_Shore_1S_04.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_1S2C_03.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_1S_02.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_1C_04.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
         {
             "key": "ISO_Tile_Water_Shore_1S_01.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
