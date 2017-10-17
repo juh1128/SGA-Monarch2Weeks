@@ -24,6 +24,10 @@ public:
 	void render();
 
 	void setDoorWall();
+
+	int getHp() { return _hp; }
+	void addHp(int add) { _hp += add; }
+	void setHp(int set) { _hp = set; }
 };
 
 
@@ -56,4 +60,8 @@ public:
 	string getSpriteKey(CountryColor::Enum color);
 
 	CountryColor::Enum getCountryColor() { return _countryColor; }
+
+	int getHp() { return _hp; }
+	void addHp(int add) { _hp += add; }
+	void setHp(int set) { _hp = set; }
 };

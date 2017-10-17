@@ -104,7 +104,15 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		{
 			float zoom = CAMERA->getZoom();
 			float zoomUnit = 0.1f;
-			((short)HIWORD(wParam) < 0) ? CAMERA->setZoom(zoom - zoomUnit) : CAMERA->setZoom(zoom + zoomUnit);
+
+			if ((short)HIWORD(wParam) < 0)
+			{
+				CAMERA->setZoom(zoom - zoomUnit);		
+			}
+			else
+			{
+				CAMERA->setZoom(zoom + zoomUnit);
+			}	
 		}
 		break;
 

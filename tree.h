@@ -19,6 +19,10 @@ public:
 	void release();
 	void update();
 	void render();
+
+	int getHp() { return _hp; }
+	void addHp(int add) { _hp += add; }
+	void setHp(int set) { _hp = set; }
 };
 
 class weed : public gameObject
@@ -37,4 +41,8 @@ public:
 	void release();
 	void update();
 	void render();
+
+	int getHp() { return _hp; }
+	void addHp(int add) { _hp += add; }
+	void setHp(int set) { _hp = set; }
 };
