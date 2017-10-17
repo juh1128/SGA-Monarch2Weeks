@@ -29,9 +29,13 @@ class unit : public gameObject
 private:
 	vector2D _index;
 	int		 _height;
+	int		 _hp;
+	bool	 _isStarUnit;
 
 	UnitState::Enum _state;
 	unitState*		_unitState;
+
+	CountryColor::Enum _unitColor;
 
 	float _moveSpeed;
 	int _imageFrameX;
@@ -62,9 +66,16 @@ public:
 
 	void build();
 	void attack();
-	void run();
+	void run(unit* _starUnit);
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
+
+	CountryColor::Enum getCountryColor() { return _unitColor; }
+
+	bool getIsStarUnit() { return _isStarUnit; }
+
+	int getHealth() { return _hp; }
+
 
 	void syncIndexFromPos();
 	void requestRender();
