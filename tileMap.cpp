@@ -320,6 +320,27 @@ vector2D tileMap::getHeightTablePosFromIndex(vector2D index)
 	return pos;
 }
 
+void tileMap::get8Tiles(terrainTile** array8, int xIndex, int yIndex)
+{
+	int i = 0;
+	for (int y = -1; y <= 1; ++y)
+	{
+		for (int x = -1; x <= 1; ++x)
+		{		
+			if (x == 0 && y == 0)
+			{
+				continue;
+			}
+			if (xIndex + x < 0 || yIndex + y < 0 || xIndex + x >= _tileCount.x || yIndex + y >= _tileCount.y)
+			{
+				array8[i++] = NULL;
+				continue;
+			}
+			array8[i++] = _terrainTiles[y + yIndex][x + xIndex];
+		}
+	}
+}
+
 
 void tileMap::loadTileResource()
 {

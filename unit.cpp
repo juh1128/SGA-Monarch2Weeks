@@ -331,6 +331,7 @@ void unitNoneState::enter(unit & me)
 		vector2D direction = me.getDirectionVector(me._unitDirection);
 		vector2D temp = me._index + direction;
 		vector2D temp2 = me._index + direction*2;
+
 		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
 		tile[1] = WORLD->getMap()->getTile(temp2.x,temp2.y);
 

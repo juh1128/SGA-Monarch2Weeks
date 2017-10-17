@@ -5,6 +5,9 @@
 #include "rock.h"
 #include "tree.h"
 #include "castle.h"
+#include "town.h"
+#include "wall.h"
+#include "bridge.h"
 
 
 
@@ -14,7 +17,37 @@
 gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 {
 	gameObject* newObj = NULL;
-	if (name == "tree")
+
+	if (name == "redTown")
+	{
+		newObj = new town;
+		((town*)newObj)->init(xIndex, yIndex, CountryColor::RED);
+	}
+	else if (name == "blueTown")
+	{
+		newObj = new town;
+		((town*)newObj)->init(xIndex, yIndex, CountryColor::BLUE);
+	}
+	else if (name == "whiteTown")
+	{
+		newObj = new town;
+		((town*)newObj)->init(xIndex, yIndex, CountryColor::WHITE);
+	}
+	else if (name == "greenTown")
+	{
+		newObj = new town;
+		((town*)newObj)->init(xIndex, yIndex, CountryColor::GREEN);
+	}
+	else if (name == "bridge")
+	{
+
+	}
+	else if (name == "wall")
+	{
+		newObj = new wall;
+		((wall*)newObj)->init(xIndex, yIndex);
+	}
+	else if (name == "tree")
 	{
 		newObj = new tree;
 		((tree*)newObj)->init(xIndex, yIndex);

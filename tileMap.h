@@ -55,6 +55,9 @@ public:
 	int getHeightFromTableIndex(int x, int y) { return _heightTable[y][x]; }
 
 	terrainTile* getTile(int x, int y) { return _terrainTiles[y][x]; }
+
+	//인덱스 주변 8개 타일을 가진 배열을 반환한다.
+	void get8Tiles(terrainTile** array8, int xIndex, int yIndex);
 	terrainTile* getPickedTile() { return _pickedTile; }
 
 

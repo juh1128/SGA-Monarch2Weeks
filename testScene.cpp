@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "testScene.h"
+#include "objectFactory.h"
 
 HRESULT testScene::init()
 {
@@ -14,6 +15,10 @@ HRESULT testScene::init()
 
 	//배경음악 재생
 	SOUNDMANAGER->play("bgm", 0.5f);
+
+	//테스트 마을 하나 생성
+	objectFactory factory;
+	WORLD->addObject(factory.createObject(4, 8, "redTown"));
 
 	return S_OK;
 }
