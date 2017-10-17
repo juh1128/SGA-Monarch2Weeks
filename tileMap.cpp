@@ -2,6 +2,8 @@
 #include "tileMap.h"
 #include <io.h>
 #include "objectFactory.h"
+#include "unit.h"
+#include "mncObjectBase.h"
 
 vector2D tileMap::_tileSize = vector2D(128, 64);
 bool tileMap::_isLoadedTile = false;
@@ -22,7 +24,6 @@ void tileMap::init(string directory)
 	_totalMapSize.x = _tileSize.x * _tileCount.x;
 	_totalMapSize.y = _tileSize.y * _tileCount.y;
 	_pickedTile = NULL;
-	_rbDownPos = vector2D(0, 0);
 }
 
 void tileMap::release()
@@ -41,26 +42,6 @@ void tileMap::release()
 
 void tileMap::update()
 {
-	//마우스 피킹
-	terrainTile* tile = this->getTileFromMousePos();
-	if (_pickedTile)
-		_pickedTile->setPicked(false);
-	if (tile)
-	{
-		_pickedTile = tile;
-		_pickedTile->setPicked(true);
-	}
-
-	//카메라 이동 구현
-	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
-	{
-		_rbDownPos = _ptMouse;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
-	{
-		CAMERA->setPos(CAMERA->getPos() + _rbDownPos - vector2D(_ptMouse));
-		_rbDownPos = _ptMouse;
-	}
 }
 
 void tileMap::render()
@@ -69,12 +50,13 @@ void tileMap::render()
 	_backgroundImage->setSizeOption(vector2D(WINSIZEX, WINSIZEY));
 	_backgroundImage->render(0, 0, Pivot::LEFT_TOP, false);
 
+	bool isStopedWorld = SCENEMANAGER->getNowScene()->isStopedWorld();
 	for (int i = 0; i < _tileCount.y; ++i)
 	{
 		for (int j = 0; j < _tileCount.x; ++j)
 		{
 			if (_terrainTiles[i][j])
-				_terrainTiles[i][j]->render();		
+				_terrainTiles[i][j]->render(isStopedWorld);
 		}
 	}
 
@@ -82,16 +64,25 @@ void tileMap::render()
 	if (_pickedTile)
 	{
 		vector2D tilePos = CAMERA->getRelativeVector2D(_pickedTile->_pos);
-		tilePos.y += this->getTileSize().y;
+		tilePos.y -= _pickedTile->getHeight()*this->getTileSize().y*0.5f;
+		tilePos.y += this->getTileSize().y - 10;
 		//유닛이 있을 경우 유닛 정보 표시
-		if (_pickedTile->getUnitOnTile().size() > 0)
+		vector<unit*> unitList = _pickedTile->getUnitOnTile();
+		if (unitList.size() > 0)
 		{
-			IMAGEMANAGER->drawText(tilePos.x, tilePos.y, L"유닛", 15, DefaultBrush::black);
+			char buf[128] = "";
+			wsprintf(buf, "[%s] DP %d", unitList[0]->_name.c_str(), unitList[0]->getHealth()); 
+			IMAGEMANAGER->fillRectangle(RectMakeCenter(tilePos.x + 12, tilePos.y + 16, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
+			IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
 		}
 		//오브젝트가 있을 경우 오브젝트의 정보 표시
 		else if (_pickedTile->getObjectOnTile())
 		{
-			IMAGEMANAGER->drawText(tilePos.x - 30, tilePos.y, L"오브젝트", 15, DefaultBrush::black);
+			char buf[128] = "";
+			mncObjectBase* obj = (mncObjectBase*)_pickedTile->getObjectOnTile();
+			wsprintf(buf, "[%s] DP %d", obj->_name.c_str(), obj->getHp());
+			IMAGEMANAGER->fillRectangle(RectMakeCenter(tilePos.x - 8, tilePos.y + 16, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
+			IMAGEMANAGER->drawText(tilePos.x - strlen(buf)*9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
 		}
 	}
 
@@ -355,6 +346,19 @@ void tileMap::get8Tiles(terrainTile** array8, int xIndex, int yIndex)
 			}
 			array8[i++] = _terrainTiles[y + yIndex][x + xIndex];
 		}
+	}
+}
+
+void tileMap::setMousePickTile()
+{
+	//마우스 피킹
+	terrainTile* tile = this->getTileFromMousePos();
+	if (_pickedTile)
+		_pickedTile->setPicked(false);
+	if (tile)
+	{
+		_pickedTile = tile;
+		_pickedTile->setPicked(true);
 	}
 }
 

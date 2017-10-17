@@ -25,7 +25,6 @@ private:
 	image*				_backgroundImage;
 
 	terrainTile*		_pickedTile;
-	vector2D			_rbDownPos;
 
 public:
 	tileMap():_name(""),_background("") {}
@@ -58,6 +57,8 @@ public:
 
 	//인덱스 주변 8개 타일을 가진 배열을 반환한다.
 	void get8Tiles(terrainTile** array8, int xIndex, int yIndex);
+
+	void setMousePickTile();
 	terrainTile* getPickedTile() { return _pickedTile; }
 
 

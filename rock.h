@@ -1,12 +1,10 @@
 #pragma once
-#include "gameObject.h"
+#include "mncObjectBase.h"
 
 
-class rock : public gameObject
+class rock : public mncObjectBase
 {
 private:
-	POINT			_index;
-	int				_height;
 
 public:
 	rock() {}
@@ -16,6 +14,4 @@ public:
 	void release();
 	void update();
 	void render();
-
-	int getHp() { return 0; }
 };

@@ -1,16 +1,11 @@
 #pragma once
-#include "gameObject.h"
+#include "mncObjectBase.h"
 
-class farmLand : public gameObject
+class farmLand : public mncObjectBase
 {
 private:
-	POINT			_index;
-	int				_height;
 	int				_frame;
-
-	int					_hp;
 	CountryColor::Enum	_countryColor;
-
 	float				_incomeTimer;
 
 public:
@@ -22,21 +17,13 @@ public:
 	void update();
 	void render();
 
-	int getHp() { return _hp; }
-	void addHp(int add) { _hp += add; }
-	void setHp(int set) { _hp = set; }
-
 	CountryColor::Enum getCountryColor() { return _countryColor; }
 };
 
-class town : public gameObject
+class town : public mncObjectBase
 {
 private:
-	POINT			_index;
-	int				_height;
 	int				_frame;
-
-	int					_hp;
 	CountryColor::Enum	_countryColor;
 
 	float			_farmTimer;
@@ -51,10 +38,6 @@ public:
 	void release();
 	void update();
 	void render();
-
-	int getHp() { return _hp; }
-	void addHp(int add) { _hp += add; }
-	void setHp(int set) { _hp = set; }
 
 	CountryColor::Enum getCountryColor() { return _countryColor; }
 };

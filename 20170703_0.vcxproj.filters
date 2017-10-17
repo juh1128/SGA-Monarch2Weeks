@@ -225,6 +225,9 @@
     <ClInclude Include="bridge.h">
       <Filter>playGround\object</Filter>
     </ClInclude>
+    <ClInclude Include="mncObjectBase.h">
+      <Filter>playGround\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -348,6 +351,9 @@
       <Filter>playGround\object</Filter>
     </ClCompile>
     <ClCompile Include="bridge.cpp">
+      <Filter>playGround\object</Filter>
+    </ClCompile>
+    <ClCompile Include="mncObjectBase.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
   </ItemGroup>

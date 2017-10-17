@@ -101,7 +101,7 @@ void terrainTile::update()
 {
 }
 
-void terrainTile::render()
+void terrainTile::render(bool isStopedWorld)
 {
 	//타일 렌더링
 	if (_image)
@@ -147,7 +147,8 @@ void terrainTile::render()
 			_renderUnitList[i]->render();
 	}
 	//렌더링 요청 초기화
-	_renderUnitList.clear();
+	if(!isStopedWorld)
+		_renderUnitList.clear();
 
 
 	//마우스 오버 시

@@ -1,15 +1,11 @@
 #pragma once
-#include "gameObject.h"
+#include "mncObjectBase.h"
 
 
-class wall : public gameObject
+class wall : public mncObjectBase
 {
 private:
-	POINT			_index;
-	int				_height;
 	int				_frame;
-
-	int				_hp;
 
 public:
 	wall() {}

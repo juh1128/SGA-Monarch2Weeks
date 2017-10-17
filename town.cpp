@@ -6,26 +6,18 @@
 // - 밸런스 설정값
 
 #define FARM_CREATE_TIME 5.0f		//농장 생성 시간
-#define PAY_TAX_TIME 5.0f			//세금 납부 시간
+#define PAY_TAX_TIME 3.5f			//세금 납부 시간
 
-#define TOWN_INCOME_TIME 4.0f		//마을 수익 시간
-#define FARM_INCOME_TIME 5.0f		//농장 수익 시간
+#define TOWN_INCOME_TIME 3.0f		//마을 수익 시간
+#define FARM_INCOME_TIME 4.0f		//농장 수익 시간
 
 
 //==========================================================
 // - 마을
 HRESULT town::init(int xIndex, int yIndex, CountryColor::Enum color)
 {
-	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
-	_height = tile->getHeight();
-	tile->setObjectOnTile(this);
-
-	gameObject::init("마을", "town", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
-	_pos = _pos / CAMERA->getZoom();
-
+	mncObjectBase::init("마을", "town", xIndex, yIndex, 50, true);
 	_frame = color;
-	_index.x = xIndex;
-	_index.y = yIndex;
 
 	_hp = 50;
 	_farmTimer = 0;
@@ -39,22 +31,19 @@ HRESULT town::init(int xIndex, int yIndex, CountryColor::Enum color)
 
 void town::release()
 {
-	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
-	tile->removeObjectOnTile();
-
-	gameObject::release();
+	mncObjectBase::release();
 }
 
 void town::update()
 {
-	gameObject::update();
+	mncObjectBase::update();
 
 	//돈 먹기
 	_townIncomeTimer += TIMEMANAGER->getElapsedTime();
 	if (_townIncomeTimer >= TOWN_INCOME_TIME)
 	{
 		this->addHp(2);
-
+		cout << "마을의 수익! +2원" << endl;
 		_townIncomeTimer -= TOWN_INCOME_TIME;
 	}
 
@@ -64,11 +53,12 @@ void town::update()
 	if (_taxTimer >= PAY_TAX_TIME)
 	{
 		country* cty = WORLD->getCountry(_countryColor);
-		float tax = _hp*cty->getTaxRate() / 3;	//세금 납부 공식
-		int pay = (_hp - tax > 0) ? _hp - tax : _hp - 1;
+		float tax = (_hp*cty->getTaxRate()) / 3;	//세금 납부 공식
+		int pay = (_hp - tax > 0) ? tax : _hp - 1;
 
 		//세금 납부
 		_hp -= pay;
+		cout << "마을에서 세금을 납부했다. [ " << pay << " ]" << endl;
 		cty->addGold(pay);
 
 		_taxTimer -= PAY_TAX_TIME;
@@ -122,13 +112,7 @@ void town::update()
 
 void town::render()
 {
-	if (_image)
-	{
-		float zoom = CAMERA->getZoom();
-		_image->setAlphaOption(_alpha);
-		_image->setScaleOption(vector2D(zoom, zoom));
-		_image->frameRender(_pos.x*zoom, _pos.y*zoom, _frame, 0, _pivot);
-	}
+	mncObjectBase::frameRender(_frame, 0);
 }
 
 
@@ -136,18 +120,10 @@ void town::render()
 // - 농장
 HRESULT farmLand::init(int xIndex, int yIndex, CountryColor::Enum color)
 {
-	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
-	_height = tile->getHeight();
-	tile->setObjectOnTile(this);
+	mncObjectBase::init("농장", "farmLand", xIndex, yIndex, 30, true);
 
-	gameObject::init("농장", "farmLand", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
-	_pos = _pos / CAMERA->getZoom();
-
-	_index.x = xIndex;
-	_index.y = yIndex;
 	_frame = color;
-
-	_hp = 30;
+	_countryColor = color;
 	_incomeTimer = 0;
 
 	return S_OK;
@@ -155,15 +131,12 @@ HRESULT farmLand::init(int xIndex, int yIndex, CountryColor::Enum color)
 
 void farmLand::release()
 {
-	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
-	tile->removeObjectOnTile();
-
-	gameObject::release();
+	mncObjectBase::release();
 }
 
 void farmLand::update()
 {
-	gameObject::update();
+	mncObjectBase::update();
 
 	//마을에 수익 주기
 	_incomeTimer += TIMEMANAGER->getElapsedTime();
@@ -185,6 +158,7 @@ void farmLand::update()
 						if (((town*)obj)->getCountryColor() == _countryColor)
 						{
 							((town*)obj)->addHp(1);
+							cout << "농장에서 주변 마을에 수익을 분배했다. +1" << endl;
 						}
 					}
 				}
@@ -200,11 +174,5 @@ void farmLand::update()
 
 void farmLand::render()
 {
-	if (_image)
-	{
-		float zoom = CAMERA->getZoom();
-		_image->setAlphaOption(_alpha);
-		_image->setScaleOption(vector2D(zoom, zoom));
-		_image->frameRender(_pos.x*zoom, _pos.y*zoom, _frame, 0, _pivot);
-	}
+	mncObjectBase::frameRender(_frame, 0);
 }

@@ -3,18 +3,8 @@
 
 HRESULT castle::init(int xIndex, int yIndex, CountryColor::Enum color, Direction::Enum direction)
 {
-	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
-	_height = tile->getHeight();
+	mncObjectBase::init("캐슬", getSpriteKey(color), xIndex, yIndex, 100, false);
 
-	//해당 x,y,height 위치의 타일에게 성을 등록함.
-	tile->setObjectOnTile(this);
-	tile->setWalkable(false);	//타일 이동불가능 설정
-
-	gameObject::init("캐슬", getSpriteKey(color), tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
-	_pos = _pos / CAMERA->getZoom();
-
-	_index.x = xIndex;
-	_index.y = yIndex;
 	_countryColor = color;
 	_frameX = 0;
 	_frameTimer = 0;
@@ -67,10 +57,6 @@ HRESULT castle::init(int xIndex, int yIndex, CountryColor::Enum color, Direction
 
 void castle::release()
 {
-	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
-	tile->removeObjectOnTile();
-	tile->setWalkable(true);	
-
 	//성벽 삭제
 	for (int i = 0; i < 8; ++i)
 	{
@@ -82,12 +68,12 @@ void castle::release()
 		}
 	}
 
-	gameObject::release();
+	mncObjectBase::release();
 }
 
 void castle::update()
 {
-	gameObject::update();
+	mncObjectBase::update();
 
 	//왕 프레임 업데이트
 	_frameTimer += TIMEMANAGER->getElapsedTime();
@@ -100,13 +86,7 @@ void castle::update()
 
 void castle::render()
 {
-	if (_image)
-	{
-		float zoom = CAMERA->getZoom();
-		_image->setAlphaOption(_alpha);
-		_image->setScaleOption(vector2D(zoom, zoom));
-		_image->frameRender(_pos.x*zoom, _pos.y*zoom, _frameX, _frameY, _pivot);
-	}
+	mncObjectBase::frameRender(_frameX,_frameY);
 }
 
 string castle::getSpriteKey(CountryColor::Enum color)
@@ -139,17 +119,8 @@ string castle::getSpriteKey(CountryColor::Enum color)
 // - 성문
 HRESULT castleWall::init(int xIndex, int yIndex, bool isLeft, CountryColor::Enum color)
 {
-	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
-	_height = tile->getHeight();
+	mncObjectBase::init("성문", "castle", xIndex, yIndex, 250, false);
 
-	tile->setObjectOnTile(this);
-	tile->setWalkable(false);	//타일 이동불가능 설정
-
-	gameObject::init("성문", "castle", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
-	_pos = _pos / CAMERA->getZoom();
-
-	_index.x = xIndex;
-	_index.y = yIndex;
 	_countryColor = color;
 
 	//프레임 셋팅
@@ -168,27 +139,17 @@ HRESULT castleWall::init(int xIndex, int yIndex, bool isLeft, CountryColor::Enum
 
 void castleWall::release()
 {
-	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
-	tile->removeObjectOnTile();
-	tile->setWalkable(true);
-
-	gameObject::release();
+	mncObjectBase::release();
 }
 
 void castleWall::update()
 {
-	gameObject::update();
+	mncObjectBase::update();
 }
 
 void castleWall::render()
 {
-	if (_image)
-	{
-		float zoom = CAMERA->getZoom();
-		_image->setAlphaOption(_alpha);
-		_image->setScaleOption(vector2D(zoom, zoom));
-		_image->frameRender(_pos.x*zoom, _pos.y*zoom, _frame, 0, _pivot);
-	}
+	mncObjectBase::frameRender(_frame, 0);
 }
 
 void castleWall::setDoorWall()

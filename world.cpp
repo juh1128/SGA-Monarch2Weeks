@@ -58,20 +58,6 @@ void world::render()
 	{
 		_tileMap->render();
 	}
-
-	////오브젝트 렌더링
-	//for (int i = 0; i < MAX_LAYER; ++i)
-	//{
-	//	unsigned int size = _objectList[i].size();
-	//	for (unsigned int j = 0; j<size; ++j)
-	//	{
-	//		gameObject* object = _objectList[i][j];
-	//		if (object->isActiveObject())
-	//		{
-	//			object->render();
-	//		}
-	//	}
-	//}
 }
 
 void world::addObject(gameObject* obj, int renderPriority)

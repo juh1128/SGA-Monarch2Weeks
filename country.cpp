@@ -6,7 +6,7 @@ void country::init(CountryColor::Enum color)
 {
 	_countryColor = color;
 	_gold = 5000;
-	_taxRate = 3.0;
+	_taxRate = 0.1f;
 }
 
 void country::release()

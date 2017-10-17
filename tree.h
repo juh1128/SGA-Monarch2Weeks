@@ -1,15 +1,11 @@
 #pragma once
-#include "gameObject.h"
+#include "mncObjectBase.h"
 
 
-class tree : public gameObject
+class tree : public mncObjectBase
 {
 private:
-	POINT			_index;
-	int				_height;
 	int				_frame;
-
-	int				_hp;
 
 public:
 	tree() {}
@@ -19,18 +15,11 @@ public:
 	void release();
 	void update();
 	void render();
-
-	int getHp() { return _hp; }
-	void addHp(int add) { _hp += add; }
-	void setHp(int set) { _hp = set; }
 };
 
-class weed : public gameObject
+class weed : public mncObjectBase
 {
 private:
-	POINT			_index;
-	int				_height;
-
 	int				_hp;
 
 public:
@@ -41,8 +30,4 @@ public:
 	void release();
 	void update();
 	void render();
-
-	int getHp() { return _hp; }
-	void addHp(int add) { _hp += add; }
-	void setHp(int set) { _hp = set; }
 };

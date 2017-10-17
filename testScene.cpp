@@ -43,15 +43,32 @@ void testScene::update()
 		WORLD->addUnit(_unit, CountryColor::GREEN);
 	}
 	
+	//마우스 피킹 + 유닛피킹 시 WORLD 스탑
+	_world->getMap()->setMousePickTile();
+	terrainTile* tile = _world->getMap()->getPickedTile();
+	if (tile)
+	{
+		if (tile->getUnitOnTile().size() > 0)
+		{
+			this->enableWorld(false);
+		}
+		else
+		{
+			this->enableWorld(true);
+		}
+	}
 
-	//if (KEYMANAGER->isOnceKeyDown(VK_F1))
-	//{
-	//	this->sendMessage("disableWorld");
-	//}
-	//if (KEYMANAGER->isOnceKeyDown(VK_F2))
-	//{
-	//	this->sendMessage("enableWorld");
-	//}
+	//카메라 이동 구현
+	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+	{
+		_rbDownPos = _ptMouse;
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
+	{
+		CAMERA->setPos(CAMERA->getPos() + _rbDownPos - vector2D(_ptMouse));
+		_rbDownPos = _ptMouse;
+	}
+
 
 }
 

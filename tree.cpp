@@ -3,87 +3,44 @@
 
 HRESULT tree::init(int xIndex, int yIndex)
 {
-	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
-	_height = tile->getHeight();
-	tile->setObjectOnTile(this);
-	tile->setWalkable(false);	//타일 이동불가능 설정
+	mncObjectBase::init("나무", "tree", xIndex, yIndex, 80, false);
 
-	gameObject::init("나무", "tree", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
-	_pos = _pos / CAMERA->getZoom();
-
-	_index.x = xIndex;
-	_index.y = yIndex;
 	_frame = 0;
-
-	_hp = 80;
-
 	return S_OK;
 }
 
 void tree::release()
 {
-	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
-	tile->removeObjectOnTile();
-	tile->setWalkable(true);
-
-	gameObject::release();
+	mncObjectBase::release();
 }
 
 void tree::update()
 {
-	gameObject::update();
+	mncObjectBase::update();
 }
 
 void tree::render()
 {
-	if (_image)
-	{
-		float zoom = CAMERA->getZoom();
-		_image->setAlphaOption(_alpha);
-		_image->setScaleOption(vector2D(zoom, zoom));
-		_image->frameRender(_pos.x*zoom, _pos.y*zoom, _frame, 0, _pivot);
-	}
+	mncObjectBase::frameRender(_frame, 0);
 }
 
 HRESULT weed::init(int xIndex, int yIndex)
 {
-	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
-	_height = tile->getHeight();
-	tile->setObjectOnTile(this);
-	tile->setWalkable(false);	//타일 이동불가능 설정
-
-	gameObject::init("잡초", "weed", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
-	_pos = _pos / CAMERA->getZoom();
-
-	_index.x = xIndex;
-	_index.y = yIndex;
-
-	_hp = 20;
-
+	mncObjectBase::init("잡초", "weed", xIndex, yIndex, 20, false);
 	return S_OK;
 }
 
 void weed::release()
 {
-	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
-	tile->removeObjectOnTile();
-	tile->setWalkable(true);
-
-	gameObject::release();
+	mncObjectBase::release();
 }
 
 void weed::update()
 {
-	gameObject::update();
+	mncObjectBase::update();
 }
 
 void weed::render()
 {
-	if (_image)
-	{
-		float zoom = CAMERA->getZoom();
-		_image->setAlphaOption(_alpha);
-		_image->setScaleOption(vector2D(zoom, zoom));
-		_image->render(_pos.x*zoom, _pos.y*zoom, _pivot);
-	}
+	mncObjectBase::render();
 }

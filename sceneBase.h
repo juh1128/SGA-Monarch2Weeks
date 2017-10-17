@@ -3,7 +3,7 @@
 
 class sceneBase : public gameNode
 {
-private:
+protected:
 	world*			_world;
 	bool			_isUpdateWorld;
 
@@ -33,6 +33,7 @@ public:
 	}
 
 	void enableWorld(bool set) { _isUpdateWorld = set; }
+	bool isStopedWorld() { return !_isUpdateWorld; }
 
 private:
 	void registCallback();

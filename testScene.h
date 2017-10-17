@@ -5,6 +5,7 @@
 class testScene : public sceneBase
 {
 private:
+	vector2D			_rbDownPos;
 
 public:
 	virtual HRESULT init();

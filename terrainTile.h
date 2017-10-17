@@ -30,7 +30,7 @@ public:
 	virtual HRESULT init(int xIndex, int yIndex, bool walkable, float moveRatio, string key = "");
 	virtual void release();
 	virtual void update();
-	virtual void render();
+	virtual void render(bool isStopedWorld);
 
 	bool isWalkable() { return _walkable; }
 	void setWalkable(bool set) { _walkable = set; }
