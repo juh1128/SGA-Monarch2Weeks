@@ -73,8 +73,10 @@ public:
 	CountryColor::Enum getCountryColor() { return _unitColor; }
 
 	bool getIsStarUnit() { return _isStarUnit; }
+	void setIsStarUnit(bool isStar) { _isStarUnit = isStar; }
 
 	int getHealth() { return _hp; }
+	void setHp(int num) { _hp = num; }
 
 
 	void syncIndexFromPos();
