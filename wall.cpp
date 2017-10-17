@@ -6,6 +6,7 @@ HRESULT wall::init(int xIndex, int yIndex)
 	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
 	_height = tile->getHeight();
 	tile->setObjectOnTile(this);
+	tile->setWalkable(false);	//타일 이동불가능 설정
 
 	gameObject::init("목책", "wall", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
 	_pos = _pos / CAMERA->getZoom();
@@ -23,6 +24,7 @@ void wall::release()
 {
 	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
 	tile->removeObjectOnTile();
+	tile->setWalkable(false);	
 
 	gameObject::release();
 }

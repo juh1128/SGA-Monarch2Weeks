@@ -5,6 +5,8 @@ HRESULT rock::init(int xIndex, int yIndex)
 {
 	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
 	_height = tile->getHeight();
+	tile->setWalkable(false);	//타일 이동불가능 설정
+
 	tile->setObjectOnTile(this);
 
 	gameObject::init("돌", "rock", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
@@ -19,6 +21,7 @@ void rock::release()
 {
 	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
 	tile->removeObjectOnTile();
+	tile->setWalkable(true);
 
 	gameObject::release();
 }

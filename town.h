@@ -8,8 +8,10 @@ private:
 	int				_height;
 	int				_frame;
 
-	int				_hp;
+	int					_hp;
 	CountryColor::Enum	_countryColor;
+
+	float				_incomeTimer;
 
 public:
 	farmLand() {}
@@ -19,6 +21,12 @@ public:
 	void release();
 	void update();
 	void render();
+
+	int getHp() { return _hp; }
+	void addHp(int add) { _hp += add; }
+	void setHp(int set) { _hp = set; }
+
+	CountryColor::Enum getCountryColor() { return _countryColor; }
 };
 
 class town : public gameObject
@@ -32,6 +40,8 @@ private:
 	CountryColor::Enum	_countryColor;
 
 	float			_farmTimer;
+	float			_taxTimer;
+	float			_townIncomeTimer;
 
 public:
 	town() {}
@@ -41,4 +51,10 @@ public:
 	void release();
 	void update();
 	void render();
+
+	int getHp() { return _hp; }
+	void addHp(int add) { _hp += add; }
+	void setHp(int set) { _hp = set; }
+
+	CountryColor::Enum getCountryColor() { return _countryColor; }
 };

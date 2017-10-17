@@ -6,6 +6,7 @@ HRESULT tree::init(int xIndex, int yIndex)
 	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
 	_height = tile->getHeight();
 	tile->setObjectOnTile(this);
+	tile->setWalkable(false);	//타일 이동불가능 설정
 
 	gameObject::init("나무", "tree", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
 	_pos = _pos / CAMERA->getZoom();
@@ -23,6 +24,7 @@ void tree::release()
 {
 	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
 	tile->removeObjectOnTile();
+	tile->setWalkable(true);
 
 	gameObject::release();
 }
@@ -48,6 +50,7 @@ HRESULT weed::init(int xIndex, int yIndex)
 	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
 	_height = tile->getHeight();
 	tile->setObjectOnTile(this);
+	tile->setWalkable(false);	//타일 이동불가능 설정
 
 	gameObject::init("잡초", "weed", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
 	_pos = _pos / CAMERA->getZoom();
@@ -64,6 +67,7 @@ void weed::release()
 {
 	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
 	tile->removeObjectOnTile();
+	tile->setWalkable(true);
 
 	gameObject::release();
 }

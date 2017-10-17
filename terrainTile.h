@@ -33,7 +33,10 @@ public:
 	virtual void render();
 
 	bool isWalkable() { return _walkable; }
+	void setWalkable(bool set) { _walkable = set; }
+
 	float getMoveRatio() { return _moveRatio; }
+
 	float getHeight() { return _height; }
 	void setHeight(int set) { _height = set; }
 	void setIndex(int x, int y);

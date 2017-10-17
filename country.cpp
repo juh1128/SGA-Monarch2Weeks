@@ -2,11 +2,11 @@
 #include "country.h"
 #include "unit.h"
 
-void country::init(CountryColor::Enum color, int startGold, float startIncome)
+void country::init(CountryColor::Enum color)
 {
 	_countryColor = color;
-	_gold = startGold;
-	_income = startIncome;
+	_gold = 5000;
+	_taxRate = 3.0;
 }
 
 void country::release()

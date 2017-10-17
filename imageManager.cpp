@@ -168,7 +168,6 @@ void imageManager::drawText(int x, int y, wstring text, COLORREF rgb, float alph
 	range.startPosition = 0;
 	range.length = text.length();
 	_dwLayout->SetFontSize(size, range);
-
 	_dwLayout->SetTextAlignment(align);
 
 	//브러쉬 생성

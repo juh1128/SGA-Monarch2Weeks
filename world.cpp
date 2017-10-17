@@ -9,7 +9,7 @@ void world::init()
 	{
 		_country[i] = NULL;
 		_country[i] = new country;
-		_country[i]->init(CountryColor::Enum(i), 4000, 0);
+		_country[i]->init(CountryColor::Enum(i));
 	}
 }
 

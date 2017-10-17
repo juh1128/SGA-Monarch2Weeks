@@ -8,6 +8,7 @@ HRESULT castle::init(int xIndex, int yIndex, CountryColor::Enum color, Direction
 
 	//해당 x,y,height 위치의 타일에게 성을 등록함.
 	tile->setObjectOnTile(this);
+	tile->setWalkable(false);	//타일 이동불가능 설정
 
 	gameObject::init("캐슬", getSpriteKey(color), tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
 	_pos = _pos / CAMERA->getZoom();
@@ -68,6 +69,7 @@ void castle::release()
 {
 	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
 	tile->removeObjectOnTile();
+	tile->setWalkable(true);	
 
 	//성벽 삭제
 	for (int i = 0; i < 8; ++i)
@@ -141,6 +143,7 @@ HRESULT castleWall::init(int xIndex, int yIndex, bool isLeft, CountryColor::Enum
 	_height = tile->getHeight();
 
 	tile->setObjectOnTile(this);
+	tile->setWalkable(false);	//타일 이동불가능 설정
 
 	gameObject::init("성문", "castle", tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
 	_pos = _pos / CAMERA->getZoom();
@@ -167,6 +170,7 @@ void castleWall::release()
 {
 	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
 	tile->removeObjectOnTile();
+	tile->setWalkable(true);
 
 	gameObject::release();
 }

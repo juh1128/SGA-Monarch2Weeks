@@ -152,6 +152,6 @@ void terrainTile::render()
 		IMAGEMANAGER->drawLine(top, left, DefaultBrush::red, 2);
 		IMAGEMANAGER->drawLine(left, bottom, DefaultBrush::red, 2);
 		IMAGEMANAGER->drawLine(bottom, right, DefaultBrush::red, 2);
-		IMAGEMANAGER->drawLine(right, top, DefaultBrush::red, 2);
+		IMAGEMANAGER->drawLine(right, top, DefaultBrush::red, 2);		
 	}
 }

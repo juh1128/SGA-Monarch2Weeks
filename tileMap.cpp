@@ -78,6 +78,23 @@ void tileMap::render()
 		}
 	}
 
+	//피킹 오브젝트 정보 표시
+	if (_pickedTile)
+	{
+		vector2D tilePos = CAMERA->getRelativeVector2D(_pickedTile->_pos);
+		tilePos.y += this->getTileSize().y;
+		//유닛이 있을 경우 유닛 정보 표시
+		if (_pickedTile->getUnitOnTile().size() > 0)
+		{
+			IMAGEMANAGER->drawText(tilePos.x, tilePos.y, L"유닛", 15, DefaultBrush::black);
+		}
+		//오브젝트가 있을 경우 오브젝트의 정보 표시
+		else if (_pickedTile->getObjectOnTile())
+		{
+			IMAGEMANAGER->drawText(tilePos.x - 30, tilePos.y, L"오브젝트", 15, DefaultBrush::black);
+		}
+	}
+
 	//높이 테이블 렌더링
 	if (_isDebugMode)
 	{
