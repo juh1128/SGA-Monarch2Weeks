@@ -17,6 +17,20 @@ HRESULT terrainTile::init(int xIndex, int yIndex, bool walkable, float moveRatio
 	return S_OK;
 }
 
+float terrainTile::getHeight(bool checkTown)
+{
+	if (!checkTown) return _height;
+
+	if (_onObject)
+	{
+		if (_onObject->_name == "¸¶À»")
+		{
+			return _height + 1;
+		}
+	}
+	return _height;
+}
+
 void terrainTile::setIndex(int x, int y)
 {
 	_index.x = x;

@@ -111,7 +111,7 @@ void town::update()
 	{
 		_hp -= 100;
 		unit* noyae = new unit;
-		noyae->init(_index, _height, _countryColor);
+		noyae->init(_index, _height+1, _countryColor);
 		WORLD->addUnit(noyae, _countryColor);
 	}
 

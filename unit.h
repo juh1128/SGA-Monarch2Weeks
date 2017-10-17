@@ -78,7 +78,6 @@ public:
 	int getHealth() { return _hp; }
 	void setHp(int num) { _hp = num; }
 
-
 	void syncIndexFromPos();
 	void requestRender();
 };

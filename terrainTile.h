@@ -37,7 +37,7 @@ public:
 
 	float getMoveRatio() { return _moveRatio; }
 
-	float getHeight() { return _height; }
+	float getHeight(bool checkTown = false);
 	void setHeight(int set) { _height = set; }
 	void setIndex(int x, int y);
 	POINT getIndex() { return _index; }

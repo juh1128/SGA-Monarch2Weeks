@@ -16,4 +16,6 @@ public:
 	void release();
 	void update();
 	void render();
+
+	int getHp() { return 0; }
 };

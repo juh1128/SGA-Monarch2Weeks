@@ -456,10 +456,10 @@ void unitOneStep::enter(unit & unit)
 		return unit.changeState(new unitNoneState);
 	}
 	//높이 차이가 2이상 나면 이동 할 수 없음.
-	if (abs(_destTile->getHeight() - unit._height) >= 2) return unit.changeState(new unitNoneState);
+	if (abs(_destTile->getHeight(true) - unit._height) >= 2) return unit.changeState(new unitNoneState);
 
 	_zoom = CAMERA->getZoom();
-	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex(), _destTile->getHeight()) / _zoom;
+	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex(), _destTile->getHeight(true)) / _zoom;
 	_oldIndex = unit._index;
 
 	//유닛 방향 설정
@@ -470,7 +470,7 @@ void unitOneStep::update(unit & unit)
 {
 	if (_zoom != CAMERA->getZoom())
 	{
-		_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex(), _destTile->getHeight()) / CAMERA->getZoom();
+		_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex(), _destTile->getHeight(true)) / CAMERA->getZoom();
 		_zoom = CAMERA->getZoom();
 	}
 	vector2D dis = _destPos - unit._pos;
@@ -493,7 +493,7 @@ void unitOneStep::update(unit & unit)
 		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
 		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() *0.25f)
 		{
-			unit._height = _destTile->getHeight();
+			unit._height = _destTile->getHeight(true);
 		}
 	}
 
