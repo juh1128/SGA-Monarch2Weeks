@@ -425,14 +425,79 @@ void unitNoneState::enter(unit & me)
 		destp.x = dest.x;
 		destp.y = dest.y;
 
-		if (dest.x < 0 || dest.y < 0 || dest.x >= WORLD->getMap()->getTileCount().x || dest.y >= WORLD->getMap()->getTileCount().y ||
-			abs(tile[0]->getHeight() - WORLD->getMap()->getTile(me._index.x, me._index.y)->getHeight()) >= 2
-			|| !WORLD->getMap()->getTile(destp.x,destp.y)->isWalkable())
-			
+		if (tile[0] == nullptr)
 		{
-			me._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0,3);
-			me.changeState(new unitNoneState());
-			return;
+			while (true)
+			{
+				me._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0, 3);
+				cout << me._unitDirection << endl;
+				direction = me.getDirectionVector(me._unitDirection);
+				temp = me._index + direction;
+				temp2 = me._index + direction * 2;
+
+				tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
+				tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
+
+				if (tile[0] == nullptr) continue;
+
+				dest = me._index + direction;
+
+				destp.x = dest.x;
+				destp.y = dest.y;
+
+				if (dest.x >= 0 || dest.y >= 0 || dest.x < WORLD->getMap()->getTileCount().x || dest.y < WORLD->getMap()->getTileCount().y)
+				{
+					if (abs(tile[0]->getHeight() - WORLD->getMap()->getTile(me._index.x, me._index.y)->getHeight()) < 2)
+					{
+						if (WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
+						{
+							break;
+						}
+					}
+				}
+			}
+
+		}
+		else
+		{
+			if (dest.x < 0 || dest.y < 0 || dest.x >= WORLD->getMap()->getTileCount().x || dest.y >= WORLD->getMap()->getTileCount().y)
+			{
+				if (abs(tile[0]->getHeight() - WORLD->getMap()->getTile(me._index.x, me._index.y)->getHeight()) >= 2)
+				{
+					if (!WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
+					{
+						while (true)
+						{
+							me._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0, 3);
+							cout << me._unitDirection << endl;
+
+							direction = me.getDirectionVector(me._unitDirection);
+							temp = me._index + direction;
+							temp2 = me._index + direction * 2;
+
+							tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
+							tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
+
+							dest = me._index + direction;
+
+							destp.x = dest.x;
+							destp.y = dest.y;
+
+							if (dest.x >= 0 || dest.y >= 0 || dest.x < WORLD->getMap()->getTileCount().x || dest.y < WORLD->getMap()->getTileCount().y)
+							{
+								if (abs(tile[0]->getHeight() - me._height) < 2)
+								{
+									if (WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
+									{
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
 		}
 		gameObject* desttile = WORLD->getMap()->getTile(dest.x, dest.y);
 		vector<gameObject*> vr;
