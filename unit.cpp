@@ -13,6 +13,9 @@ unit::~unit()
 
 HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 {
+	//유닛의 소속색깔
+	_unitColor = country;
+
 	string color;
 	//색깔검사
 	switch (country)
@@ -40,6 +43,8 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	_pos = _pos / CAMERA->getZoom();
 	_index = index;
 	_height = height;
+	_hp = 100;
+	_isStarUnit = false;
 
 	WORLD->getMap()->getTile(_index.x, _index.y)->addUnitOnTile(this);
 
@@ -210,6 +215,11 @@ void unit::requestRender()
 void unit::build()
 {
 	//건설을 담당하는 함수
+
+
+
+
+
 }
 
 void unit::attack()
@@ -217,28 +227,30 @@ void unit::attack()
 	//공격을 담당하는 함수
 }
 
-void unit::run()
+void unit::run(unit* starUnit)
 {
 	//도망가는 함수
+	//cout << "도망" << endl;
+	POINT index;
+	gameObject tile;
+	vector<gameObject*> tileVector;
 
 
 
+	//sendMessage("move", 0, 0, 0, _index, tileVector);
 }
 
-void unitNoneState::enter(unit & unit)
+void unitNoneState::enter(unit & me)
 {
-	unit._state = UnitState::None;
-	if (unit._isAuto)
+	me._state = UnitState::None;
+	if (me._isAuto)
 	{
 		//방향에 따른 타일 두칸검출
 		terrainTile* tile[2];
-		vector2D direction = unit.getDirectionVector(unit._unitDirection);
-		vector2D temp = unit._index + direction;
-		vector2D temp2 = unit._index + direction*2;
-		if (temp.x == 6 && temp.y == 17)
-		{
-			cout << "stop" << endl;
-		}
+		vector2D direction = me.getDirectionVector(me._unitDirection);
+		vector2D temp = me._index + direction;
+		vector2D temp2 = me._index + direction*2;
+
 		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
 		tile[1] = WORLD->getMap()->getTile(temp2.x,temp2.y);
 
@@ -247,13 +259,63 @@ void unitNoneState::enter(unit & unit)
 		//도망가는 상황
 		//자신으로부터 25칸(상하좌우대각으로 2칸씩)
 		//별달린 에너미가 있다면 도망가는 함수실행
-		//for (int i = 0; i < 5; i++)
-		//{
-		//	for (int j = 0; j < 5; j++)
-		//	{
-		//
-		//	}
-		//}
+		//주변에 두마리이상이 있을경우 가장 체력이 높은애로부터 도망감
+
+		//찾아낸 유닛들
+		vector<unit*> searchedUnit;
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				//타일밖에를 검출하게 될 경우는 컨티뉴
+				if (j - 2 + me._pos.x < 0 || j - 2 + me._pos.x > WORLD->getMap()->getTileCount().x
+					|| i - 2 + me._pos.y < 0 || i - 2 + me._pos.y > WORLD->getMap()->getTileCount().y) continue;
+
+				//해당 타일에 있는 유닛벡터
+				vector<unit*> unitOnTile = WORLD->getMap()->getTile(j - 2 + me._pos.x, i - 2 + me._pos.y)->getUnitOnTile();
+				
+
+				//타일에 유닛이 있다면
+				if (WORLD->getMap()->getTile(j - 2 + me._pos.x, i - 2 + me._pos.y)->getUnitOnTile().size() != NULL)
+				{
+					//타일에있는 유닛벡터를 돌아 나보다 체력이 높다면 도망
+					for (int k = 0; k <unitOnTile.size();k++)
+					{
+						//나 자신과 색깔이 같다면 계산하지 않는다.
+						if (unitOnTile[k]->getCountryColor() == me._unitColor) continue;
+						//그 유닛이 별달린 유닛이 아니라면
+						if (!unitOnTile[k]->getIsStarUnit()) continue;
+
+						//나의체력 + 200 이 타일위의 유닛의 체력 보다 적을경우
+						if (me._hp + 200 < unitOnTile[k]->getHealth())
+						{
+							searchedUnit.push_back(unitOnTile[k]);
+						}
+					}
+				}
+			}
+		}
+
+		//유닛탐색하여 벡터에 다 담았으므로 비어있지 않다면 유닛을 찾은것이다.
+		//그래서 도망가는 함수를 실행한다.
+		if (searchedUnit.size() != NULL)
+		{
+			//체력이 가장 높은 유닛을 찾아낸다
+			int maximumHealth = 0;
+			int maximumUnitIndex = 0;
+			for (int k = 0; k < searchedUnit.size(); k++)
+			{
+				//찾은유닛중 이번유닛이 최대체력보다 높다면
+				if (searchedUnit[k]->getHealth() > maximumHealth)
+				{
+					//최대체력과 최대체력을 가진 유닛의 인덱스를 저장
+					maximumHealth = searchedUnit[k]->getHealth();
+					maximumUnitIndex = k;
+				}
+			}
+
+			me.run(searchedUnit[maximumUnitIndex]);
+		}
 
 		//건물짓는 상황
 		//tile[0]번의 상하좌우대각 한칸씩을 탐색하여 건물이 없다면 건설함수 실행
@@ -274,27 +336,28 @@ void unitNoneState::enter(unit & unit)
 		//}
 
 		//아무것도 못하면 이동한다
-		vector2D dest = unit._index + direction;
+		vector2D dest = me._index + direction;
 		POINT destp;
 		destp.x = dest.x;
 		destp.y = dest.y;
 
 		if (dest.x < 0 || dest.y < 0 || dest.x >= WORLD->getMap()->getTileCount().x || dest.y >= WORLD->getMap()->getTileCount().y ||
-			abs(tile[0]->getHeight() - WORLD->getMap()->getTile(unit._index.x, unit._index.y)->getHeight()) >= 2
+			abs(tile[0]->getHeight() - WORLD->getMap()->getTile(me._index.x, me._index.y)->getHeight()) >= 2
 			|| !WORLD->getMap()->getTile(destp.x,destp.y)->isWalkable())
 			
 		{
-			unit._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0,3);
-			unit.changeState(new unitNoneState());
+			me._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0,3);
+			me.changeState(new unitNoneState());
 			return;
 		}
 		gameObject* desttile = WORLD->getMap()->getTile(dest.x, dest.y);
 		vector<gameObject*> vr;
 		vr.push_back(desttile);
-		unit.sendMessage("move", 0, 0, 0, destp, vr);
+		me.sendMessage("move", 0, 0, 0, destp, vr);
 		vr.clear();
 	}
 }
+
 
 void unitNoneState::update(unit & unit)
 {
