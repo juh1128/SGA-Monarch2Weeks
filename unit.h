@@ -20,7 +20,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		None, MoveOneStep, End
+		CreateMotion, None, MoveOneStep, End
 	};
 }
 
@@ -47,6 +47,7 @@ private:
 
 	UnitDirection::DIRECTION _unitDirection;
 
+	friend class unitCreateMotion;
 	friend class unitNoneState;
 	friend class unitOneStep;
 
@@ -124,4 +125,17 @@ public:
 	}
 	virtual void enter(unit& unit);
 	virtual void update(unit& unit);
+};
+
+class unitCreateMotion : public unitState
+{
+private:
+	//생성 연출
+	float _createFrameTimer;
+	int _rotateNum;
+
+public:
+	unitCreateMotion() {}
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
 };
