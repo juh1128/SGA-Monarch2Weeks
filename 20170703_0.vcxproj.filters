@@ -329,9 +329,6 @@
     <ClCompile Include="country.cpp">
       <Filter>playGround\country</Filter>
     </ClCompile>
-    <ClCompile Include="unitDirection.cpp">
-      <Filter>playGround\unit</Filter>
-    </ClCompile>
     <ClCompile Include="unitImageFrame.cpp">
       <Filter>playGround\unit</Filter>
     </ClCompile>

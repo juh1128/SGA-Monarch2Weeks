@@ -80,6 +80,8 @@ public:
 
 	void syncIndexFromPos();
 	void requestRender();
+
+	bool isMoveable(POINT index);
 };
 
 class unitState
@@ -96,31 +98,27 @@ class unitNoneState : public unitState
 {
 private:
 public:
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
 
-	virtual void enter(unit& unit);
-	virtual void update(unit& unit);
+	void moveOneStep(unit& me);
 
 };
 
 class unitOneStep : public unitState
 {
 private:
-	vector2D _destPos;
 	terrainTile* _destTile;
-	vector2D _directionIndex;
+
+	vector2D _destIndex;
 	vector2D _oldIndex;
-	int _destheight;
-	float _moveRatio;
-	float _zoom;
 
 public:
-	unitOneStep(terrainTile* tile,POINT direction)
+	unitOneStep(int xIndex, int yIndex)
 	{
-		_destTile = tile;
-		_directionIndex.x = direction.x;
-		_directionIndex.y = direction.y;
+		_destIndex.x = xIndex;
+		_destIndex.y = yIndex;
 	}
 	virtual void enter(unit& unit);
 	virtual void update(unit& unit);
-	void unitdirection(unit& unit);
 };

@@ -139,7 +139,7 @@ void unit::moveCallBack(POINT directionTile, gameObject* dest)
 	//{
 	//	return changeState(new unitNoneState);
 	//}
-	changeState(new unitOneStep((terrainTile*)dest, directionTile));
+	//changeState(new unitOneStep((terrainTile*)dest, directionTile));
 
 }
 
@@ -210,6 +210,28 @@ void unit::requestRender()
 	}
 
 	WORLD->getMap()->getTile(maxIndex.x, maxIndex.y)->requestRender(this);
+}
+
+bool unit::isMoveable(POINT index)
+{
+	//목적지가 갈 수 없는 곳일 경우 NoneState로 변경.
+	vector2D tileCount = WORLD->getMap()->getTileCount();
+
+	// - 오버플로우 체크
+	if (index.x < 0 || index.x >= tileCount.x || index.y < 0 || index.y >= tileCount.y)
+	{
+		return false;
+	}
+
+	// - 높이, 이동불가능 타일 체크
+	terrainTile* destTile = WORLD->getMap()->getTile(index.x, index.y);
+	int distanceHeight = abs(destTile->getHeight(true) - _height);
+	if (!destTile->isWalkable() || distanceHeight > 1)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void unit::build()
@@ -316,7 +338,7 @@ void unit::run(unit* starUnit)
 	directionIndex.y = destTile->getIndex().y;
 
 
-	changeState(new unitOneStep(destTile, directionIndex));
+	//changeState(new unitOneStep(destTile, directionIndex));
 
 	//this->sendMessage("move", 0, 0, 0, _index, tileVector);
 }
@@ -330,10 +352,10 @@ void unitNoneState::enter(unit & me)
 		terrainTile* tile[2];
 		vector2D direction = me.getDirectionVector(me._unitDirection);
 		vector2D temp = me._index + direction;
-		vector2D temp2 = me._index + direction*2;
+		vector2D temp2 = me._index + direction * 2;
 
 		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
-		tile[1] = WORLD->getMap()->getTile(temp2.x,temp2.y);
+		tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
 
 		//순서 도망->건설->공격
 
@@ -343,63 +365,63 @@ void unitNoneState::enter(unit & me)
 		//주변에 두마리이상이 있을경우 가장 체력이 높은애로부터 도망감
 
 		//찾아낸 유닛들
-		vector<unit*> searchedUnit;
-		for (int i = 0; i < 5; i++)
-		{
-			for (int j = 0; j < 5; j++)
-			{
-				//예외처리
-				if (j - 2 + me._index.x < 0 || j - 2 + me._index.x > WORLD->getMap()->getTileCount().x
-					|| i - 2 + me._index.y < 0 || i - 2 + me._index.y > WORLD->getMap()->getTileCount().y
-					|| (j== 2 && i == 2)) continue;
+		//vector<unit*> searchedUnit;
+		//for (int i = 0; i < 5; i++)
+		//{
+		//	for (int j = 0; j < 5; j++)
+		//	{
+		//		//예외처리
+		//		if (j - 2 + me._index.x < 0 || j - 2 + me._index.x > WORLD->getMap()->getTileCount().x
+		//			|| i - 2 + me._index.y < 0 || i - 2 + me._index.y > WORLD->getMap()->getTileCount().y
+		//			|| (j== 2 && i == 2)) continue;
 
-				//해당 타일에 있는 유닛벡터
-				vector<unit*> unitOnTile = WORLD->getMap()->getTile(j - 2 + me._index.x, i - 2 + me._index.y)->getUnitOnTile();
-				
+		//		//해당 타일에 있는 유닛벡터
+		//		vector<unit*> unitOnTile = WORLD->getMap()->getTile(j - 2 + me._index.x, i - 2 + me._index.y)->getUnitOnTile();
+		//		
 
-				//타일에 유닛이 있다면
-				if (WORLD->getMap()->getTile(j - 2 + me._index.x, i - 2 + me._index.y)->getUnitOnTile().size() != NULL)
-				{
-					//타일에있는 유닛벡터를 돌아 나보다 체력이 높다면 도망
-					for (int k = 0; k <unitOnTile.size();k++)
-					{
-						//나 자신과 색깔이 같다면 계산하지 않는다.
-						if (unitOnTile[k]->getCountryColor() == me._unitColor) continue;
-						//그 유닛이 별달린 유닛이 아니라면
-						if (!unitOnTile[k]->getIsStarUnit()) continue;
+		//		//타일에 유닛이 있다면
+		//		if (WORLD->getMap()->getTile(j - 2 + me._index.x, i - 2 + me._index.y)->getUnitOnTile().size() != NULL)
+		//		{
+		//			//타일에있는 유닛벡터를 돌아 나보다 체력이 높다면 도망
+		//			for (int k = 0; k <unitOnTile.size();k++)
+		//			{
+		//				//나 자신과 색깔이 같다면 계산하지 않는다.
+		//				if (unitOnTile[k]->getCountryColor() == me._unitColor) continue;
+		//				//그 유닛이 별달린 유닛이 아니라면
+		//				if (!unitOnTile[k]->getIsStarUnit()) continue;
 
-						//나의체력 + 200 이 타일위의 유닛의 체력 보다 적을경우
-						if (me._hp + 200 < unitOnTile[k]->getHealth())
-						{
-							searchedUnit.push_back(unitOnTile[k]);
-						}
-					}
-				}
-			}
-		}
+		//				//나의체력 + 200 이 타일위의 유닛의 체력 보다 적을경우
+		//				if (me._hp + 200 < unitOnTile[k]->getHealth())
+		//				{
+		//					searchedUnit.push_back(unitOnTile[k]);
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
 
-		//유닛탐색하여 벡터에 다 담았으므로 비어있지 않다면 유닛을 찾은것이다.
-		//그래서 도망가는 함수를 실행한다.
-		if (searchedUnit.size() != NULL)
-		{
-			//체력이 가장 높은 유닛을 찾아낸다
-			int maximumHealth = 0;
-			int maximumUnitIndex = 0;
-			for (int k = 0; k < searchedUnit.size(); k++)
-			{
-				//찾은유닛중 이번유닛이 최대체력보다 높다면
-				if (searchedUnit[k]->getHealth() > maximumHealth)
-				{
-					//최대체력과 최대체력을 가진 유닛의 인덱스를 저장
-					maximumHealth = searchedUnit[k]->getHealth();
-					maximumUnitIndex = k;
-				}
-			}
+		////유닛탐색하여 벡터에 다 담았으므로 비어있지 않다면 유닛을 찾은것이다.
+		////그래서 도망가는 함수를 실행한다.
+		//if (searchedUnit.size() != NULL)
+		//{
+		//	//체력이 가장 높은 유닛을 찾아낸다
+		//	int maximumHealth = 0;
+		//	int maximumUnitIndex = 0;
+		//	for (int k = 0; k < searchedUnit.size(); k++)
+		//	{
+		//		//찾은유닛중 이번유닛이 최대체력보다 높다면
+		//		if (searchedUnit[k]->getHealth() > maximumHealth)
+		//		{
+		//			//최대체력과 최대체력을 가진 유닛의 인덱스를 저장
+		//			maximumHealth = searchedUnit[k]->getHealth();
+		//			maximumUnitIndex = k;
+		//		}
+		//	}
 
-			me.run(searchedUnit[maximumUnitIndex]);
+		//	me.run(searchedUnit[maximumUnitIndex]);
 
-			return;
-		}
+		//	return;
+		//}
 
 		//건물짓는 상황
 		//tile[0]번의 상하좌우대각 한칸씩을 탐색하여 건물이 없다면 건설함수 실행
@@ -419,144 +441,201 @@ void unitNoneState::enter(unit & me)
 		//
 		//}
 
-		//아무것도 못하면 이동한다
-		vector2D dest = me._index + direction;
-		POINT destp;
-		destp.x = dest.x;
-		destp.y = dest.y;
 
-		if (tile[0] == nullptr)
-		{
-			while (true)
-			{
-				me._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0, 3);
-				cout << me._unitDirection << endl;
-				direction = me.getDirectionVector(me._unitDirection);
-				temp = me._index + direction;
-				temp2 = me._index + direction * 2;
 
-				tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
-				tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
 
-				if (tile[0] == nullptr) continue;
 
-				dest = me._index + direction;
+		
+		
+		
 
-				destp.x = dest.x;
-				destp.y = dest.y;
+		
 
-				if (dest.x >= 0 || dest.y >= 0 || dest.x < WORLD->getMap()->getTileCount().x || dest.y < WORLD->getMap()->getTileCount().y)
-				{
-					if (abs(tile[0]->getHeight() - WORLD->getMap()->getTile(me._index.x, me._index.y)->getHeight()) < 2)
-					{
-						if (WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
-						{
-							break;
-						}
-					}
-				}
-			}
 
-		}
-		else
-		{
-			if (dest.x < 0 || dest.y < 0 || dest.x >= WORLD->getMap()->getTileCount().x || dest.y >= WORLD->getMap()->getTileCount().y)
-			{
-				if (abs(tile[0]->getHeight() - WORLD->getMap()->getTile(me._index.x, me._index.y)->getHeight()) >= 2)
-				{
-					if (!WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
-					{
-						while (true)
-						{
-							me._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0, 3);
-							cout << me._unitDirection << endl;
+		//===========================================================================
 
-							direction = me.getDirectionVector(me._unitDirection);
-							temp = me._index + direction;
-							temp2 = me._index + direction * 2;
+		//	//POINT destp;
+		//	//destp.x = dest.x;
+		//	//destp.y = dest.y;
 
-							tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
-							tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
+		//	if (tile[0] == nullptr)
+		//	{
+		//		while (true)
+		//		{
+		//			me._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0, 3);
+		//			cout << me._unitDirection << endl;
+		//			direction = me.getDirectionVector(me._unitDirection);
+		//			temp = me._index + direction;
+		//			temp2 = me._index + direction * 2;
 
-							dest = me._index + direction;
+		//			tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
+		//			tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
 
-							destp.x = dest.x;
-							destp.y = dest.y;
+		//			if (tile[0] == nullptr) continue;
 
-							if (dest.x >= 0 || dest.y >= 0 || dest.x < WORLD->getMap()->getTileCount().x || dest.y < WORLD->getMap()->getTileCount().y)
-							{
-								if (abs(tile[0]->getHeight() - me._height) < 2)
-								{
-									if (WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
-									{
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+		//			dest = me._index + direction;
 
-		}
-		gameObject* desttile = WORLD->getMap()->getTile(dest.x, dest.y);
-		vector<gameObject*> vr;
-		vr.push_back(desttile);
-		me.sendMessage("move", 0, 0, 0, destp, vr);
-		vr.clear();
+		//			destp.x = dest.x;
+		//			destp.y = dest.y;
+
+		//			if (dest.x >= 0 || dest.y >= 0 || dest.x < WORLD->getMap()->getTileCount().x || dest.y < WORLD->getMap()->getTileCount().y)
+		//			{
+		//				if (abs(tile[0]->getHeight() - WORLD->getMap()->getTile(me._index.x, me._index.y)->getHeight()) < 2)
+		//				{
+		//					if (WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
+		//					{
+		//						break;
+		//					}
+		//				}
+		//			}
+		//		}
+
+		//	}
+		//	else
+		//	{
+		//		if (dest.x < 0 || dest.y < 0 || dest.x >= WORLD->getMap()->getTileCount().x || dest.y >= WORLD->getMap()->getTileCount().y)
+		//		{
+		//			if (abs(tile[0]->getHeight() - WORLD->getMap()->getTile(me._index.x, me._index.y)->getHeight()) >= 2)
+		//			{
+		//				if (!WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
+		//				{
+		//					while (true)
+		//					{
+		//						me._unitDirection = (UnitDirection::DIRECTION)RND->getFromIntTo(0, 3);
+		//						cout << me._unitDirection << endl;
+
+		//						direction = me.getDirectionVector(me._unitDirection);
+		//						temp = me._index + direction;
+		//						temp2 = me._index + direction * 2;
+
+		//						tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
+		//						tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
+
+		//						dest = me._index + direction;
+
+		//						destp.x = dest.x;
+		//						destp.y = dest.y;
+
+		//						if (dest.x >= 0 || dest.y >= 0 || dest.x < WORLD->getMap()->getTileCount().x || dest.y < WORLD->getMap()->getTileCount().y)
+		//						{
+		//							if (abs(tile[0]->getHeight() - me._height) < 2)
+		//							{
+		//								if (WORLD->getMap()->getTile(destp.x, destp.y)->isWalkable())
+		//								{
+		//									break;
+		//								}
+		//							}
+		//						}
+		//					}
+		//				}
+		//			}
+		//		}
+
+		//	}
+		//	gameObject* desttile = WORLD->getMap()->getTile(dest.x, dest.y);
+		//	vector<gameObject*> vr;
+		//	vr.push_back(desttile);
+		//	me.sendMessage("move", 0, 0, 0, destp, vr);
+		//	vr.clear();
+		//}
 	}
 }
 
 
-void unitNoneState::update(unit & unit)
+void unitNoneState::update(unit & me)
 {
+	moveOneStep(me);
 }
 
+void unitNoneState::moveOneStep(unit& me)
+{
+	//자기가 바라보고 있는 방향으로 이동한다.
+	vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
+
+	//1. 4방향 검사 후 이동 가능한 방향을 배열에 담는다.
+	vector<vector2D> directionCheck;
+	for (int i = 0; i < 4; ++i)
+	{
+		vector2D dIndex = me._index + me.getDirectionVector((UnitDirection::DIRECTION)i);
+		if (me.isMoveable(dIndex.toPoint()))
+		{
+			directionCheck.push_back(dIndex);
+		}
+	}
+
+	//2. 이동 가능한 방향 중 destIndex가 있으면 그 방향으로 이동.
+	//없으면 랜덤 방향으로 이동.
+	size_t size = directionCheck.size();
+	bool isRndDirection = true;
+	for (size_t i = 0; i < size; ++i)
+	{
+		if (directionCheck[i] == destIndex)
+		{
+			me.changeState(new unitOneStep(destIndex.x, destIndex.y));
+			isRndDirection = false;
+			break;
+		}
+	}
+	if (size > 0 && isRndDirection)
+	{
+		vector2D rndDirection = directionCheck[RND->getFromIntTo(0, size - 1)];
+		me.changeState(new unitOneStep(rndDirection.x, rndDirection.y));
+	}
+}
+
+
+
+//유닛 1칸씩 이동. 
 void unitOneStep::enter(unit & unit)
 {
-	unit._state = UnitState::MoveOneStep;
-	//목적지를 못받아옴 에러 or 이상한곳찍음
-	if (!_destTile)
+	// - 이동거리 체크 (인덱스 차이가 2칸 이상 일 경우 이동하지 않음)
+	vector2D distance = _destIndex - unit._index;
+	if (distance.getLength() > 1)
 	{
-		return unit.changeState(new unitNoneState);
+		unit.changeState(new unitNoneState);
 	}
-	//높이 차이가 2이상 나면 이동 할 수 없음.
-	if (abs(_destTile->getHeight(true) - unit._height) >= 2) return unit.changeState(new unitNoneState);
 
-	_zoom = CAMERA->getZoom();
-	_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex(), _destTile->getHeight(true)) / _zoom;
+	unit._state = UnitState::MoveOneStep;
 	_oldIndex = unit._index;
+	_destTile = WORLD->getMap()->getTile(_destIndex.x, _destIndex.y);
 
 	//유닛 방향 설정
-	unitdirection(unit);
+	if (distance.x == 1)
+		unit._unitDirection = UnitDirection::UNIT_RIGHT;
+	else if (distance.x == -1)
+		unit._unitDirection = UnitDirection::UNIT_LEFT;
+	else if (distance.y == 1)
+		unit._unitDirection = UnitDirection::UNIT_DOWN;
+	else if (distance.y == -1)
+		unit._unitDirection = UnitDirection::UNIT_UP;
+	else
+		cout << "유닛 방향 설정 오류" << endl;
+
 }
 
 void unitOneStep::update(unit & unit)
 {
-	if (_zoom != CAMERA->getZoom())
-	{
-		_destPos = WORLD->getMap()->getTilePosFromIndex(_destTile->getIndex(), _destTile->getHeight(true)) / CAMERA->getZoom();
-		_zoom = CAMERA->getZoom();
-	}
-	vector2D dis = _destPos - unit._pos;
-	_moveRatio = WORLD->getTileMoveRatio(unit._index.x, unit._index.y);
+	float zoom = CAMERA->getZoom();
+	vector2D destPos = tileMap::getTilePosFromIndex(_destIndex, _destTile->getHeight(true)) / zoom;
+	vector2D distance = destPos - unit._pos;
 
 	//목적지 도착
-	if (dis.getLength() <= unit._moveSpeed * _moveRatio)
+	float length = distance.getLength();
+	if (length <= unit._moveSpeed)
 	{
+		//유닛이 서있는 타일 변경
 		WORLD->getMap()->getTile(_oldIndex.x, _oldIndex.y)->deleteUnitOnTile(&unit);
-		WORLD->getMap()->getTile(_directionIndex.x, _directionIndex.y)->addUnitOnTile(&unit);
-	
-		unit._pos = _destPos;
+		WORLD->getMap()->getTile(_destIndex.x, _destIndex.y)->addUnitOnTile(&unit);
+		unit._pos = destPos;
 		unit.changeState(new unitNoneState);
-
 	}
 	//가는 중
 	else
 	{
-		unit._pos = unit._pos + dis.normalize()*unit._moveSpeed*_moveRatio;
+		unit._pos = unit._pos + distance.normalize()*unit._moveSpeed;
+
 		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
-		if (dis.getLength() <= tileMap::getTileSize().getLength()*CAMERA->getZoom() *0.25f)
+		if (length <= tileMap::getTileSize().getLength()*zoom*0.25f)
 		{
 			unit._height = _destTile->getHeight(true);
 		}
