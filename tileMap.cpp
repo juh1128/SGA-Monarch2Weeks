@@ -71,7 +71,7 @@ void tileMap::render()
 		if (unitList.size() > 0)
 		{
 			char buf[128] = "";
-			wsprintf(buf, "[%s] DP %d", unitList[0]->_name.c_str(), unitList[0]->getHealth()); 
+			wsprintf(buf, "[%s] DF %d", unitList[0]->_name.c_str(), unitList[0]->getHealth()); 
 			IMAGEMANAGER->fillRectangle(RectMakeCenter(tilePos.x + 12, tilePos.y + 16, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
 			IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
 		}
@@ -82,7 +82,7 @@ void tileMap::render()
 			mncObjectBase* obj = (mncObjectBase*)_pickedTile->getObjectOnTile();
 			if (obj->_name != "µ¹")
 			{
-				wsprintf(buf, "[%s] DP %d", obj->_name.c_str(), obj->getHp());
+				wsprintf(buf, "[%s] DF %d", obj->_name.c_str(), obj->getHp());
 				IMAGEMANAGER->fillRectangle(RectMake(tilePos.x - strlen(buf) * 5 - 8, tilePos.y + 4, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
 				IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
 			}
