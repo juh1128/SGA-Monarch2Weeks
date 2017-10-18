@@ -2,10 +2,12 @@
 #include "sceneBase.h"
 #include "unit.h"
 
+class userInterface;
+
 class testScene : public sceneBase
 {
 private:
-	vector2D			_rbDownPos;
+	userInterface* _ui;
 
 public:
 	virtual HRESULT init();

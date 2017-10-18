@@ -97,6 +97,9 @@
     <Filter Include="playGround\object">
       <UniqueIdentifier>{e09a8a13-4e37-4c54-ad41-e0a56040f03b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\ui">
+      <UniqueIdentifier>{c42779f9-8b08-4ac1-9040-62482b0a141e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -227,6 +230,9 @@
     </ClInclude>
     <ClInclude Include="mncObjectBase.h">
       <Filter>playGround\object</Filter>
+    </ClInclude>
+    <ClInclude Include="userInterface.h">
+      <Filter>playGround\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -361,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="unitNoneState.cpp">
       <Filter>playGround\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="userInterface.cpp">
+      <Filter>playGround\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
