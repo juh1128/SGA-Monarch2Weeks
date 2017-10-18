@@ -183,6 +183,8 @@
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unitCreateMotion.cpp" />
     <ClCompile Include="unitImageFrame.cpp" />
+    <ClCompile Include="unitNoneState.cpp" />
+    <ClCompile Include="unitOneStep.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wall.cpp" />
