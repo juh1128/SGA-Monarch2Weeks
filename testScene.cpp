@@ -42,6 +42,13 @@ void testScene::update()
 		_unit->init(vector2D(4,8), 0,CountryColor::GREEN);
 		WORLD->addUnit(_unit, CountryColor::GREEN);
 	}
+	if (KEYMANAGER->isOnceKeyDown('B'))
+	{
+		unit* _unit = new unit;
+		_unit->init(vector2D(4, 8), 0, CountryColor::RED);
+		_unit->setHp(400);
+		WORLD->addUnit(_unit, CountryColor::RED);
+	}
 	
 	//마우스 피킹 + 유닛피킹 시 WORLD 스탑
 	_world->getMap()->setMousePickTile();
