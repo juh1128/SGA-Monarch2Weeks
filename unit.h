@@ -60,7 +60,6 @@ public:
 	void update();
 	void render();
 
-	void moveCallBack(POINT directionTile,gameObject* dest);
 	void changeState(unitState* newstate);
 	void imageFrame(void);
 
@@ -103,6 +102,10 @@ public:
 
 	void moveOneStep(unit& me);
 
+	//도망갈지 판단하는 함수
+	void judgeRun(unit& me);
+	//건물지을지 판단하는 함수
+	//void judgeBuild(unit& me);
 };
 
 class unitOneStep : public unitState
