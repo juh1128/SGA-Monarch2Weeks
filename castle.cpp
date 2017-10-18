@@ -3,7 +3,7 @@
 
 HRESULT castle::init(int xIndex, int yIndex, CountryColor::Enum color, Direction::Enum direction)
 {
-	mncObjectBase::init("캐슬", getSpriteKey(color), xIndex, yIndex, 100, false);
+	mncObjectBase::init("군주", getSpriteKey(color), xIndex, yIndex, 100, false);
 
 	_countryColor = color;
 	_frameX = 0;
