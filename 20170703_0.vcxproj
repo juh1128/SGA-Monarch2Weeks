@@ -181,6 +181,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="unit.cpp" />
+    <ClCompile Include="unitCreateMotion.cpp" />
     <ClCompile Include="unitImageFrame.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2D.cpp" />

@@ -10,4 +10,3 @@ void unit::imageFrame(void)
 		_imageFrameX = ++_imageFrameX % 2;
 	}
 }
-

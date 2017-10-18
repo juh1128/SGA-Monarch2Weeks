@@ -56,7 +56,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	_moveSpeed = 1.5f;
 	_frameTimer = 0;
 	
-	changeState(new unitNoneState);
+	changeState(new unitCreateMotion);
 
 	return S_OK;
 }
@@ -101,8 +101,8 @@ void unit::update()
 	{
 		keyboardTest(UnitDirection::UNIT_DOWN);
 	}
-	_unitState->update(*this);
 
+	_unitState->update(*this);
 
 	//pos <-> 인덱스 동기화
 	syncIndexFromPos();
@@ -398,8 +398,6 @@ void unitNoneState::enter(unit & me)
 		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
 		tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
 
-		tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
-
 		//순서 도망->건설->공격
 
 		//도망가는 상황
@@ -575,3 +573,4 @@ void unitOneStep::update(unit & unit)
 	}
 
 }
+
