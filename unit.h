@@ -40,7 +40,7 @@ private:
 	float _moveSpeed;
 	int _imageFrameX;
 
-	float _livedTime;
+	float _frameTimer;
 
 	//자동 상태인가
 	bool _isAuto;

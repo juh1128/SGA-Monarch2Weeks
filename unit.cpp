@@ -53,8 +53,8 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 	_isAuto = true;
 	_unitState = new unitNoneState;
-	_moveSpeed = 3.0f;
-	_livedTime = 0;
+	_moveSpeed = 1.5f;
+	_frameTimer = 0;
 	
 	changeState(new unitNoneState);
 
@@ -68,8 +68,6 @@ void unit::release()
 void unit::update()
 {
 	gameObject::update();
-
-	_livedTime += TIMEMANAGER->getElapsedTime();
 
 	imageFrame();
 
@@ -402,6 +400,12 @@ void unitNoneState::enter(unit & me)
 
 		tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
 
+		//순서 도망->건설->공격
+
+		//도망가는 상황
+		//자신으로부터 25칸(상하좌우대각으로 2칸씩)
+		//주변에 두마리이상이 있을경우 가장 체력이 높은애로부터 도망감
+
 		//도망
 		judgeRun(me);
 
@@ -455,12 +459,6 @@ void unitNoneState::moveOneStep(unit& me)
 
 void unitNoneState::judgeRun(unit& me)
 {
-	//순서 도망->건설->공격
-
-	//도망가는 상황
-	//자신으로부터 25칸(상하좌우대각으로 2칸씩)
-	//주변에 두마리이상이 있을경우 가장 체력이 높은애로부터 도망감
-	
 	//찾아낸 유닛들을 담을 벡터
 	vector<unit*> searchedUnit;
 	for (int i = 0; i < 5; i++)
