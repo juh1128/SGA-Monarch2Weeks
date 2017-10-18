@@ -99,6 +99,10 @@ public:
 
 	virtual void enter(unit& unit);
 	virtual void update(unit& unit);
+	//도망갈지 판단하는 함수
+	void judgeRun(unit& me);
+	//건물지을지 판단하는 함수
+	void judgeBuild(unit& me);
 
 };
 
