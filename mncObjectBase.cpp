@@ -36,6 +36,11 @@ void mncObjectBase::release()
 void mncObjectBase::update()
 {
 	gameObject::update();
+
+	if (_hp <= 0)
+	{
+		setDestroy();
+	}
 }
 
 void mncObjectBase::render()
