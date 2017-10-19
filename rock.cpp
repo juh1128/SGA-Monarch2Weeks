@@ -3,7 +3,7 @@
 
 HRESULT rock::init(int xIndex, int yIndex)
 {
-	mncObjectBase::init("µ¹", "rock", xIndex, yIndex, 0, false);
+	mncObjectBase::init("µ¹", "rock", xIndex, yIndex, 100, false);
 	return S_OK;
 }
 
