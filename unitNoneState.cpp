@@ -128,7 +128,7 @@ void unitNoneState::judgeRun(unit& me)
 			}
 		}
 
-		me.run(searchedUnit[maximumUnitIndex]);
+		me.changeState(new unitRun(searchedUnit[maximumUnitIndex]));
 
 		return;
 	}
