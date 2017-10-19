@@ -28,7 +28,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	WORLD->getMap()->getTile(_index.x, _index.y)->addUnitOnTile(this);
 
 	_imageFrameX = 0;
-	_unitDirection = (UnitDirection::DIRECTION)0;
+	_unitDirection = (UnitDirection::DIRECTION)(RND->getFromIntTo(0, 3));
 
 	_isAuto = true;
 	_unitState = new unitNoneState;
