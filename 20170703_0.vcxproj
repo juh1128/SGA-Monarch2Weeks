@@ -127,6 +127,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="unit.h" />
+    <ClInclude Include="userInterface.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="vector2D.h" />
     <ClInclude Include="wall.h" />
@@ -183,7 +184,13 @@
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unitCreateMotion.cpp" />
     <ClCompile Include="unitImageFrame.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="unitRun.cpp" />
+=======
+    <ClCompile Include="unitNoneState.cpp" />
+    <ClCompile Include="unitOneStep.cpp" />
+    <ClCompile Include="userInterface.cpp" />
+>>>>>>> e6e8f65b855465a5250cb6b111aef82db65f42b1
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wall.cpp" />

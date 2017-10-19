@@ -20,21 +20,17 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	//»ö±ò°Ë»ç
 	switch (country)
 	{
-	case CountryColor::RED:
-		color = "red";
+		case CountryColor::RED:
+			color = "red";
 		break;
-	case CountryColor::WHITE:
-		color = "white";
+		case CountryColor::WHITE:
+			color = "white";
 		break;
-	case CountryColor::BLUE:
-		color = "blue";
+		case CountryColor::BLUE:
+			color = "blue";
 		break;
-	case CountryColor::GREEN:
-		color = "green";
-		break;
-	case CountryColor::END:
-		break;
-	default:
+		case CountryColor::GREEN:
+			color = "green";
 		break;
 	}
 
@@ -63,6 +59,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 void unit::release()
 {
+	gameObject::release();
 }
 
 void unit::update()
@@ -136,13 +133,13 @@ vector2D unit::getDirectionVector(UnitDirection::DIRECTION dir)
 
 	switch (dir)
 	{
-	case UnitDirection::UNIT_LEFT: direction = vector2D(-1, 0);
+		case UnitDirection::UNIT_LEFT: direction = vector2D(-1, 0);
 		break;
-	case UnitDirection::UNIT_UP: direction = vector2D(0, -1);
+		case UnitDirection::UNIT_UP: direction = vector2D(0, -1);
 		break;
-	case UnitDirection::UNIT_RIGHT:	direction = vector2D(1, 0);
+		case UnitDirection::UNIT_RIGHT:	direction = vector2D(1, 0);
 		break;
-	case UnitDirection::UNIT_DOWN: direction = vector2D(0, 1);
+		case UnitDirection::UNIT_DOWN: direction = vector2D(0, 1);
 		break;
 	}
 	return direction;

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "testScene.h"
 #include "objectFactory.h"
+#include "userInterface.h"
 
 HRESULT testScene::init()
 {
@@ -12,6 +13,10 @@ HRESULT testScene::init()
 	//카메라 설정
 	vector2D mapSize = WORLD->getMapSize();
 	CAMERA->setMapSize(mapSize.x, mapSize.y);
+
+	//UI
+	_ui = new userInterface;
+	_ui->init();
 
 	//배경음악 재생
 	SOUNDMANAGER->play("bgm", 0.5f);
@@ -25,6 +30,9 @@ HRESULT testScene::init()
 
 void testScene::release()
 {
+	_ui->release();
+	delete _ui;
+
 	sceneBase::release();
 }
 
@@ -35,6 +43,9 @@ void testScene::resume()
 void testScene::update()
 {
 	sceneBase::update();
+
+	//인터페이스
+	_ui->update();
 
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
@@ -50,31 +61,7 @@ void testScene::update()
 		WORLD->addUnit(_unit, CountryColor::RED);
 	}
 	
-	//마우스 피킹 + 유닛피킹 시 WORLD 스탑
-	_world->getMap()->setMousePickTile();
-	terrainTile* tile = _world->getMap()->getPickedTile();
-	if (tile)
-	{
-		if (tile->getUnitOnTile().size() > 0)
-		{
-			this->enableWorld(false);
-		}
-		else
-		{
-			this->enableWorld(true);
-		}
-	}
 
-	//카메라 이동 구현
-	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
-	{
-		_rbDownPos = _ptMouse;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
-	{
-		CAMERA->setPos(CAMERA->getPos() + _rbDownPos - vector2D(_ptMouse));
-		_rbDownPos = _ptMouse;
-	}
 
 
 }
@@ -82,4 +69,7 @@ void testScene::update()
 void testScene::render()
 {
 	sceneBase::render();
+
+	//인터페이스 렌더링
+	_ui->render();
 }
