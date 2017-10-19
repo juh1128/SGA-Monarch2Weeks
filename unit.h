@@ -4,6 +4,7 @@
 
 class unitState;
 
+
 namespace UnitDirection
 {
 	enum DIRECTION
@@ -20,7 +21,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		None, MoveOneStep, End
+		None, MoveOneStep, BuildTown, End
 	};
 }
 
@@ -50,7 +51,7 @@ private:
 	friend class unitNoneState;
 	friend class unitOneStep;
 
-
+	friend class unitBuildTown;
 public:
 	unit();
 	~unit();
@@ -63,7 +64,7 @@ public:
 	void changeState(unitState* newstate);
 	void imageFrame(void);
 
-	void build();
+	void build(unit& me);
 	void attack();
 	void run(unit* _starUnit);
 
@@ -81,6 +82,8 @@ public:
 	void requestRender();
 
 	bool isMoveable(POINT index);
+	bool isBuildableTown(POINT index);
+	string getColorString();
 };
 
 class unitState
@@ -124,4 +127,14 @@ public:
 	}
 	virtual void enter(unit& unit);
 	virtual void update(unit& unit);
+};
+
+class unitBuildTown : public unitState
+{
+private:
+	POINT _destIndex;
+public:
+	unitBuildTown(POINT index) { _destIndex = index; }
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
 };

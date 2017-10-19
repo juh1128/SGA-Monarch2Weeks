@@ -353,5 +353,8 @@
     <ClCompile Include="mncObjectBase.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
+    <ClCompile Include="unitBuildTown.cpp">
+      <Filter>playGround\unit</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
