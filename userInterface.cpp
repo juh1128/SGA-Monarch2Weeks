@@ -192,7 +192,7 @@ void userInterface::renderCountryInfo()
 	};
 
 	otherCountryInfoPos.x += 12;
-	otherCountryInfoPos.y += 11;
+	otherCountryInfoPos.y += 10;
 	int index = 0;
 	for (int i = 0; i < CountryColor::END; ++i)
 	{
@@ -204,6 +204,9 @@ void userInterface::renderCountryInfo()
 
 		wsprintf(buf, "[%s] 경제력: %dG 전투력: %d", getCountryName((CountryColor::Enum)i),
 			cty->getGold(), cty->getCountryPower());	
+		IMAGEMANAGER->drawText(otherCountryInfoPos.x+30, otherCountryInfoPos.y + index * 30, 
+			UTIL::string_to_wstring(buf), 12, DefaultBrush::black,
+			DWRITE_TEXT_ALIGNMENT_LEADING);
 
 		index++;
 	}
@@ -213,7 +216,7 @@ void userInterface::renderCountryInfo()
 		_playerCountry->getColor(), 0, Pivot::LEFT_TOP, false);
 
 	wsprintf(buf, "[%s] 경제력: %dG 전투력: %d", getCountryName(_playerCountry->getColor()), _playerCountry->getGold(),
-		_playerCountry->getGold());
+		_playerCountry->getCountryPower());
 	IMAGEMANAGER->drawText(_back->_pos.x + 84, _back->_pos.y + 40, UTIL::string_to_wstring(buf), 11, DefaultBrush::black,
 		DWRITE_TEXT_ALIGNMENT_LEADING);
 }

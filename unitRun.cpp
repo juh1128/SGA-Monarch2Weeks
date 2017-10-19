@@ -3,6 +3,8 @@
 
 void unitRun::enter(unit& me)
 {
+	me._state = UnitState::Run;
+
 	//도망가는 함수
 	cout << "run" << endl;
 	terrainTile* destTile;
@@ -67,22 +69,27 @@ void unitRun::enter(unit& me)
 		{
 			vector2D index;
 			for (int i = 0; i < 4; i++)
-			{	
+			{
 				index = me._index + me.getDirectionVector(UnitDirection::DIRECTION(i));
 				if (me.isMoveable(index.toPoint()))
 				{
+					//대각이동으로 도망
 					break;
 				}
 			}
-			me.changeState(new unitOneStep(index.x,index.y));
+			cout << "대각이동으로 도망" << endl;
+			me.changeState(new unitOneStep(index.x, index.y));
 		}
-		else me.changeState(new unitOneStep(destIndex.x, destIndex.y));
+		else
+		{
+			cout << "대각이동으로 도망" << endl;
+			me.changeState(new unitOneStep(destIndex.x, destIndex.y));
+		}
 	}
 
 	//x거리가 더 짧다면
-	if (distance.x < distance.y)
+	else if (distance.x > distance.y)
 	{
-		bool isCanGo = true;
 		//내가 왼쪽에있다면
 		if (me._index.x < _avoidUnit->_index.x)
 		{
@@ -105,7 +112,7 @@ void unitRun::enter(unit& me)
 			vector2D index;
 			for (int i = 0; i < 4; i++)
 			{
-				index = me.getDirectionVector(UnitDirection::DIRECTION(i));
+				index = me._index + me.getDirectionVector(UnitDirection::DIRECTION(i));
 				if (me.isMoveable(index.toPoint()))
 				{
 					return;
@@ -117,32 +124,32 @@ void unitRun::enter(unit& me)
 	}
 
 	//y의 거리가 더 짧다면
-	if (distance.x > distance.y)
+	else if (distance.x < distance.y)
 	{
-		bool isCanGo = true;
-		//내가 위쪽에있다면
-		if (me._index.y < _avoidUnit->_index.y)
-		{
-			destIndex.y -= 1;
-		}
-		else if (me._index.y > _avoidUnit->_index.y)
+
+		//내가 아래에 있다면
+		if (me._index.y > _avoidUnit->_index.y)
 		{
 			destIndex.y += 1;
+		}
+		else if (me._index.y < _avoidUnit->_index.y)
+		{
+			destIndex.y -= 1;
 		}
 
 		//갈수있다면
 		if (me.isMoveable(destIndex))
 		{
 			cout << "상하이동으로 도망" << endl;
-			me.changeState(new unitOneStep(destIndex.x, destIndex.y));
+			me.changeState(new unitOneStep(destIndex.x,destIndex.y));
 		}
-		//갈수없다면
-		else
+		//못간다면
+		else if (!me.isMoveable(destIndex))
 		{
 			vector2D index;
 			for (int i = 0; i < 4; i++)
 			{
-				index = me.getDirectionVector(UnitDirection::DIRECTION(i));
+				index = me._index + me.getDirectionVector(UnitDirection::DIRECTION(i));
 				if (me.isMoveable(index.toPoint()))
 				{
 					return;
@@ -151,5 +158,6 @@ void unitRun::enter(unit& me)
 			cout << "상하이동으로 도망" << endl;
 			me.changeState(new unitOneStep(index.x, index.y));
 		}
+
 	}
 }

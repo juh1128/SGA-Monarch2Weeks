@@ -20,7 +20,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		CreateMotion, None, MoveOneStep, End
+		CreateMotion, None, Run, End
 	};
 }
 
@@ -44,6 +44,7 @@ private:
 
 	//자동 상태인가
 	bool _isAuto;
+	bool _isMove;
 
 
 

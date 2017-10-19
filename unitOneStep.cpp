@@ -11,7 +11,6 @@ void unitOneStep::enter(unit & unit)
 		unit.changeState(new unitNoneState);
 	}
 
-	unit._state = UnitState::MoveOneStep;
 	_oldIndex = unit._index;
 	_destTile = WORLD->getMap()->getTile(_destIndex.x, _destIndex.y);
 
@@ -26,8 +25,10 @@ void unitOneStep::enter(unit & unit)
 		unit._unitDirection = UnitDirection::UNIT_UP;
 	else
 		cout << "유닛 방향 설정 오류" << endl;
+
 	WORLD->getMap()->getTile(_oldIndex.x, _oldIndex.y)->deleteUnitOnTile(&unit);
 	WORLD->getMap()->getTile(_destIndex.x, _destIndex.y)->addUnitOnTile(&unit);
+	unit._isMove = true;
 
 }
 
@@ -42,6 +43,7 @@ void unitOneStep::update(unit & unit)
 	if (length <= unit._moveSpeed)
 	{
 		//유닛이 서있는 타일 변경
+		unit._isMove = false;
 		unit._pos = destPos;
 		unit.changeState(new unitNoneState);
 	}

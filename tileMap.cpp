@@ -127,6 +127,7 @@ void tileMap::load(string directory)
 		obj = *iter;
 		tile.init(0, 0, obj["walkable"].GetBool(), obj["moveRatio"].GetFloat(), obj["key"].GetString());
 		tile.setHeight(obj["height"].GetInt());
+		tile.setBuildable(obj["isBuild"].GetBool());
 		_terrainAtt.emplace_back(tile);
 	}
 

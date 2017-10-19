@@ -118,6 +118,13 @@ void unit::render()
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
 		_image->frameRender(_pos.x*CAMERA->getZoom(), _pos.y*CAMERA->getZoom(), _imageFrameX, _unitDirection, _pivot);
+
+		vector2D renderPos = CAMERA->getRelativeVector2D(_pos);
+		renderPos = renderPos * CAMERA->getZoom();
+		if (_state == UnitState::Run)
+		{		
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"도망", 16);
+		}
 	}
 }
 
@@ -155,7 +162,7 @@ void unit::syncIndexFromPos()
 void unit::requestRender()
 {
 	//가만히 서있을 경우 다른 연산 필요없음
-	if (_state != UnitState::MoveOneStep)
+	if (!_isMove)
 	{
 		WORLD->getMap()->getTile(_index.x, _index.y)->requestRender(this);
 		return;
@@ -249,7 +256,7 @@ unit* unit::isCanRun()
 		{
 			//예외처리
 			if (i > 0 && i < 4 && j > 0 && j < 4) continue;
-			if (j + _index.x - 2 < 0 || j + _index.x - 2 > WORLD->getMap()->getTileCount().x) continue;
+			if (j + _index.x - 2 < 0 || j + _index.x - 2 > WORLD->getMap()->getTileCount().x - 1) continue;
 			if (i + _index.y - 2 < 0 || i + _index.y - 2 > WORLD->getMap()->getTileCount().y - 1) continue;
 
 			//해당 타일에 있는 유닛벡터
@@ -266,9 +273,12 @@ unit* unit::isCanRun()
 					if (unitOnTile[k]->getCountryColor() == _unitColor) continue;
 
 					//나의체력 + 200 이 타일위의 유닛의 체력 보다 적을경우
-					if (_hp + 200 < unitOnTile[k]->getHealth())
+					if (_hp < unitOnTile[k]->getHealth())
 					{
-						searchedUnit.push_back(unitOnTile[k]);
+						if (abs(unitOnTile[k]->getHealth() - _hp) > 200)
+						{
+							searchedUnit.push_back(unitOnTile[k]);
+						}
 					}
 				}
 			}

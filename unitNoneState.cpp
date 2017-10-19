@@ -33,7 +33,7 @@ void unitNoneState::update(unit & me)
 	unit* dangerousUnit = me.isCanRun();
 	if (dangerousUnit != NULL)
 	{
-	//	return me.changeState(new unitRun(dangerousUnit));
+		return me.changeState(new unitRun(dangerousUnit));
 		
 	}
 	unit* enemy = me.isCanAttack();
@@ -43,6 +43,7 @@ void unitNoneState::update(unit & me)
 	}
 	moveOneStep(me);
 
+	
 }
 
 
