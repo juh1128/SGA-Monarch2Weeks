@@ -118,5 +118,5 @@ void autoButton::update()
 
 void autoButton::render()
 {
-	_image->frameRender(_pos.x, _pos.y, !_auto, 0, Pivot::LEFT_TOP, false);
+	_image->frameRender(_pos.x, _pos.y, _auto, 0, Pivot::LEFT_TOP, false);
 }
