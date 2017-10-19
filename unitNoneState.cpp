@@ -28,14 +28,16 @@ void unitNoneState::enter(unit & me)
 
 void unitNoneState::update(unit & me)
 {
-	moveOneStep(me);
+	
 
 	//도망 공격 건설 이동
 	unit* dangerousUnit = me.isCanRun();
 	if (dangerousUnit != NULL)
 	{
-	//	me.changeState(new unitRun(dangerousUnit));
+		me.changeState(new unitRun(dangerousUnit));
 	}
+	
+	moveOneStep(me);
 }
 
 

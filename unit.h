@@ -20,7 +20,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		CreateMotion, None, MoveOneStep, End
+		CreateMotion, None, MoveOneStep, Run, End
 	};
 }
 

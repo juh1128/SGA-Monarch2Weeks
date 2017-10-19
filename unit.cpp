@@ -248,7 +248,7 @@ unit* unit::isCanRun()
 		{
 			//예외처리
 			if (i > 0 && i < 4 && j > 0 && j < 4) continue;
-			if (j + _index.x - 2 < 0 || j + _index.x - 2 > WORLD->getMap()->getTileCount().x) continue;
+			if (j + _index.x - 2 < 0 || j + _index.x - 2 > WORLD->getMap()->getTileCount().x - 1) continue;
 			if (i + _index.y - 2 < 0 || i + _index.y - 2 > WORLD->getMap()->getTileCount().y - 1) continue;
 
 			//해당 타일에 있는 유닛벡터

@@ -3,6 +3,8 @@
 
 void unitRun::enter(unit& me)
 {
+	me._state = UnitState::Run;
+
 	//도망가는 함수
 	cout << "run" << endl;
 	terrainTile* destTile;
