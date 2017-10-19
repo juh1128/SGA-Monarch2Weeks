@@ -47,9 +47,22 @@ void unitFight::update(unit & me)
 	int emHealth = _enemyUnit->getHealth();
 
 	if (emHealth <= 0) return me.changeState(new unitNoneState);
-
-	health -= emHealth*0.02f;
-	emHealth -= health*0.02f;
+	
+	if (health > emHealth)
+	{
+		health -= _enemyUnit->getHealth()*0.001f;
+		emHealth -= me.getHealth()*0.002f;
+	}
+	else if (health == emHealth)
+	{
+		health -= _enemyUnit->getHealth()*0.002f;
+		emHealth -= me.getHealth()*0.002f;
+	}
+	else if (health < emHealth)
+	{
+		health -= _enemyUnit->getHealth()*0.002f;
+		emHealth -= me.getHealth()*0.001f;
+	}
 
 	me.setHp(health);
 	_enemyUnit->setHp(emHealth);
