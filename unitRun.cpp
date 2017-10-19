@@ -15,15 +15,6 @@ void unitRun::enter(unit& me)
 	distance.x = UTIL::getDistance(me._index.x, 0, _avoidUnit->_index.x, 0);
 	distance.y = UTIL::getDistance(0, me._index.y, 0, _avoidUnit->_index.y);
 
-	//if (me.isMoveable(destIndex))
-	//{
-	//
-	//}
-	//else
-	//{
-	//
-	//}
-
 	//서로의 X거리 Y거리가 같다면
 	if (distance.x == distance.y)
 	{
@@ -40,17 +31,10 @@ void unitRun::enter(unit& me)
 			destIndex.x += 1;
 		}
 
-		if (WORLD->getMap()->getTile(destIndex.x, destIndex.y)->isWalkable())
+		//못가는타일이면
+		if (!me.isMoveable(destIndex))
 		{
-			if (destIndex.x < 0 || destIndex.y <0
-				|| destIndex.y > WORLD->getMap()->getTileCount().y
-				|| destIndex.x > WORLD->getMap()->getTileCount().x)
-			{
-				isCanGo = false;
-			}
-		}
-		else
-		{
+			//못가
 			isCanGo = false;
 		}
 
@@ -70,49 +54,102 @@ void unitRun::enter(unit& me)
 				destIndex.y += 1;
 			}
 
-			//갈수있는타일인데
-			if (WORLD->getMap()->getTile(destIndex.x, destIndex.y)->isWalkable())
-			{
-		
-			}
-			//갈수없는타일이면
-			else
+			//갈수없는 타일이면
+			if (!me.isMoveable(destIndex))
 			{
 				//못가
 				isCanGo = false;
 			}
 		}
 
-		//x와y다 돌았는데도 못가면 걍 원스텝으로 보내자 알아서 하겠지 뭐
+		//x와y다 돌았는데도 못가면 걍 여기서 갈수있는타일찾자
 		if (!isCanGo)
 		{
+			vector2D index;
 			for (int i = 0; i < 4; i++)
 			{	
-				//갈수있으면
-				if (WORLD->getMap()->getTile(me._index.x + me.getDirectionVector((UnitDirection::DIRECTION)i).x, me._index.y + me.getDirectionVector((UnitDirection::DIRECTION)i).y))
+				index = me._index + me.getDirectionVector(UnitDirection::DIRECTION(i));
+				if (me.isMoveable(index.toPoint()))
 				{
-
+					break;
 				}
 			}
+			me.changeState(new unitOneStep(index.x,index.y));
 		}
+		else me.changeState(new unitOneStep(destIndex.x, destIndex.y));
 	}
 
 	//x거리가 더 짧다면
 	if (distance.x < distance.y)
 	{
-		
+		bool isCanGo = true;
+		//내가 왼쪽에있다면
+		if (me._index.x < _avoidUnit->_index.x)
+		{
+			destIndex.x -= 1;
+		}
+		else if (me._index.x > _avoidUnit->_index.x)
+		{
+			destIndex.x += 1;
+		}
+
+		//갈수있다면
+		if (me.isMoveable(destIndex))
+		{
+			cout << "좌우이동으로 도망" << endl;
+			me.changeState(new unitOneStep(destIndex.x,destIndex.y));
+		}
+		//갈수없다면
+		else
+		{
+			vector2D index;
+			for (int i = 0; i < 4; i++)
+			{
+				index = me.getDirectionVector(UnitDirection::DIRECTION(i));
+				if (me.isMoveable(index.toPoint()))
+				{
+					return;
+				}
+			}
+			cout << "좌우이동으로 도망" << endl;
+			me.changeState(new unitOneStep(index.x, index.y));
+		}
 	}
 
 	//y의 거리가 더 짧다면
 	if (distance.x > distance.y)
 	{
-		
+		bool isCanGo = true;
+		//내가 위쪽에있다면
+		if (me._index.y < _avoidUnit->_index.y)
+		{
+			destIndex.y -= 1;
+		}
+		else if (me._index.y > _avoidUnit->_index.y)
+		{
+			destIndex.y += 1;
+		}
+
+		//갈수있다면
+		if (me.isMoveable(destIndex))
+		{
+			cout << "상하이동으로 도망" << endl;
+			me.changeState(new unitOneStep(destIndex.x, destIndex.y));
+		}
+		//갈수없다면
+		else
+		{
+			vector2D index;
+			for (int i = 0; i < 4; i++)
+			{
+				index = me.getDirectionVector(UnitDirection::DIRECTION(i));
+				if (me.isMoveable(index.toPoint()))
+				{
+					return;
+				}
+			}
+			cout << "상하이동으로 도망" << endl;
+			me.changeState(new unitOneStep(index.x, index.y));
+		}
 	}
-
-	//POINT directionIndex;
-	//directionIndex.x = destTile->getIndex().x;
-	//directionIndex.y = destTile->getIndex().y;
-	//
-	//me.changeState(new unitOneStep(directionIndex.x, directionIndex.y));
 }
-

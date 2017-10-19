@@ -235,8 +235,7 @@ unit* unit::isCanRun()
 		for (int j = 0; j < 5; j++)
 		{
 			//예외처리
-			if (j == 2 && i == 2) continue;
-			if (j > 0 && j < 4) continue;
+			if (i > 0 && i < 4 && j > 0 && j < 4) continue;
 			if (j + _index.x - 2 < 0 || j + _index.x - 2 > WORLD->getMap()->getTileCount().x) continue;
 			if (i + _index.y - 2 < 0 || i + _index.y - 2 > WORLD->getMap()->getTileCount().y - 1) continue;
 
