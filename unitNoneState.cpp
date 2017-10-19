@@ -4,17 +4,17 @@
 
 void unitNoneState::enter(unit & me)
 {
-	me._state = UnitState::None;
-	if (me._isAuto)
-	{
+	//me._state = UnitState::None;
+	//if (me._isAuto)
+	//{
 		//방향에 따른 타일 두칸검출
-		terrainTile* tile[2];
-		vector2D direction = me.getDirectionVector(me._unitDirection);
-		vector2D temp = me._index + direction;
-		vector2D temp2 = me._index + direction * 2;
+		//terrainTile* tile[2];
+		//vector2D direction = me.getDirectionVector(me._unitDirection);
+		//vector2D temp = me._index + direction;
+		//vector2D temp2 = me._index + direction * 2;
 
-		tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
-		tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
+		//tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
+		//tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
 
 		//순서 도망->건설->공격
 
@@ -22,28 +22,35 @@ void unitNoneState::enter(unit & me)
 		//자신으로부터 25칸(상하좌우대각으로 2칸씩)
 		//주변에 두마리이상이 있을경우 가장 체력이 높은애로부터 도망감
 
-	}
+	//}
 }
 
 
 void unitNoneState::update(unit & me)
 {
-
-	//도망 공격 건설 이동
-	unit* dangerousUnit = me.isCanRun();
-	if (dangerousUnit != NULL)
+	if (me._isAuto)
 	{
-		return me.changeState(new unitRun(dangerousUnit));
-		
-	}
-	unit* enemy = me.isCanAttack();
-	if (enemy != NULL)
-	{
-		return me.changeState(new unitFight(enemy));
-	}
-	moveOneStep(me);
+		//도망 공격 건설 이동
+		unit* dangerousUnit = me.isCanRun();
+		if (dangerousUnit != NULL)
+		{
+			return me.changeState(new unitRun(dangerousUnit));
 
-	
+		}
+		unit* enemy = me.isCanAttack();
+		if (enemy != NULL)
+		{
+			return me.changeState(new unitFight(enemy));
+		}
+
+		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
+		if (me.isBuildableTown(destIndex.toPoint()))
+		{
+			return me.changeState(new unitBuildTown(destIndex.toPoint()));
+		}
+
+		moveOneStep(me);
+	}
 }
 
 

@@ -21,7 +21,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		CreateMotion, None, Run, BuildTown, End
+		CreateMotion, Run, BuildTown, End
 	};
 }
 
@@ -46,8 +46,6 @@ private:
 	//자동 상태인가
 	bool _isAuto;
 	bool _isMove;
-
-
 
 	UnitDirection::DIRECTION _unitDirection;
 
