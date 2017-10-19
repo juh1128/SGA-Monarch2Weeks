@@ -69,9 +69,6 @@ public:
 	void changeState(unitState* newstate);
 	void imageFrame(void);
 
-	void build();
-	void attack();
-
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
 
 	CountryColor::Enum getCountryColor() { return _unitColor; }
@@ -80,7 +77,7 @@ public:
 	void setIsStarUnit(bool isStar) { _isStarUnit = isStar; }
 
 	int getHealth() { return _hp; }
-	void setHp(int num) { _hp = num; }
+	void setHp(int num) { _hp = num;  if (_hp < 0) _hp = 0; }
 
 	void syncIndexFromPos();
 	void requestRender();
