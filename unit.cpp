@@ -60,6 +60,8 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 void unit::release()
 {
+	//유닛이 삭제될 때 자기가 서있는 타일에 등록 해제함.
+	syncIndexFromPos();
 	WORLD->getMap()->getTile(_index.x, _index.y)->deleteUnitOnTile(this);
 
 	gameObject::release();
@@ -237,22 +239,6 @@ bool unit::isMoveable(POINT index)
 	}
 
 	return true;
-}
-
-void unit::build()
-{
-	//건설을 담당하는 함수
-
-
-
-
-
-}
-
-
-void unit::attack()
-{
-	//공격을 담당하는 함수
 }
 
 unit* unit::isCanRun()

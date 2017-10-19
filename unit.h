@@ -69,9 +69,6 @@ public:
 	void changeState(unitState* newstate);
 	void imageFrame(void);
 
-	void build();
-	void attack();
-
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
 
 	CountryColor::Enum getCountryColor() { return _unitColor; }
