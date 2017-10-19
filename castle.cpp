@@ -101,7 +101,7 @@ string castle::getSpriteKey(CountryColor::Enum color)
 			str = "redKing";
 		break;
 		case CountryColor::BLUE:
-			str = "greenKing";
+			str = "blueKing";
 		break;
 		case CountryColor::GREEN:
 			str = "greenKing";

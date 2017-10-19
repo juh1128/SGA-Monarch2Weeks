@@ -18,6 +18,7 @@ private:
 	float						_taxRate; //세율
 
 	vector<unit*>				_unitList; //유닛리스트
+	int							_countryPower; //전투력
 
 public:
 	country() {}
@@ -37,4 +38,8 @@ public:
 	void setGold(int set) { _gold = set; }
 	float getTaxRate() { return _taxRate; }
 	void setTaxRate(float set) { _taxRate = set; }
+
+	//- 기타
+	int getCountryPower() { return _countryPower; }
+	CountryColor::Enum getColor() { return _countryColor; }
 };
