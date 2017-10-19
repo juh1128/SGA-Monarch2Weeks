@@ -21,7 +21,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		CreateMotion, Run, BuildTown, End
+		CreateMotion, Fight, Run, BuildTown, End
 	};
 }
 

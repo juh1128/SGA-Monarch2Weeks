@@ -209,6 +209,7 @@ bool unit::isMoveable(POINT index)
 		return false;
 	}
 
+	// - 이동 하려는 타일에 적 유닛이 있는지 체크
 	vector<unit*> vr = destTile->getUnitOnTile();
 	if (vr.size() >= 0)
 	{

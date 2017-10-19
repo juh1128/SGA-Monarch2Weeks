@@ -207,7 +207,7 @@ void userInterface::renderCountryInfo()
 	otherCountryInfoPos.x += 12;
 	otherCountryInfoPos.y += 10;
 	int index = 0;
-	for (int i = 0; i < CountryColor::END; ++i)
+	for (int i = 0; i < CountryColor::END-1; ++i)
 	{
 		country* cty = WORLD->getCountry((CountryColor::Enum)i);
 		if (cty == _playerCountry) continue;

@@ -22,27 +22,24 @@ void unitBuildTown::update(unit& me)
 
 bool unit::isBuildableTown(POINT index)
 {
-	//건설을 담당하는 함수
-	cout << "마을건설" << endl;
-
+	//index 오버플로우, 높이 체크, 적 유닛이 있는지 체크	
 	if (!isMoveable(index))
 	{
-		//terrainTile* tile = WORLD->getMap()->getTile(index.x, index.y);
-		return false;
+		//건설 가능한지 체크
+		terrainTile* tile = WORLD->getMap()->getTile(index.x, index.y);
+		if(!tile->isBuildable())
+			return false;
 	}
 	
-
+	//건설하려는 곳 주변의 8타일을 가져와서 아군 마을이 있는지 체크
+	//아군 마을이 이미 건설되어있다면 건설 못함.
 	terrainTile* tiles[8];
 	WORLD->getMap()->get8Tiles(tiles, index.x, index.y);
-
-	//마을이 있는지 체크
 	for (int i = 0; i < 8; ++i)
 	{
-	
 		if (tiles[i])
 		{
-			//오브젝트가 없는 타일
-			
+			//오브젝트가 없는 타일			
 			gameObject* objectOnTile = tiles[i]->getObjectOnTile();
 			if (objectOnTile != NULL)
 			{

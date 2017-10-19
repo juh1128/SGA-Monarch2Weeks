@@ -359,8 +359,6 @@
     <ClCompile Include="mncObjectBase.cpp">
       <Filter>playGround\object</Filter>
     </ClCompile>
-    <ClCompile Include="unitBuildTown.cpp">
-    </ClCompile>
     <ClCompile Include="unitCreateMotion.cpp">
       <Filter>playGround\unit</Filter>
     </ClCompile>
@@ -380,6 +378,9 @@
       <Filter>playGround\ui</Filter>
     </ClCompile>
     <ClCompile Include="unitFight.cpp">
+      <Filter>playGround\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="unitBuildTown.cpp">
       <Filter>playGround\unit</Filter>
     </ClCompile>
   </ItemGroup>

@@ -37,6 +37,8 @@ unit* unit::isCanAttack()
 }
 void unitFight::enter(unit & me)
 {
+	me._state = UnitState::Fight;
+
 	vector2D direction = _enemyUnit->_index - me._index;
 
 	if (direction.x == 1)
