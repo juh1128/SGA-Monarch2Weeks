@@ -6,7 +6,7 @@ namespace CountryColor
 {
 	enum Enum
 	{
-		RED, WHITE, BLUE, GREEN, END
+		RED, WHITE, BLUE, GREEN, NATURE, END
 	};
 }
 

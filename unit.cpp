@@ -15,24 +15,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 {
 	//À¯´ÖÀÇ ¼Ò¼Ó»ö±ò
 	_unitColor = country;
-
-	string color;
-	//»ö±ò°Ë»ç
-	switch (country)
-	{
-		case CountryColor::RED:
-			color = "red";
-		break;
-		case CountryColor::WHITE:
-			color = "white";
-		break;
-		case CountryColor::BLUE:
-			color = "blue";
-		break;
-		case CountryColor::GREEN:
-			color = "green";
-		break;
-	}
+	string color = getColorString();
 
 	gameObject::init("unit", color + "Lv1", tileMap::getTilePosFromIndex(index, height), Pivot::CENTER);
 
@@ -300,4 +283,27 @@ unit* unit::isCanRun()
 		return searchedUnit[maximumUnitIndex];
 	}
 	else return NULL;
+}
+
+
+
+string unit::getColorString()
+{
+	string color;
+	switch (_unitColor)
+	{
+	case CountryColor::RED:
+		color = "red";
+		break;
+	case CountryColor::WHITE:
+		color = "white";
+		break;
+	case CountryColor::BLUE:
+		color = "blue";
+		break;
+	case CountryColor::GREEN:
+		color = "green";
+		break;
+	}
+	return color;
 }

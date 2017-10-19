@@ -9,6 +9,8 @@ protected:
 	int						_hp;
 	bool					_walkable;
 
+	CountryColor::Enum		_countryColor;
+
 public:
 	mncObjectBase() {}
 	virtual ~mncObjectBase() {}
@@ -24,4 +26,6 @@ public:
 	void addHp(int add) { _hp += add; }
 	void setHp(int set) { _hp = set; }
 
+	CountryColor::Enum getCountryColor() { return _countryColor; }
+	void setCountryColor(CountryColor::Enum color) { _countryColor = color; }
 };
