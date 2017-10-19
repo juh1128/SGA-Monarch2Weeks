@@ -371,5 +371,8 @@
     <ClCompile Include="userInterface.cpp">
       <Filter>playGround\ui</Filter>
     </ClCompile>
+    <ClCompile Include="interface+entity.cpp">
+      <Filter>playGround\ui</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

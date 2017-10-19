@@ -3,12 +3,29 @@
 #include "mncObjectBase.h"
 #include "unit.h"
 
-HRESULT userInterface::init()
+HRESULT userInterface::init(CountryColor::Enum playerColor)
 {
 	gameObject::init("인터페이스");
 
+	//인터페이스 리소스 로드
+	IMAGEMANAGER->addImage("interfaceBack", L"resource/interface/myInterfaceBack.png");
+	IMAGEMANAGER->addFrameImage("autoBtn", L"resource/interface/autoButton.png", 2, 1);
+	IMAGEMANAGER->addFrameImage("taxProgress", L"resource/interface/taxProgress.png", 1, 2);
+	_otherCountryInfo = IMAGEMANAGER->addImage("otherCountry", L"resource/interface/otherCountry.png");
+	_countryColorSprite = IMAGEMANAGER->addFrameImage("countryColor", L"resource/interface/countryColor.png", 4, 1);
+
 	_pickedUnit = NULL;
 	_map = WORLD->getMap();
+	_playerCountry = WORLD->getCountry(playerColor);
+
+	//인터페이스 객체 생성
+	_back = new interfaceBack;
+	_back->init();
+	_autoBtn = new autoButton;
+	_autoBtn->init(_back);
+	_taxProgress = new taxProgress;
+	_taxProgress->init(_back, _playerCountry->getTaxRate());
+
 	return S_OK;
 }
 
@@ -24,11 +41,20 @@ void userInterface::update()
 
 	moveCamera();				//카메라 이동
 
+
+	//인터페이스 업데이트
+	_taxProgress->update();
+	_autoBtn->update();
+
+	//동기화
+	_playerCountry->setTaxRate(_taxProgress->getTaxRate());
 }
 
 void userInterface::render()
 {
 	renderPickInfo();
+
+	renderCountryInfo();
 }
 
 void userInterface::moveCamera()
@@ -132,4 +158,62 @@ void userInterface::renderPickInfo()
 			IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
 		}
 	}
+}
+
+void userInterface::renderCountryInfo()
+{
+	//인터페이스 렌더링
+	_back->render();
+	_autoBtn->render();
+
+	_taxProgress->render();
+
+	//다른 국가
+	char buf[128] = "";
+	vector2D otherCountryInfoPos = vector2D(_back->_pos.x, _back->_pos.y + _back->getSize().y);
+	_otherCountryInfo->render(otherCountryInfoPos.x, otherCountryInfoPos.y, Pivot::LEFT_TOP, false);
+
+	auto getCountryName = [](CountryColor::Enum color) {
+		switch (color)
+		{
+			case CountryColor::RED:
+				return "휴디";
+			break;
+			case CountryColor::WHITE:
+				return "로그로";
+			break;
+			case CountryColor::BLUE:
+				return "배트랜드";
+			break;
+			case CountryColor::GREEN:
+				return "알빈";
+			break;
+		}
+	};
+
+	otherCountryInfoPos.x += 12;
+	otherCountryInfoPos.y += 11;
+	int index = 0;
+	for (int i = 0; i < CountryColor::END; ++i)
+	{
+		country* cty = WORLD->getCountry((CountryColor::Enum)i);
+		if (cty == _playerCountry) continue;
+
+		_countryColorSprite->frameRender(otherCountryInfoPos.x, otherCountryInfoPos.y + index *30,
+			i, 0, Pivot::LEFT_TOP, false);
+
+		wsprintf(buf, "[%s] 경제력: %dG 전투력: %d", getCountryName((CountryColor::Enum)i),
+			cty->getGold(), cty->getCountryPower());	
+
+		index++;
+	}
+
+	//자국 표시
+	_countryColorSprite->frameRender(_back->_pos.x + 64, _back->_pos.y + 40,
+		_playerCountry->getColor(), 0, Pivot::LEFT_TOP, false);
+
+	wsprintf(buf, "[%s] 경제력: %dG 전투력: %d", getCountryName(_playerCountry->getColor()), _playerCountry->getGold(),
+		_playerCountry->getGold());
+	IMAGEMANAGER->drawText(_back->_pos.x + 84, _back->_pos.y + 40, UTIL::string_to_wstring(buf), 11, DefaultBrush::black,
+		DWRITE_TEXT_ALIGNMENT_LEADING);
 }

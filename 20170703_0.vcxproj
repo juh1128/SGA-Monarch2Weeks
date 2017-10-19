@@ -153,6 +153,7 @@
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="interface+entity.cpp" />
     <ClCompile Include="json.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="mncObjectBase.cpp" />

@@ -34,6 +34,7 @@ void unitNoneState::enter(unit & me)
 void unitNoneState::update(unit & me)
 {
 	moveOneStep(me);
+
 }
 
 

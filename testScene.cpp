@@ -16,14 +16,14 @@ HRESULT testScene::init()
 
 	//UI
 	_ui = new userInterface;
-	_ui->init();
+	_ui->init(CountryColor::BLUE);
 
 	//배경음악 재생
 	SOUNDMANAGER->play("bgm", 0.5f);
 
 	//테스트 마을 하나 생성
 	objectFactory factory;
-	WORLD->addObject(factory.createObject(4, 8, "redTown"));
+	WORLD->addObject(factory.createObject(4, 8, "blueTown"));
 
 	return S_OK;
 }
