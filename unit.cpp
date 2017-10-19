@@ -99,7 +99,6 @@ void unit::update()
 	{
 		return this->setDestroy();
 	}
-
 }
 
 void unit::render()
@@ -112,11 +111,27 @@ void unit::render()
 		_image->setScaleOption(_scale);
 		_image->frameRender(_pos.x*CAMERA->getZoom(), _pos.y*CAMERA->getZoom(), _imageFrameX, _unitDirection, _pivot);
 
-		vector2D renderPos = CAMERA->getRelativeVector2D(_pos);
-		renderPos = renderPos * CAMERA->getZoom();
-		if (_state == UnitState::Run)
+		vector2D renderPos = _pos * CAMERA->getZoom();
+		renderPos = CAMERA->getRelativeVector2D(renderPos);
+		if (_state == UnitState::Search)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"Å½»ö", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+		else if (_state == UnitState::Run)
 		{		
-			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"µµ¸Á", 16);
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"µµ¸Á", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+		else if (_state == UnitState::Fight)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"ÀüÅõ", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+		else if (_state == UnitState::Stop)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"´ë±â", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
 		}
 	}
 }

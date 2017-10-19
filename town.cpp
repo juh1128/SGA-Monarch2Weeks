@@ -77,14 +77,18 @@ void town::update()
 			{
 				if (tiles[i])
 				{
-					//오브젝트가 없는 타일
-					if (!tiles[i]->getObjectOnTile())
+					//건설 가능한지 확인
+					if (tiles[i]->isBuildable())
 					{
-						farmLand* farm = new farmLand;
-						farm->init(tiles[i]->getIndex().x, tiles[i]->getIndex().y, _countryColor);
-						WORLD->addObject(farm);
+						//높이 차이 체크
+						if (abs(tiles[i]->getHeight()-_height) < 2)
+						{
+							farmLand* farm = new farmLand;
+							farm->init(tiles[i]->getIndex().x, tiles[i]->getIndex().y, _countryColor);
+							WORLD->addObject(farm);
 
-						_hp -= 30;
+							_hp -= 30;
+						}
 						break;
 					}
 				}

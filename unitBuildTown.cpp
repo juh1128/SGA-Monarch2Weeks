@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "unit.h"
 #include "objectFactory.h"
+#include "mncObjectBase.h"
 
 
 void unitBuildTown::enter(unit& me)
@@ -9,8 +10,8 @@ void unitBuildTown::enter(unit& me)
 
 	//마을이 없으면 지을 수 있음.
 	objectFactory factory;
-	WORLD->addObject(factory.createObject(_destIndex.x, _destIndex.y, me.getCountryColor() + "Town"));
-	me._hp -= 30;
+	WORLD->addObject(factory.createObject(_destIndex.x, _destIndex.y, me.getColorString() + "Town"));
+	me._hp -= 25;
 
 	me.changeState(new unitNoneState);
 }
@@ -22,14 +23,15 @@ void unitBuildTown::update(unit& me)
 
 bool unit::isBuildableTown(POINT index)
 {
+	//자기 체력이 25보다 많아야 지을 수 있음.
+	if (_hp <= 25) return false;
+
 	//index 오버플로우, 높이 체크, 적 유닛이 있는지 체크	
-	if (!isMoveable(index))
-	{
-		//건설 가능한지 체크
-		terrainTile* tile = WORLD->getMap()->getTile(index.x, index.y);
-		if(!tile->isBuildable())
-			return false;
-	}
+	if (!isMoveable(index)) return false;
+		
+	//건설 가능한지 체크
+	terrainTile* tile = WORLD->getMap()->getTile(index.x, index.y);
+	if (!tile->isBuildable()) return false;
 	
 	//건설하려는 곳 주변의 8타일을 가져와서 아군 마을이 있는지 체크
 	//아군 마을이 이미 건설되어있다면 건설 못함.
@@ -39,16 +41,17 @@ bool unit::isBuildableTown(POINT index)
 	{
 		if (tiles[i])
 		{
-			//오브젝트가 없는 타일			
-			gameObject* objectOnTile = tiles[i]->getObjectOnTile();
+			mncObjectBase* objectOnTile = (mncObjectBase*)(tiles[i]->getObjectOnTile());
 			if (objectOnTile != NULL)
 			{
-				if (objectOnTile->_name == "마을")
+				if (objectOnTile->isLive())
 				{
-					return false;
-					break;
+					if (objectOnTile->_name == "마을" && objectOnTile->getCountryColor() == _unitColor)
+					{
+						return false;
+						break;
+					}
 				}
-
 			}
 		}
 	}

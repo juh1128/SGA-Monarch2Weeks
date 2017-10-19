@@ -30,26 +30,36 @@ void unitNoneState::update(unit & me)
 {
 	if (me._isAuto)
 	{
-		//도망 공격 건설 이동
-		unit* dangerousUnit = me.isCanRun();
-		if (dangerousUnit != NULL)
+		//도망
+		//unit* dangerousUnit = me.isCanRun();
+		//if (dangerousUnit != NULL)
 		{
-			return me.changeState(new unitRun(dangerousUnit));
+			//return me.changeState(new unitRun(dangerousUnit));
 
 		}
+
+		//공격
 		unit* enemy = me.isCanAttack();
 		if (enemy != NULL)
 		{
 			return me.changeState(new unitFight(enemy));
 		}
 
+		me._state = UnitState::Search;
+
+		//건설
 		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
 		if (me.isBuildableTown(destIndex.toPoint()))
 		{
 			return me.changeState(new unitBuildTown(destIndex.toPoint()));
 		}
 
+		//이동
 		moveOneStep(me);
+	}
+	else
+	{
+		me._state = UnitState::Stop;
 	}
 }
 

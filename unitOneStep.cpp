@@ -29,7 +29,6 @@ void unitOneStep::enter(unit & unit)
 	WORLD->getMap()->getTile(_oldIndex.x, _oldIndex.y)->deleteUnitOnTile(&unit);
 	WORLD->getMap()->getTile(_destIndex.x, _destIndex.y)->addUnitOnTile(&unit);
 	unit._isMove = true;
-
 }
 
 void unitOneStep::update(unit & unit)
