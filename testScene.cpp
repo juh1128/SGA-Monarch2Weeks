@@ -67,6 +67,22 @@ void testScene::update()
 		_unit->setHp(400);
 		WORLD->addUnit(_unit, CountryColor::BLUE);
 	}
+	if (KEYMANAGER->isOnceKeyDown('A'))
+	{
+		unit* _unit = new unit;
+		_unit->init(vector2D(4, 8), 0, CountryColor::BLUE);
+		_unit->setHp(400);
+		WORLD->addUnit(_unit, CountryColor::BLUE);
+		unit* _unit2 = new unit;
+		_unit2->init(vector2D(5, 8), 0, CountryColor::RED);
+		_unit2->setHp(400);
+		WORLD->addUnit(_unit2, CountryColor::RED);
+		unit* _unit3 = new unit;
+		_unit3->init(vector2D(6, 8), 0, CountryColor::BLUE);
+		_unit3->setHp(400);
+		WORLD->addUnit(_unit3, CountryColor::BLUE);
+
+	}
 
 
 
