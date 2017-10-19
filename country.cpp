@@ -38,6 +38,7 @@ void country::update()
 		{
 			_unitList[i]->release();
 			delete _unitList[i];
+			_unitList[i]->setDestroy();
 			_unitList[i] = NULL;
 
 			_unitList.erase(_unitList.begin() + i);

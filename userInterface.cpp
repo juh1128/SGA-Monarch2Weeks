@@ -131,31 +131,37 @@ void userInterface::renderPickInfo()
 	//피킹 유닛 정보 표시
 	if (_pickedUnit)
 	{
-		float zoom = CAMERA->getZoom();
-		vector2D unitPos = CAMERA->getRelativeVector2D(_pickedUnit->_pos*zoom);		
-		unitPos.y += _pickedUnit->getSize().y*zoom*0.5f;
+		if (_pickedUnit->isLive())
+		{
+			float zoom = CAMERA->getZoom();
+			vector2D unitPos = CAMERA->getRelativeVector2D(_pickedUnit->_pos*zoom);
+			unitPos.y += _pickedUnit->getSize().y*zoom*0.5f;
 
-		char buf[128] = "";
-		wsprintf(buf, "[%s] DF %d", _pickedUnit->_name.c_str(), _pickedUnit->getHealth());
-		IMAGEMANAGER->fillRectangle(RectMakeCenter(unitPos.x + 12, unitPos.y + 16, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
-		IMAGEMANAGER->drawText(unitPos.x - strlen(buf) * 9, unitPos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
-		return;
+			char buf[128] = "";
+			wsprintf(buf, "[%s] DF %d", _pickedUnit->_name.c_str(), _pickedUnit->getHealth());
+			IMAGEMANAGER->fillRectangle(RectMakeCenter(unitPos.x + 12, unitPos.y + 16, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
+			IMAGEMANAGER->drawText(unitPos.x - strlen(buf) * 9, unitPos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
+			return;
+		}
 	}
 
 	//피킹 오브젝트 정보 표시
-	if (_pickedTile->getObjectOnTile())
+	mncObjectBase* pickedObj = (mncObjectBase*)_pickedTile->getObjectOnTile();
+	if (pickedObj)
 	{
-		vector2D tilePos = CAMERA->getRelativeVector2D(_pickedTile->_pos);
-		tilePos.y -= _pickedTile->getHeight()*_map->getTileSize().y*0.5f;
-		tilePos.y += _map->getTileSize().y - 10;
-
-		char buf[128] = "";
-		mncObjectBase* obj = (mncObjectBase*)_pickedTile->getObjectOnTile();
-		if (obj->_name != "돌")
+		if (pickedObj->isLive())
 		{
-			wsprintf(buf, "[%s] DF %d", obj->_name.c_str(), obj->getHp());
-			IMAGEMANAGER->fillRectangle(RectMake(tilePos.x - strlen(buf) * 5 - 8, tilePos.y + 4, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
-			IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
+			vector2D tilePos = CAMERA->getRelativeVector2D(_pickedTile->_pos);
+			tilePos.y -= _pickedTile->getHeight()*_map->getTileSize().y*0.5f;
+			tilePos.y += _map->getTileSize().y - 10;
+
+			char buf[128] = "";
+			if (pickedObj->_name != "돌")
+			{
+				wsprintf(buf, "[%s] DF %d", pickedObj->_name.c_str(), pickedObj->getHp());
+				IMAGEMANAGER->fillRectangle(RectMake(tilePos.x - strlen(buf) * 5 - 8, tilePos.y + 4, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
+				IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
+			}
 		}
 	}
 }
