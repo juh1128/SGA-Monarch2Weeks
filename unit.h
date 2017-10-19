@@ -69,7 +69,7 @@ public:
 	void changeState(unitState* newstate);
 	void imageFrame(void);
 
-	void build(unit& me);
+	void build();
 	void attack();
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
@@ -147,7 +147,7 @@ public:
 	unitBuildTown(POINT index) { _destIndex = index; }
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
-}
+};
 
 class unitCreateMotion : public unitState
 {

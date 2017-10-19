@@ -60,11 +60,14 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 void unit::release()
 {
+	WORLD->getMap()->getTile(_index.x, _index.y)->deleteUnitOnTile(this);
+
 	gameObject::release();
 }
 
 void unit::update()
 {
+
 	gameObject::update();
 
 	imageFrame();
@@ -107,6 +110,11 @@ void unit::update()
 
 	//Z오더 상 적절한 타일에게 렌더링을 요청한다.
 	requestRender();
+	if (_hp <= 0)
+	{
+		return this->setDestroy();
+	}
+
 }
 
 void unit::render()

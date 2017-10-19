@@ -8,6 +8,10 @@ unit* unit::isCanAttack()
 	for (int i = 0; i < 4; i++)
 	{
 		vector2D direct = _index + getDirectionVector((UnitDirection::DIRECTION)i);
+		
+		if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) continue;
+		if (direct.y <0 || direct.y > WORLD->getMap()->getTileCount().y - 1) continue;
+
 		vector<unit*> emUnit = WORLD->getMap()->getTile(direct.x, direct.y)->getUnitOnTile();
 
 		if (emUnit.size() <= 0) continue;
@@ -26,7 +30,9 @@ unit* unit::isCanAttack()
 			return true;
 		return false;
 	});
+
 	cout << "적있당" << endl;
+
 	return enemy[0];
 }
 void unitFight::enter(unit & me)
@@ -36,10 +42,18 @@ void unitFight::enter(unit & me)
 
 void unitFight::update(unit & me)
 {
+	
 	int health = me.getHealth();
 	int emHealth = _enemyUnit->getHealth();
-	health = health*health - emHealth*emHealth;
-	me.setHp(sqrt(health));
+
+	if (emHealth <= 0) return me.changeState(new unitNoneState);
+
+	health -= emHealth*0.02f;
+	emHealth -= health*0.02f;
+
+	me.setHp(health);
+	_enemyUnit->setHp(emHealth);
+
 	cout << "싸우는중" << endl;
 	if (me.getHealth() <= 0)
 	{
