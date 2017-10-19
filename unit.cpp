@@ -230,160 +230,6 @@ void unit::attack()
 	//공격을 담당하는 함수
 }
 
-void unit::run(unit* starUnit)
-{
-	//도망가는 함수
-	cout << "run" << endl;
-	terrainTile* destTile;
-
-	//x와y거리
-	int xDistance = UTIL::getDistance(_pos.x, 0, starUnit->_pos.x, 0);
-	int yDistance = UTIL::getDistance(0, _pos.y, 0, starUnit->_pos.y);
-
-	//서로의 X거리 Y거리를 구한다
-	if (abs(xDistance) == abs(yDistance))
-	{
-		//내가 오른쪽에있다면
-		if (_pos.x > starUnit->_pos.x)
-		{
-			destTile = WORLD->getMap()->getTile(_index.x + 1, _index.y);
-		}
-		//내가 왼쪽에있다면
-		else if (_pos.x < starUnit->_pos.x)
-		{
-			destTile = WORLD->getMap()->getTile(_index.x - 1, _index.y);
-		}
-
-		//갈수없다면
-		if (!destTile->isWalkable() || destTile->getIndex().x < 0 || destTile->getIndex().y
-			|| destTile->getIndex().x > WORLD->getMap()->getTileCount().x
-			|| destTile->getIndex().y > WORLD->getMap()->getTileCount().y)
-		{
-			//내가 아래에있다면
-			if (_pos.y > starUnit->_pos.y)
-			{
-				destTile = WORLD->getMap()->getTile(_index.x, _index.y + 1);
-			}
-			//내가 위에있다면
-			else if (_pos.y < starUnit->_pos.y - 1)
-			{
-				destTile = WORLD->getMap()->getTile(_index.x, _index.y - 1);
-			}
-			// 갈수없다면
-				if (!destTile->isWalkable() || destTile->getIndex().x < 0 || destTile->getIndex().y
-					|| destTile->getIndex().x > WORLD->getMap()->getTileCount().x
-					|| destTile->getIndex().y > WORLD->getMap()->getTileCount().y
-					|| destTile == NULL)
-				{
-					destTile = WORLD->getMap()->getTile(_index.x + getDirectionVector(_unitDirection).x, _index.y + getDirectionVector(_unitDirection).y);
-				}
-		}
-	}
-
-	//x거리가 더 짧다면
-	if (abs(xDistance) < abs(yDistance))
-	{
-		//내가 오른쪽에있다면
-		if (_pos.x > starUnit->_pos.x)
-		{
-			destTile = WORLD->getMap()->getTile(_index.x + 1, _index.y);
-		}
-		//내가 왼쪽에있다면
-		else if (_pos.x < starUnit->_pos.x)
-		{
-			destTile = WORLD->getMap()->getTile(_index.x - 1, _index.y);
-		}
-		else if (_pos.x == starUnit->_pos.x)
-		{
-			xDistance = 0;
-			yDistance = 1;
-		}
-
-		//갈수없다면
-		if (!destTile->isWalkable() || destTile->getIndex().x < 0 || destTile->getIndex().y
-			|| destTile->getIndex().x > WORLD->getMap()->getTileCount().x
-			|| destTile->getIndex().y > WORLD->getMap()->getTileCount().y
-			|| destTile == NULL)
-		{
-			//x로 갈수없으니 y로 이동하기위함
-			xDistance = 0;
-			yDistance = 1;
-		}
-	}
-
-	//y의 거리가 더 짧다면
-	if (abs(xDistance) > abs(yDistance))
-	{
-		//내가 아래에있다면
-		if (_pos.y > starUnit->_pos.y)
-		{
-			destTile = WORLD->getMap()->getTile(_index.x, _index.y + 1);
-		}
-		//내가 위에있다면
-		else if (_pos.y < starUnit->_pos.y - 1)
-		{
-			destTile = WORLD->getMap()->getTile(_index.x, _index.y - 1);
-		}
-
-		//갈수없다면
-		if (!destTile->isWalkable() || destTile->getIndex().x < 0 || destTile->getIndex().y
-			|| destTile->getIndex().x > WORLD->getMap()->getTileCount().x
-			|| destTile->getIndex().y > WORLD->getMap()->getTileCount().y
-			|| destTile == NULL)
-		{
-			//x로 갈수없으니 y로 이동하기위함
-			xDistance = 1;
-			yDistance = 0;
-		}
-	}
-
-	//한번더 x를 검사(y검사에서 바뀌었을수도있기때문)
-	if (abs(xDistance) < abs(yDistance))
-	{
-		//내가 오른쪽에있다면
-		if (_pos.x > starUnit->_pos.x)
-		{
-			destTile = WORLD->getMap()->getTile(_index.x + 1, _index.y);
-		}
-		//내가 왼쪽에있다면
-		else if (_pos.x < starUnit->_pos.x)
-		{
-			destTile = WORLD->getMap()->getTile(_index.x - 1, _index.y);
-		}
-		else if (_pos.x == starUnit->_pos.x)
-		{
-			//내가 아래에있다면
-			if (_pos.y > starUnit->_pos.y)
-			{
-				destTile = WORLD->getMap()->getTile(_index.x, _index.y + 1);
-			}
-			//내가 위에있다면
-			else if (_pos.y < starUnit->_pos.y - 1)
-			{
-				destTile = WORLD->getMap()->getTile(_index.x, _index.y - 1);
-			}
-		}
-
-		//갈수없다면
-		if (!destTile->isWalkable() || destTile->getIndex().x < 0 || destTile->getIndex().y
-			|| destTile->getIndex().x > WORLD->getMap()->getTileCount().x
-			|| destTile->getIndex().y > WORLD->getMap()->getTileCount().y
-			|| destTile == NULL)
-		{
-			//여기서는 x와 y를 모두 검출한거기때문에 그냥 도망을 포기한다
-			//그냥 가던길로간다
-			destTile = WORLD->getMap()->getTile(_index.x + getDirectionVector(_unitDirection).x, _index.y + getDirectionVector(_unitDirection).y);
-		}
-	}
-
-	POINT directionIndex;
-	directionIndex.x = destTile->getIndex().x;
-	directionIndex.y = destTile->getIndex().y;
-
-	if (destTile == NULL) return;
-		changeState(new unitOneStep(directionIndex.x, directionIndex.y));
-}
-
 void unitNoneState::enter(unit & me)
 {
 	me._state = UnitState::None;
@@ -411,7 +257,6 @@ void unitNoneState::enter(unit & me)
 		//judgeBuild(me);
 	}
 }
-
 
 void unitNoneState::update(unit & me)
 {
@@ -465,7 +310,7 @@ void unitNoneState::judgeRun(unit& me)
 		{
 			//예외처리
 			if (j == 2 && i == 2) continue;
-			if (j > 0 && j < 4) continue;
+			if (j > 0 && j < 4 && i>0 && i<4) continue;
 			if (j + me._index.x - 2 < 0 || j + me._index.x - 2 > WORLD->getMap()->getTileCount().x) continue;
 			if (i + me._index.y - 2 < 0 || i + me._index.y - 2 > WORLD->getMap()->getTileCount().y - 1) continue;
 
@@ -510,7 +355,7 @@ void unitNoneState::judgeRun(unit& me)
 			}
 		}
 
-		me.run(searchedUnit[maximumUnitIndex]);
+		me.changeState(new unitRun(searchedUnit[maximumUnitIndex]));
 
 		return;
 	}

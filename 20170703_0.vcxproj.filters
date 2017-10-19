@@ -356,5 +356,8 @@
     <ClCompile Include="unitCreateMotion.cpp">
       <Filter>playGround\unit</Filter>
     </ClCompile>
+    <ClCompile Include="unitRun.cpp">
+      <Filter>playGround\unit</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -50,6 +50,7 @@ private:
 	friend class unitCreateMotion;
 	friend class unitNoneState;
 	friend class unitOneStep;
+	friend class unitRun;
 
 
 public:
@@ -66,7 +67,6 @@ public:
 
 	void build();
 	void attack();
-	void run(unit* _starUnit);
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
 
@@ -138,4 +138,17 @@ public:
 	unitCreateMotion() {}
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
+};
+
+class unitRun : public unitState
+{
+private:
+	unit* _avoidUnit;	//«««“¿Ø¥÷
+public:
+	unitRun(unit* avoidUnit)
+	{
+		_avoidUnit = avoidUnit;
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit& me) {}
 };
