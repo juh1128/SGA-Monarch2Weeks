@@ -227,6 +227,67 @@ void unit::attack()
 	//공격을 담당하는 함수
 }
 
+unit* unit::isCanRun()
+{
+	vector<unit*>searchedUnit;
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			//예외처리
+			if (j == 2 && i == 2) continue;
+			if (j > 0 && j < 4) continue;
+			if (j + _index.x - 2 < 0 || j + _index.x - 2 > WORLD->getMap()->getTileCount().x) continue;
+			if (i + _index.y - 2 < 0 || i + _index.y - 2 > WORLD->getMap()->getTileCount().y - 1) continue;
+
+			//해당 타일에 있는 유닛벡터
+			vector<unit*> unitOnTile = WORLD->getMap()->getTile(j - 2 + _index.x, i - 2 + _index.y)->getUnitOnTile();
+
+
+			//타일에 유닛이 있다면
+			if (unitOnTile.size() != NULL)
+			{
+				//타일에있는 유닛벡터를 돌아 나보다 체력이 높다면 도망
+				for (int k = 0; k <unitOnTile.size(); k++)
+				{
+					//나 자신과 색깔이 같다면 계산하지 않는다.
+					if (unitOnTile[k]->getCountryColor() == _unitColor) continue;
+
+					//나의체력 + 200 이 타일위의 유닛의 체력 보다 적을경우
+					if (_hp + 200 < unitOnTile[k]->getHealth())
+					{
+						searchedUnit.push_back(unitOnTile[k]);
+					}
+				}
+			}
+		}
+	}
+
+	//유닛탐색하여 벡터에 다 담았으므로 비어있지 않다면 유닛을 찾은것이다.
+	//그래서 도망가는 함수를 실행한다.
+	if (searchedUnit.size() != NULL)
+	{
+		//체력이 가장 높은 유닛을 찾아낸다
+		int maximumHealth = 0;
+		int maximumUnitIndex = 0;
+		for (int k = 0; k < searchedUnit.size(); k++)
+		{
+			//찾은유닛중 이번유닛이 최대체력보다 높다면
+			if (searchedUnit[k]->getHealth() > maximumHealth)
+			{
+				//최대체력과 최대체력을 가진 유닛의 인덱스를 저장
+				maximumHealth = searchedUnit[k]->getHealth();
+				maximumUnitIndex = k;
+			}
+		}
+	
+		return searchedUnit[maximumUnitIndex];
+	}
+	else return NULL;
+}
+
+
+
 
 
 

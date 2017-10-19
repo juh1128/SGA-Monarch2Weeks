@@ -45,6 +45,8 @@ private:
 	//자동 상태인가
 	bool _isAuto;
 
+
+
 	UnitDirection::DIRECTION _unitDirection;
 
 	friend class unitCreateMotion;
@@ -82,6 +84,15 @@ public:
 	void requestRender();
 
 	bool isMoveable(POINT index);
+	unit* isCanRun();
+	bool isCanBuild();
+	bool isCanAttack();
+
+	//도망갈지 판단하는 함수
+	void judgeRun(unit& me);
+	//건물지을지 판단하는 함수
+	//void judgeBuild(unit& me);
+
 };
 
 class unitState
@@ -103,10 +114,7 @@ public:
 
 	void moveOneStep(unit& me);
 
-	//도망갈지 판단하는 함수
-	void judgeRun(unit& me);
-	//건물지을지 판단하는 함수
-	//void judgeBuild(unit& me);
+
 };
 
 class unitOneStep : public unitState
@@ -143,7 +151,7 @@ public:
 class unitRun : public unitState
 {
 private:
-	unit* _avoidUnit;	//피할유닛
+	unit* _avoidUnit;
 public:
 	unitRun(unit* avoidUnit)
 	{

@@ -10,7 +10,6 @@ void unitRun::enter(unit& me)
 	destIndex.x = me._index.x;
 	destIndex.y = me._index.y;
 
-
 	//x와y거리
 	POINT distance;
 	distance.x = UTIL::getDistance(me._index.x, 0, _avoidUnit->_index.x, 0);
@@ -25,7 +24,7 @@ void unitRun::enter(unit& me)
 	//
 	//}
 
-	//서로의 X거리 Y거리를 구한다
+	//서로의 X거리 Y거리가 같다면
 	if (distance.x == distance.y)
 	{
 		bool isCanGo = true;
@@ -74,14 +73,7 @@ void unitRun::enter(unit& me)
 			//갈수있는타일인데
 			if (WORLD->getMap()->getTile(destIndex.x, destIndex.y)->isWalkable())
 			{
-				//맵 밖이면
-				if (destIndex.x < 0 || destIndex.y <0
-					|| destIndex.y > WORLD->getMap()->getTileCount().y
-					|| destIndex.x > WORLD->getMap()->getTileCount().x)
-				{
-					//못가
-					isCanGo = false;
-				}
+		
 			}
 			//갈수없는타일이면
 			else
