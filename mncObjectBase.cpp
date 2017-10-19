@@ -6,6 +6,8 @@ HRESULT mncObjectBase::init(string name, string key, int xIndex, int yIndex, int
 	_index.x = xIndex;
 	_index.y = yIndex;
 
+	_countryColor = CountryColor::NATURE;
+
 	terrainTile* tile = WORLD->getMap()->getTile(xIndex, yIndex);
 	_height = tile->getHeight();
 

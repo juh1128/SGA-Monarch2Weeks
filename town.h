@@ -5,7 +5,6 @@ class farmLand : public mncObjectBase
 {
 private:
 	int				_frame;
-	CountryColor::Enum	_countryColor;
 	float				_incomeTimer;
 
 public:
@@ -16,15 +15,12 @@ public:
 	void release();
 	void update();
 	void render();
-
-	CountryColor::Enum getCountryColor() { return _countryColor; }
 };
 
 class town : public mncObjectBase
 {
 private:
 	int				_frame;
-	CountryColor::Enum	_countryColor;
 
 	float			_farmTimer;
 	float			_taxTimer;
@@ -38,6 +34,4 @@ public:
 	void release();
 	void update();
 	void render();
-
-	CountryColor::Enum getCountryColor() { return _countryColor; }
 };

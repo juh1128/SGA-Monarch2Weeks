@@ -30,8 +30,6 @@ public:
 class castle : public mncObjectBase
 {
 private:
-	CountryColor::Enum	_countryColor;
-
 	int					_frameX;
 	int					_frameY;
 	float				_frameTimer;
@@ -48,6 +46,4 @@ public:
 	void render();
 
 	string getSpriteKey(CountryColor::Enum color);
-
-	CountryColor::Enum getCountryColor() { return _countryColor; }
 };
