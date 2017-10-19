@@ -147,7 +147,7 @@ void terrainTile::render(bool isStopedWorld)
 			_renderUnitList[i]->render();
 	}
 	//렌더링 요청 초기화
-	if(!isStopedWorld)
+	if (!isStopedWorld)
 		_renderUnitList.clear();
 
 

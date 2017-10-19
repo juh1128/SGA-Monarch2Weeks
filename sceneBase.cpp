@@ -22,6 +22,18 @@ void sceneBase::release()
 
 void sceneBase::update()	   
 {
+	//월드 업데이트
+	if (_isUpdateWorld)
+	{
+		_world->update();
+	}
+	//카메라 업데이트
+	CAMERA->update();
+
+	//EFFECTMANAGER->update();
+
+
+
 	//메시지 예약 리스트 업데이트
 	float elapsedTime = TIMEMANAGER->getElapsedTime();
 	for (int i = 0; i < _reservedMessage.size(); ++i)
@@ -47,16 +59,6 @@ void sceneBase::update()
 		}
 		_messageList.erase(_messageList.begin() + i);
 	}
-
-	//월드 업데이트
-	if (_isUpdateWorld)
-	{
-		_world->update();
-	}
-	//카메라 업데이트
-	CAMERA->update();
-	
-	//EFFECTMANAGER->update();
 }
 void sceneBase::render()	   
 {

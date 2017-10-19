@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "testScene.h"
 #include "objectFactory.h"
+#include "userInterface.h"
 
 HRESULT testScene::init()
 {
@@ -13,18 +14,25 @@ HRESULT testScene::init()
 	vector2D mapSize = WORLD->getMapSize();
 	CAMERA->setMapSize(mapSize.x, mapSize.y);
 
+	//UI
+	_ui = new userInterface;
+	_ui->init(CountryColor::BLUE);
+
 	//배경음악 재생
 	SOUNDMANAGER->play("bgm", 0.5f);
 
 	//테스트 마을 하나 생성
 	objectFactory factory;
-	WORLD->addObject(factory.createObject(4, 8, "redTown"));
+	WORLD->addObject(factory.createObject(4, 8, "blueTown"));
 
 	return S_OK;
 }
 
 void testScene::release()
 {
+	_ui->release();
+	delete _ui;
+
 	sceneBase::release();
 }
 
@@ -36,38 +44,31 @@ void testScene::update()
 {
 	sceneBase::update();
 
+	//인터페이스
+	_ui->update();
+
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
 		unit* _unit = new unit;
 		_unit->init(vector2D(4,8), 0,CountryColor::GREEN);
 		WORLD->addUnit(_unit, CountryColor::GREEN);
 	}
-	
-	//마우스 피킹 + 유닛피킹 시 WORLD 스탑
-	_world->getMap()->setMousePickTile();
-	terrainTile* tile = _world->getMap()->getPickedTile();
-	if (tile)
+	if (KEYMANAGER->isOnceKeyDown('R'))
 	{
-		if (tile->getUnitOnTile().size() > 0)
-		{
-			this->enableWorld(false);
-		}
-		else
-		{
-			this->enableWorld(true);
-		}
+		unit* _unit = new unit;
+		_unit->init(vector2D(4, 8), 0, CountryColor::RED);
+		_unit->setHp(400);
+		WORLD->addUnit(_unit, CountryColor::RED);
+	}
+	if (KEYMANAGER->isOnceKeyDown('B'))
+	{
+		unit* _unit = new unit;
+		_unit->init(vector2D(4, 8), 0, CountryColor::BLUE);
+		_unit->setHp(400);
+		WORLD->addUnit(_unit, CountryColor::BLUE);
 	}
 
-	//카메라 이동 구현
-	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
-	{
-		_rbDownPos = _ptMouse;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
-	{
-		CAMERA->setPos(CAMERA->getPos() + _rbDownPos - vector2D(_ptMouse));
-		_rbDownPos = _ptMouse;
-	}
+
 
 
 }
@@ -75,4 +76,7 @@ void testScene::update()
 void testScene::render()
 {
 	sceneBase::render();
+
+	//인터페이스 렌더링
+	_ui->render();
 }

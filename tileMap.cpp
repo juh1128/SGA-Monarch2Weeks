@@ -60,35 +60,6 @@ void tileMap::render()
 		}
 	}
 
-	//피킹 오브젝트 정보 표시
-	if (_pickedTile)
-	{
-		vector2D tilePos = CAMERA->getRelativeVector2D(_pickedTile->_pos);
-		tilePos.y -= _pickedTile->getHeight()*this->getTileSize().y*0.5f;
-		tilePos.y += this->getTileSize().y - 10;
-		//유닛이 있을 경우 유닛 정보 표시
-		vector<unit*> unitList = _pickedTile->getUnitOnTile();
-		if (unitList.size() > 0)
-		{
-			char buf[128] = "";
-			wsprintf(buf, "[%s] DF %d", unitList[0]->_name.c_str(), unitList[0]->getHealth()); 
-			IMAGEMANAGER->fillRectangle(RectMakeCenter(tilePos.x + 12, tilePos.y + 16, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
-			IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
-		}
-		//오브젝트가 있을 경우 오브젝트의 정보 표시
-		else if (_pickedTile->getObjectOnTile())
-		{
-			char buf[128] = "";
-			mncObjectBase* obj = (mncObjectBase*)_pickedTile->getObjectOnTile();
-			if (obj->_name != "돌")
-			{
-				wsprintf(buf, "[%s] DF %d", obj->_name.c_str(), obj->getHp());
-				IMAGEMANAGER->fillRectangle(RectMake(tilePos.x - strlen(buf) * 5 - 8, tilePos.y + 4, strlen(buf) * 10, 24), D2D1::ColorF::FloralWhite, 0.7f);
-				IMAGEMANAGER->drawText(tilePos.x - strlen(buf) * 9, tilePos.y, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
-			}
-		}
-	}
-
 	//높이 테이블 렌더링
 	if (_isDebugMode)
 	{
@@ -156,6 +127,7 @@ void tileMap::load(string directory)
 		obj = *iter;
 		tile.init(0, 0, obj["walkable"].GetBool(), obj["moveRatio"].GetFloat(), obj["key"].GetString());
 		tile.setHeight(obj["height"].GetInt());
+		tile.setBuildable(obj["isBuild"].GetBool());
 		_terrainAtt.emplace_back(tile);
 	}
 

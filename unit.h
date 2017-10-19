@@ -21,7 +21,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		None, MoveOneStep, BuildTown, End
+		CreateMotion, None, Run, BuildTown, End
 	};
 }
 
@@ -41,17 +41,22 @@ private:
 	float _moveSpeed;
 	int _imageFrameX;
 
-	float _livedTime;
+	float _frameTimer;
 
 	//자동 상태인가
 	bool _isAuto;
+	bool _isMove;
+
+
 
 	UnitDirection::DIRECTION _unitDirection;
 
+	friend class unitCreateMotion;
 	friend class unitNoneState;
 	friend class unitOneStep;
-
 	friend class unitBuildTown;
+	friend class unitRun;
+	friend class unitFight;
 public:
 	unit();
 	~unit();
@@ -66,7 +71,6 @@ public:
 
 	void build(unit& me);
 	void attack();
-	void run(unit* _starUnit);
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
 
@@ -84,6 +88,15 @@ public:
 	bool isMoveable(POINT index);
 	bool isBuildableTown(POINT index);
 	string getColorString();
+
+	unit* isCanRun();
+	bool isCanBuild();
+	unit* isCanAttack();
+
+	//도망갈지 판단하는 함수
+	void judgeRun(unit& me);
+	//건물지을지 판단하는 함수
+	//void judgeBuild(unit& me);
 };
 
 class unitState
@@ -105,10 +118,7 @@ public:
 
 	void moveOneStep(unit& me);
 
-	//도망갈지 판단하는 함수
-	void judgeRun(unit& me);
-	//건물지을지 판단하는 함수
-	//void judgeBuild(unit& me);
+
 };
 
 class unitOneStep : public unitState
@@ -135,6 +145,47 @@ private:
 	POINT _destIndex;
 public:
 	unitBuildTown(POINT index) { _destIndex = index; }
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
+}
+
+class unitCreateMotion : public unitState
+{
+private:
+	//생성 연출
+	float _createFrameTimer;
+	int _rotateNum;
+
+public:
+	unitCreateMotion() {}
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
+};
+
+class unitRun : public unitState
+{
+private:
+	unit* _avoidUnit;
+public:
+	unitRun(unit* avoidUnit)
+	{
+		_avoidUnit = avoidUnit;
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit& me) {}
+};
+
+class unitFight : public unitState
+{
+private:
+	unit* _enemyUnit;
+public:
+	unitFight() {}
+	unitFight(unit* enemy)
+	{
+		_enemyUnit = enemy;
+	}
+
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
 };

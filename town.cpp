@@ -5,11 +5,11 @@
 //==========================================================
 // - 밸런스 설정값
 
-#define FARM_CREATE_TIME 5.0f		//농장 생성 시간
-#define PAY_TAX_TIME 3.5f			//세금 납부 시간
+#define FARM_CREATE_TIME 3.0f		//농장 생성 시간
+#define PAY_TAX_TIME 1.5f			//세금 납부 시간
 
-#define TOWN_INCOME_TIME 3.0f		//마을 수익 시간
-#define FARM_INCOME_TIME 4.0f		//농장 수익 시간
+#define TOWN_INCOME_TIME 1.0f		//마을 수익 시간
+#define FARM_INCOME_TIME 2.0f		//농장 수익 시간
 
 
 //==========================================================
@@ -43,7 +43,6 @@ void town::update()
 	if (_townIncomeTimer >= TOWN_INCOME_TIME)
 	{
 		this->addHp(2);
-		cout << "마을의 수익! +2원" << endl;
 		_townIncomeTimer -= TOWN_INCOME_TIME;
 	}
 
@@ -58,7 +57,6 @@ void town::update()
 
 		//세금 납부
 		_hp -= pay;
-		cout << "마을에서 세금을 납부했다. [ " << pay << " ]" << endl;
 		cty->addGold(pay);
 
 		_taxTimer -= PAY_TAX_TIME;
@@ -158,7 +156,6 @@ void farmLand::update()
 						if (((town*)obj)->getCountryColor() == _countryColor)
 						{
 							((town*)obj)->addHp(1);
-							cout << "농장에서 주변 마을에 수익을 분배했다. +1" << endl;
 						}
 					}
 				}

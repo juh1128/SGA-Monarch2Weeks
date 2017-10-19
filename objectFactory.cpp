@@ -118,6 +118,50 @@ gameObject * objectFactory::createCastle(int xIndex, int yIndex, string name)
 		((castle*)_castle)->init(xIndex, yIndex, CountryColor::RED, Direction::Up);
 	}
 
+	//그린
+	if (name == "greenKing0")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::GREEN, Direction::Left);
+	}
+	else if (name == "greenKing1")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::GREEN, Direction::Down);
+	}
+	else if (name == "greenKing2")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::GREEN, Direction::Right);
+	}
+	else if (name == "greenKing3")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::GREEN, Direction::Up);
+	}
+
+	//화이트
+	if (name == "whiteKing0")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::WHITE, Direction::Left);
+	}
+	else if (name == "whiteKing1")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::WHITE, Direction::Down);
+	}
+	else if (name == "whiteKing2")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::WHITE, Direction::Right);
+	}
+	else if (name == "whiteKing3")
+	{
+		_castle = new castle;
+		((castle*)_castle)->init(xIndex, yIndex, CountryColor::WHITE, Direction::Up);
+	}
+
 	
 	return _castle;
 }

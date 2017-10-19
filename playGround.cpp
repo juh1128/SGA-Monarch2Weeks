@@ -25,6 +25,10 @@ HRESULT playGround::init(void)
 	IMAGEMANAGER->addFrameImage("redLv1", L"resource/unit/orangeLv1.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("redLv2", L"resource/unit/orangeLv2.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("redLv3", L"resource/unit/orangeLv3.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("blueKing", L"resource/unit/blueKing.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("blueLv1", L"resource/unit/blueLv1.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("blueLv2", L"resource/unit/blueLv2.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("blueLv3", L"resource/unit/blueLv3.png", 2, 4, false);
 	// - 오브젝트
 	IMAGEMANAGER->addFrameImage("bridge", L"resource/object/bridge.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("castle", L"resource/object/castle.png", 4, 1);

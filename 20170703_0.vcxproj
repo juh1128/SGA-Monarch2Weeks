@@ -127,6 +127,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="unit.h" />
+    <ClInclude Include="userInterface.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="vector2D.h" />
     <ClInclude Include="wall.h" />
@@ -152,6 +153,7 @@
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="interface+entity.cpp" />
     <ClCompile Include="json.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="mncObjectBase.cpp" />
@@ -182,7 +184,13 @@
     </ClCompile>
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unitBuildTown.cpp" />
+    <ClCompile Include="unitCreateMotion.cpp" />
+    <ClCompile Include="unitFight.cpp" />
     <ClCompile Include="unitImageFrame.cpp" />
+    <ClCompile Include="unitRun.cpp" />
+    <ClCompile Include="unitNoneState.cpp" />
+    <ClCompile Include="unitOneStep.cpp" />
+    <ClCompile Include="userInterface.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wall.cpp" />
