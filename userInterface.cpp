@@ -98,6 +98,8 @@ void userInterface::pickUnit()
 				//付快胶客 面倒眉农
 				for (size_t j = 0; j < unitList.size(); ++j)
 				{
+					if (!unitList[j]->isLive()) continue;
+
 					vector2D pos = unitList[j]->_pos * zoom;
 					vector2D size = unitList[j]->getSize() * zoom;
 					RECT rc = RectMakeCenter(pos.x, pos.y, size.x, size.y);
@@ -113,14 +115,19 @@ void userInterface::pickUnit()
 		}
 	}
 
-	if (_pickedUnit)
-	{
-		SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
-	}
-	else
-	{
-		SCENEMANAGER->getNowScene()->sendMessage("enableWorld");
-	}
+	//_unitPickingTimer += TIMEMANAGER->getElapsedTime();
+	//if (_pickedUnit)
+	//{
+	//	if (_unitPickingTimer >= 0.5f)
+	//	{
+	//		SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
+	//		_unitPickingTimer = 0;
+	//	}
+	//}
+	//else
+	//{
+	//	SCENEMANAGER->getNowScene()->sendMessage("enableWorld");
+	//}
 }
 
 void userInterface::renderPickInfo()
