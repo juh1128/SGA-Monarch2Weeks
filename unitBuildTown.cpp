@@ -11,7 +11,7 @@ void unitBuildTown::enter(unit& me)
 	//마을이 없으면 지을 수 있음.
 	objectFactory factory;
 	WORLD->addObject(factory.createObject(_destIndex.x, _destIndex.y, me.getColorString() + "Town"));
-	me._hp -= 25;
+	me._hp -= 50;
 
 	me.changeState(new unitNoneState);
 }
@@ -23,8 +23,8 @@ void unitBuildTown::update(unit& me)
 
 bool unit::isBuildableTown(POINT index)
 {
-	//자기 체력이 25보다 많아야 지을 수 있음.
-	if (_hp <= 25) return false;
+	//자기 체력이 50보다 많아야 지을 수 있음.
+	if (_hp <= 50) return false;
 
 	//index 오버플로우, 높이 체크, 적 유닛이 있는지 체크	
 	if (!isMoveable(index)) return false;

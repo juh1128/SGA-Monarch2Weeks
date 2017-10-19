@@ -103,15 +103,16 @@ void unit::update()
 
 void unit::render()
 {
-	_scale = vector2D(CAMERA->getZoom(), CAMERA->getZoom());
-
 	if (_image)
 	{
+		float zoom = CAMERA->getZoom();
+		_scale = vector2D(zoom, zoom);
+
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
-		_image->frameRender(_pos.x*CAMERA->getZoom(), _pos.y*CAMERA->getZoom(), _imageFrameX, _unitDirection, _pivot);
+		_image->frameRender(_pos.x*zoom, _pos.y*zoom, _imageFrameX, _unitDirection, _pivot);
 
-		vector2D renderPos = _pos * CAMERA->getZoom();
+		vector2D renderPos = _pos*zoom;
 		renderPos = CAMERA->getRelativeVector2D(renderPos);
 		if (_state == UnitState::Search)
 		{

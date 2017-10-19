@@ -54,7 +54,7 @@ void unitNoneState::update(unit & me)
 			return me.changeState(new unitBuildTown(destIndex.toPoint()));
 		}
 
-		//이동
+		//이동 (계속 이동만하고 딱히 행동을 할게 없으면 가장 가까운 유닛에게 병합한다.)
 		moveOneStep(me);
 	}
 	else

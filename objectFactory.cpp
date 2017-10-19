@@ -9,6 +9,8 @@
 #include "wall.h"
 #include "bridge.h"
 
+#include "unit.h"
+
 
 
 //오브젝트를 팩토리 패턴으로 생성하려면
@@ -56,6 +58,30 @@ gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 	{
 		newObj = new rock;
 		((rock*)newObj)->init(xIndex, yIndex);
+	}
+	else if (name == "blueStartUnit")
+	{
+		newObj = new unit;
+		((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::BLUE);
+		((unit*)newObj)->setHp(500);
+	}
+	else if (name == "greenStartUnit")
+	{
+		newObj = new unit;
+		((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::GREEN);
+		((unit*)newObj)->setHp(500);
+	}
+	else if (name == "redStartUnit")
+	{
+		newObj = new unit;
+		((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::RED);
+		((unit*)newObj)->setHp(500);
+	}
+	else if (name == "whiteStartUnit")
+	{
+		//newObj = new unit;
+		//((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::WHITE);
+		//((unit*)newObj)->setHp(500);
 	}
 	else
 	{
