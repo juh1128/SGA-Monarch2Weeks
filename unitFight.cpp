@@ -37,7 +37,18 @@ unit* unit::isCanAttack()
 }
 void unitFight::enter(unit & me)
 {
+	vector2D direction = _enemyUnit->_index - me._index;
 
+	if (direction.x == 1)
+		me._unitDirection = UnitDirection::UNIT_RIGHT;
+	else if (direction.x == -1)
+		me._unitDirection = UnitDirection::UNIT_LEFT;
+	else if (direction.y == 1)
+		me._unitDirection = UnitDirection::UNIT_DOWN;
+	else if (direction.y == -1)
+		me._unitDirection = UnitDirection::UNIT_UP;
+	else
+		cout << "unitFight enter 방향설정 오류" << endl;
 }
 
 void unitFight::update(unit & me)
@@ -52,25 +63,30 @@ void unitFight::update(unit & me)
 	{
 		health -= _enemyUnit->getHealth()*0.001f;
 		emHealth -= me.getHealth()*0.002f;
+
+		_enemyUnit->setHp(emHealth);
+		if (_enemyUnit->getHealth() <= 0) return me.changeState(new unitNoneState);
+		me.setHp(health);
 	}
 	else if (health == emHealth)
 	{
 		health -= _enemyUnit->getHealth()*0.002f;
 		emHealth -= me.getHealth()*0.002f;
+
+		me.setHp(health);
+		_enemyUnit->setHp(emHealth);
+
 	}
 	else if (health < emHealth)
 	{
 		health -= _enemyUnit->getHealth()*0.002f;
 		emHealth -= me.getHealth()*0.001f;
+
+		me.setHp(health);
+		if (me.getHealth() <= 0) return me.changeState(new unitNoneState);
+		_enemyUnit->setHp(emHealth);
+
 	}
 
-	me.setHp(health);
-	_enemyUnit->setHp(emHealth);
 
-	cout << "싸우는중" << endl;
-	if (me.getHealth() <= 0)
-	{
-		cout << "피없당" << endl;
-		return;
-	}
 }
