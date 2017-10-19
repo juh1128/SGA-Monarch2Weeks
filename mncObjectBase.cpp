@@ -15,6 +15,9 @@ HRESULT mncObjectBase::init(string name, string key, int xIndex, int yIndex, int
 	if(!_walkable)
 		tile->setWalkable(false);	//타일 이동불가능 설정
 
+	//건설 불가 설정
+	tile->setBuildable(false);
+
 	gameObject::init(name, key, tileMap::getTilePosFromIndex(vector2D(xIndex, yIndex), _height));
 	_pos = _pos / CAMERA->getZoom();
 
@@ -29,6 +32,7 @@ void mncObjectBase::release()
 
 	if (!_walkable)
 		tile->setWalkable(true);	//타일 이동불가능 복구
+	tile->setBuildable(true);		//이제 건설 가능
 
 	gameObject::release();
 }

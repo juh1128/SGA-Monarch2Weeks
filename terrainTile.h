@@ -6,6 +6,7 @@ class terrainTile : public gameObject
 {
 private:
 	bool		_walkable;
+	bool		_buildable;
 	float		_moveRatio;
 
 	string		_imageKey;
@@ -34,6 +35,8 @@ public:
 
 	bool isWalkable() { return _walkable; }
 	void setWalkable(bool set) { _walkable = set; }
+	bool isBuildable() { return _buildable; }
+	void setBuildable(bool set) { _buildable = set; }
 
 	float getMoveRatio() { return _moveRatio; }
 
