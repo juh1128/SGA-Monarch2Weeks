@@ -53,14 +53,21 @@ void testScene::update()
 		_unit->init(vector2D(4,8), 0,CountryColor::GREEN);
 		WORLD->addUnit(_unit, CountryColor::GREEN);
 	}
-	if (KEYMANAGER->isOnceKeyDown('B'))
+	if (KEYMANAGER->isOnceKeyDown('R'))
 	{
 		unit* _unit = new unit;
 		_unit->init(vector2D(4, 8), 0, CountryColor::RED);
 		_unit->setHp(400);
 		WORLD->addUnit(_unit, CountryColor::RED);
 	}
-	
+	if (KEYMANAGER->isOnceKeyDown('B'))
+	{
+		unit* _unit = new unit;
+		_unit->init(vector2D(4, 8), 0, CountryColor::BLUE);
+		_unit->setHp(400);
+		WORLD->addUnit(_unit, CountryColor::BLUE);
+	}
+
 
 
 
