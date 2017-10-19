@@ -45,11 +45,14 @@ private:
 	//자동 상태인가
 	bool _isAuto;
 
+
+
 	UnitDirection::DIRECTION _unitDirection;
 
 	friend class unitCreateMotion;
 	friend class unitNoneState;
 	friend class unitOneStep;
+	friend class unitRun;
 
 
 public:
@@ -66,7 +69,6 @@ public:
 
 	void build();
 	void attack();
-	void run(unit* _starUnit);
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
 
@@ -82,6 +84,15 @@ public:
 	void requestRender();
 
 	bool isMoveable(POINT index);
+	unit* isCanRun();
+	bool isCanBuild();
+	bool isCanAttack();
+
+	//도망갈지 판단하는 함수
+	void judgeRun(unit& me);
+	//건물지을지 판단하는 함수
+	//void judgeBuild(unit& me);
+
 };
 
 class unitState
@@ -103,10 +114,7 @@ public:
 
 	void moveOneStep(unit& me);
 
-	//도망갈지 판단하는 함수
-	void judgeRun(unit& me);
-	//건물지을지 판단하는 함수
-	//void judgeBuild(unit& me);
+
 };
 
 class unitOneStep : public unitState
@@ -138,4 +146,17 @@ public:
 	unitCreateMotion() {}
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
+};
+
+class unitRun : public unitState
+{
+private:
+	unit* _avoidUnit;
+public:
+	unitRun(unit* avoidUnit)
+	{
+		_avoidUnit = avoidUnit;
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit& me) {}
 };
