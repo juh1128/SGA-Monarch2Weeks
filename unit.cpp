@@ -208,6 +208,18 @@ bool unit::isMoveable(POINT index)
 		return false;
 	}
 
+	vector<unit*> vr = destTile->getUnitOnTile();
+	if (vr.size() >= 0)
+	{
+		for (int i = 0; i < vr.size(); ++i)
+		{
+			if (vr[i]->getCountryColor() != this->getCountryColor())
+			{
+				return false;
+			}
+		}
+	}
+
 	return true;
 }
 
@@ -284,10 +296,3 @@ unit* unit::isCanRun()
 	}
 	else return NULL;
 }
-
-
-
-
-
-
-

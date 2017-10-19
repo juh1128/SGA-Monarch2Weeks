@@ -377,5 +377,8 @@
     <ClCompile Include="interface+entity.cpp">
       <Filter>playGround\ui</Filter>
     </ClCompile>
+    <ClCompile Include="unitFight.cpp">
+      <Filter>playGround\unit</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

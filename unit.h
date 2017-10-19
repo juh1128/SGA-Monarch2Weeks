@@ -53,7 +53,7 @@ private:
 	friend class unitNoneState;
 	friend class unitOneStep;
 	friend class unitRun;
-
+	friend class unitFight;
 
 public:
 	unit();
@@ -159,4 +159,17 @@ public:
 	}
 	virtual void enter(unit& me);
 	virtual void update(unit& me) {}
+};
+
+class unitFight : public unitState
+{
+private:
+	unit* _enemyUnit;
+public:
+	unitFight(unit* enemy)
+	{
+		_enemyUnit = enemy;
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
 };
