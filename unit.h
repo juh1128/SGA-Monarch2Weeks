@@ -86,7 +86,7 @@ public:
 	bool isMoveable(POINT index);
 	unit* isCanRun();
 	bool isCanBuild();
-	bool isCanAttack();
+	unit* isCanAttack();
 
 	//도망갈지 판단하는 함수
 	void judgeRun(unit& me);
@@ -166,6 +166,7 @@ class unitFight : public unitState
 private:
 	unit* _enemyUnit;
 public:
+	unitFight() {}
 	unitFight(unit* enemy)
 	{
 		_enemyUnit = enemy;

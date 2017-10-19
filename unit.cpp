@@ -54,6 +54,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	
 	changeState(new unitCreateMotion);
 
+
 	return S_OK;
 }
 
