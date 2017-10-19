@@ -3,7 +3,7 @@
 
 bool unit::isCanAttack()
 {
-
+	return false;
 }
 void unitFight::enter(unit & me)
 {
