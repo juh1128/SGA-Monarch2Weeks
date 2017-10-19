@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -184,13 +184,10 @@
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unitCreateMotion.cpp" />
     <ClCompile Include="unitImageFrame.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="unitRun.cpp" />
-=======
     <ClCompile Include="unitNoneState.cpp" />
     <ClCompile Include="unitOneStep.cpp" />
     <ClCompile Include="userInterface.cpp" />
->>>>>>> e6e8f65b855465a5250cb6b111aef82db65f42b1
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wall.cpp" />
