@@ -2,6 +2,7 @@
 #include "singletonBase.h"
 #include <deque>
 
+
 class pathFinder : public singletonBase<pathFinder>
 {
 private:
