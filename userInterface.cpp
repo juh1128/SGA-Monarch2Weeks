@@ -13,6 +13,7 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 	IMAGEMANAGER->addFrameImage("taxProgress", L"resource/interface/taxProgress.png", 1, 2);
 	_otherCountryInfo = IMAGEMANAGER->addImage("otherCountry", L"resource/interface/otherCountry.png");
 	_countryColorSprite = IMAGEMANAGER->addFrameImage("countryColor", L"resource/interface/countryColor.png", 4, 1);
+	_whatwhereImage = IMAGEMANAGER->addFrameImage("whatwhere", L"resource/interface/whatwhere.png", 2, 1);
 
 	_pickedUnit = NULL;
 	_map = WORLD->getMap();
@@ -50,6 +51,8 @@ void userInterface::update()
 	_startBtn->update();
 
 	//명령 인터페이스
+	clickedMouse();
+	dragedMouse();
 	_commandWindow->update();
 
 	//동기화
@@ -229,4 +232,19 @@ void userInterface::renderCountryInfo()
 		_playerCountry->getCountryPower());
 	IMAGEMANAGER->drawText(_back->_pos.x + 84, _back->_pos.y + 40, UTIL::string_to_wstring(buf), 11, DefaultBrush::black,
 		DWRITE_TEXT_ALIGNMENT_LEADING);
+}
+
+
+
+
+void userInterface::clickedMouse()
+{
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+
+	}
+}
+
+void userInterface::dragedMouse()
+{
 }
