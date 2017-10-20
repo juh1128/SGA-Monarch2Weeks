@@ -51,12 +51,15 @@ private:
 
 	UnitDirection::DIRECTION _unitDirection;
 
+	unit* _mergeUnit;
+
 	friend class unitCreateMotion;
 	friend class unitNoneState;
 	friend class unitOneStep;
 	friend class unitBuildTown;
 	friend class unitRun;
 	friend class unitFight;
+	friend class unitMerge;
 	friend class unitDigObject;
 
 public:
@@ -93,6 +96,9 @@ public:
 	unit* isCanRun();
 	unit* isCanAttack();
 	mncObjectBase* isCanAttackNature();
+	unit* isCanCombin();
+
+	void setMergeUnit(unit* mergeUnit);
 };
 
 class unitState
@@ -139,6 +145,8 @@ class unitBuildTown : public unitState
 {
 private:
 	POINT _destIndex;
+	mncObjectBase* _obj;
+	int _frameTimer;
 public:
 	unitBuildTown(POINT index) { _destIndex = index; }
 	virtual void enter(unit& me);
@@ -198,4 +206,17 @@ public:
 
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
+};
+class unitMerge : public unitState
+{
+private:
+	unit* _mergeUnit;
+public:
+	unitMerge(unit* mergeUnit)
+	{
+		_mergeUnit = mergeUnit;
+		
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit & me);
 };
