@@ -188,7 +188,7 @@ void commandWindow::update()
 		case commandWindowState::Where:
 		{
 			//타일 클릭 시 What으로 넘어감.
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 			{
 				_destTile = WORLD->getMap()->getPickedTile();
 				if (_destTile)
