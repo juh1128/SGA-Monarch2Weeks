@@ -8,6 +8,8 @@ void unit::setMergeUnit(unit * mergeUnit)
 
 void unitMerge::enter(unit& me)
 {
+	if (!_mergeUnit) return me.changeState(new unitNoneState);
+
 	if (me._mergeUnit == NULL)
 	{
 		me.setMergeUnit(_mergeUnit);

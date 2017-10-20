@@ -52,7 +52,7 @@ void unitOneStep::update(unit & me)
 		{
 			if (unitList[i]->isLive())
 			{
-				if (unitList[i]->getCountryColor() == me._unitColor)
+				if (unitList[i] != &me && unitList[i]->getCountryColor() == me._unitColor)
 				{
 					me.changeState(new unitMerge(unitList[i]));
 					isMerge = true;

@@ -37,6 +37,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	_unitState = new unitNoneState;
 	_moveSpeed = 1.5f;
 	_frameTimer = 0;
+	_mergeUnit = NULL;
 	
 	changeState(new unitCreateMotion);
 
