@@ -139,6 +139,8 @@ class unitBuildTown : public unitState
 {
 private:
 	POINT _destIndex;
+	mncObjectBase* _obj;
+	int _frameTimer;
 public:
 	unitBuildTown(POINT index) { _destIndex = index; }
 	virtual void enter(unit& me);
