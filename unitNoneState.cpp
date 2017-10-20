@@ -28,6 +28,14 @@ void unitNoneState::enter(unit & me)
 
 void unitNoneState::update(unit & me)
 {
+	//예약 상태 확인
+	if (me._reservedState.size() > 0)
+	{
+		me.changeState(me._reservedState[0]);
+		me._reservedState.erase(me._reservedState.begin());
+		return;
+	}
+
 	if (me._isAuto)
 	{
 		//도망

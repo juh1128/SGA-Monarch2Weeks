@@ -31,30 +31,48 @@ void unitOneStep::enter(unit & unit)
 	unit._isMove = true;
 }
 
-void unitOneStep::update(unit & unit)
+void unitOneStep::update(unit & me)
 {
 	float zoom = CAMERA->getZoom();
 	vector2D destPos = tileMap::getTilePosFromIndex(_destIndex, _destTile->getHeight(true)) / zoom;
-	vector2D distance = destPos - unit._pos;
+	vector2D distance = destPos - me._pos;
 
 	//목적지 도착
 	float length = distance.getLength();
-	if (length <= unit._moveSpeed)
+	if (length <= me._moveSpeed)
 	{
 		//유닛이 서있는 타일 변경
-		unit._isMove = false;
-		unit._pos = destPos;
-		unit.changeState(new unitNoneState);
+		me._isMove = false;
+		me._pos = destPos;
+
+		//도착했는데 아군 유닛이 있을 경우 병합한다.
+		vector<unit*> unitList = _destTile->getUnitOnTile();
+		bool isMerge = false;
+		for (size_t i = 0; i < unitList.size(); ++i)
+		{
+			if (unitList[i]->isLive())
+			{
+				if (unitList[i]->getCountryColor() == me._unitColor)
+				{
+					me.changeState(new unitMerge(unitList[i]));
+					isMerge = true;
+					break;
+				}
+			}
+		}
+
+		if(!isMerge)
+			me.changeState(new unitNoneState);
 	}
 	//가는 중
 	else
 	{
-		unit._pos = unit._pos + distance.normalize()*unit._moveSpeed;
+		me._pos = me._pos + distance.normalize()*me._moveSpeed;
 
 		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
 		if (length <= tileMap::getTileSize().getLength()*zoom*0.25f)
 		{
-			unit._height = _destTile->getHeight(true);
+			me._height = _destTile->getHeight(true);
 		}
 	}
 

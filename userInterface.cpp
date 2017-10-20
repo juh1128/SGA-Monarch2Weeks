@@ -50,9 +50,9 @@ void userInterface::update()
 	_startBtn->update();
 
 	//명령 인터페이스
+	_commandWindow->update();
 	clickedMouse();
 	dragedMouse();
-	_commandWindow->update();
 
 	//동기화
 	_playerCountry->setTaxRate(_taxProgress->getTaxRate());

@@ -149,6 +149,11 @@ void unit::changeState(unitState* newstate)
 	_unitState->enter(*this);
 }
 
+void unit::reserveState(unitState * newstate)
+{
+	_reservedState.push_back(newstate);
+}
+
 vector2D unit::getDirectionVector(UnitDirection::DIRECTION dir)
 {
 	vector2D direction;

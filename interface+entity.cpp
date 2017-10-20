@@ -149,13 +149,13 @@ void commandWindow::show(vector<unit*> targetList)
 {
 	if (_state == commandWindowState::Hide)
 	{
-		_state = commandWindowState::Where;
 		_targetList.clear();
 		for (size_t i = 0; i < targetList.size(); ++i)
 		{
 			_targetList.push_back(targetList[i]);
 		}	
 		SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
+		_state = commandWindowState::Where;
 	}
 }
 
@@ -188,13 +188,13 @@ void commandWindow::update()
 		case commandWindowState::Where:
 		{
 			//타일 클릭 시 What으로 넘어감.
-			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
 				_destTile = WORLD->getMap()->getPickedTile();
 				if (_destTile)
 				{
 					_state = commandWindowState::What;
-				}			
+				}	
 			}
 
 			//어디? 일 때 어딜 찍었는지에 따라 명령이 열림.

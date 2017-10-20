@@ -21,7 +21,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		Stop, Search, CreateMotion, Fight, Run, BuildTown, End
+		Stop, Search, CreateMotion, Fight, Run, BuildTown, Merge, End
 	};
 }
 
@@ -33,8 +33,9 @@ private:
 	int		 _hp;
 	bool	 _isStarUnit;
 
-	UnitState::Enum _state;
-	unitState*		_unitState;
+	UnitState::Enum		_state;
+	unitState*			_unitState;
+	vector<unitState*>	_reservedState;
 
 	CountryColor::Enum _unitColor;
 
@@ -72,6 +73,7 @@ public:
 	void render();
 
 	void changeState(unitState* newstate);
+	void reserveState(unitState* newstate);
 	void imageFrame(void);
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
