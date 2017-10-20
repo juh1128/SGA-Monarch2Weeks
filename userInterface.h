@@ -20,9 +20,12 @@ private:
 	interfaceBack*		_back;
 	startButton*		_startBtn;
 	taxProgress*		_taxProgress;
+	commandWindow*		_commandWindow;
+
+	//이미지
 	image*				_otherCountryInfo;
 	image*				_countryColorSprite;
-	commandWindow*		_commandWindow;
+	image*				_whatwhereImage;
 
 public:
 	userInterface() {}
@@ -37,6 +40,10 @@ public:
 	void moveCamera();
 	//유닛 피킹
 	void pickUnit();
+	//클릭 시 처리
+	void clickedMouse();
+	//드래그 시 처리
+	void dragedMouse();
 
 
 	//피킹된 타일 위의 오브젝트 정보 표시

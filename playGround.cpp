@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "playGround.h"
 #include "testScene.h"
+#include "objectFactory.h"
 
 playGround::playGround()
 {
@@ -29,6 +30,9 @@ HRESULT playGround::init(void)
 	IMAGEMANAGER->addFrameImage("blueLv1", L"resource/unit/blueLv1.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("blueLv2", L"resource/unit/blueLv2.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("blueLv3", L"resource/unit/blueLv3.png", 2, 4, false);
+	//오브젝트 팩토리 초기화
+	objectFactory::initUnitImage();
+
 	// - 오브젝트
 	IMAGEMANAGER->addFrameImage("bridge", L"resource/object/bridge.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("castle", L"resource/object/castle.png", 4, 1);

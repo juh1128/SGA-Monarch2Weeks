@@ -81,6 +81,8 @@ gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 	{
 		//newObj = new unit;
 		//((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::WHITE);
+		//((unit*)newObj)->setImage(getUnitImage(CountryColor::WHITE, 1), getUnitImage(CountryColor::WHITE, 2),
+			//getUnitImage(CountryColor::WHITE, 3));
 		//((unit*)newObj)->setHp(500);
 	}
 	else
@@ -190,4 +192,29 @@ gameObject * objectFactory::createCastle(int xIndex, int yIndex, string name)
 
 	
 	return _castle;
+}
+
+
+//static 이미지 초기화
+image* objectFactory::_unitImage[12] = { NULL };
+
+void objectFactory::initUnitImage()
+{
+	//레드, 화이트, 블루, 그린
+	//redLv1, redLv2, redLv3 / whiteLv1, whiteLv2, whiteLv3 
+	char* colorList[] = { "red", "white", "blue", "greed" };
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 1; j <= 3; ++j)
+		{
+			char key[128] = "";
+			wsprintf(key, "%sLv%d", colorList[i], j);
+			_unitImage[i * 3 + (j-1)] = IMAGEMANAGER->findImage(key);
+		}
+	}
+}
+image* objectFactory::getUnitImage(CountryColor::Enum color, int lv)
+{
+	if (color == CountryColor::NATURE) return NULL;
+	return _unitImage[color * 3 + (lv-1)];
 }
