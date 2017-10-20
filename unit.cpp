@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "unit.h"
-
+#include "mncObjectBase.h"
 
 unit::unit()
 {

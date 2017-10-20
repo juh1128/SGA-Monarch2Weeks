@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "unit.h"
 #include <algorithm>
+#include "mncObjectBase.h"
 
 unit* unit::isCanAttack()
 {
@@ -18,6 +19,7 @@ unit* unit::isCanAttack()
 
 		for (int i = 0; i < emUnit.size(); ++i)
 		{
+			if (!emUnit[i]->isLive()) continue;
 			if (this->getCountryColor() != emUnit[i]->getCountryColor())
 				enemy.push_back(emUnit[i]);
 		}
@@ -35,11 +37,42 @@ unit* unit::isCanAttack()
 
 	return enemy[0];
 }
+mncObjectBase* unit::isCanAttackNature()
+{
+	vector<mncObjectBase*> nature;
+	vector2D direct = _index + getDirectionVector(_unitDirection);
+
+	if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) return nullptr;
+	if (direct.y <0 || direct.y > WORLD->getMap()->getTileCount().y - 1) return nullptr;
+
+	mncObjectBase* obj = (mncObjectBase*)WORLD->getMap()->getTile(direct.x, direct.y)->getObjectOnTile();
+	if(obj)
+		nature.push_back(obj);
+
+	if (nature.size() <= 0) return nullptr;
+	if (nature[0]->getCountryColor() == this->getCountryColor()) return nullptr;
+	if (nature[0]->_name == "돌") return nullptr;
+
+	return nature[0];
+
+
+	cout << "isCanAttackNature 버그 있어욤" << endl;
+
+	return nullptr;
+}
+
 void unitFight::enter(unit & me)
 {
 	me._state = UnitState::Fight;
 
 	vector2D direction = _enemyUnit->_index - me._index;
+
+	int length = direction.getLength();
+
+	if (length> 1 || length == 0)
+	{
+		return me.changeState(new unitNoneState);
+	}
 
 	if (direction.x == 1)
 		me._unitDirection = UnitDirection::UNIT_RIGHT;
@@ -50,7 +83,7 @@ void unitFight::enter(unit & me)
 	else if (direction.y == -1)
 		me._unitDirection = UnitDirection::UNIT_UP;
 	else
-		cout << "unitFight enter 방향설정 오류" << endl;
+		cout << direction.x <<" , "<< direction.y <<"unitFight enter 방향설정 오류" << endl;
 }
 
 void unitFight::update(unit & me)
@@ -91,4 +124,21 @@ void unitFight::update(unit & me)
 	}
 
 
+}
+void unitDigObject::enter(unit& me)
+{
+
+}
+void unitDigObject::update(unit& me)
+{
+	int health = me.getHealth();
+	int natureHP = _nature->getHp();
+
+	if (natureHP <= 0) return me.changeState(new unitNoneState);
+
+	natureHP -= me.getHealth()*0.031f * 0.25f;
+	health -= _nature->getHp()*0.04f;
+
+	me.setHp(health);
+	_nature->setHp(natureHP);
 }
