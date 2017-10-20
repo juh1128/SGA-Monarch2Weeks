@@ -238,7 +238,7 @@ void userInterface::renderCountryInfo()
 
 void userInterface::clickedMouse()
 {
-	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		if (_pickedUnit)
 		{
