@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "unit.h"
 #include "mncObjectBase.h"
+#include "objectFactory.h"
 
 unit::unit()
 {
@@ -18,8 +19,8 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	string color = getColorString();
 
 	gameObject::init("unit", color + "Lv1", tileMap::getTilePosFromIndex(index, height), Pivot::CENTER);
-
-
+	this->setImage(objectFactory::getUnitImage(country, 1), objectFactory::getUnitImage(country, 2),
+		objectFactory::getUnitImage(country, 3));
 
 	_pos = _pos / CAMERA->getZoom();
 	_index = index;

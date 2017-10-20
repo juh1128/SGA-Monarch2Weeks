@@ -81,6 +81,8 @@ gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 	{
 		//newObj = new unit;
 		//((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::WHITE);
+		//((unit*)newObj)->setImage(getUnitImage(CountryColor::WHITE, 1), getUnitImage(CountryColor::WHITE, 2),
+			//getUnitImage(CountryColor::WHITE, 3));
 		//((unit*)newObj)->setHp(500);
 	}
 	else
