@@ -127,7 +127,7 @@ void unitFight::update(unit & me)
 }
 void unitDigObject::enter(unit& me)
 {
-
+	me._state = UnitState::Fight;
 }
 void unitDigObject::update(unit& me)
 {
@@ -136,8 +136,8 @@ void unitDigObject::update(unit& me)
 
 	if (natureHP <= 0) return me.changeState(new unitNoneState);
 
-	natureHP -= me.getHealth()*0.031f * 0.25f;
-	health -= _nature->getHp()*0.04f;
+	natureHP -= me.getHealth()*0.03f * 0.2f;
+	health -= _nature->getHp()*0.05f;
 
 	me.setHp(health);
 	_nature->setHp(natureHP);

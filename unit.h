@@ -38,6 +38,8 @@ private:
 
 	CountryColor::Enum _unitColor;
 
+	image* _lv[4];
+
 	float _moveSpeed;
 	int _imageFrameX;
 
@@ -55,6 +57,8 @@ private:
 	friend class unitBuildTown;
 	friend class unitRun;
 	friend class unitFight;
+	friend class unitDigObject;
+
 public:
 	unit();
 	~unit();
@@ -79,6 +83,8 @@ public:
 
 	void syncIndexFromPos();
 	void requestRender();
+	image* setUnitLvImage(int health);
+	void setImage(image* lv1, image* lv2, image* lv3);
 
 	string getColorString();
 
