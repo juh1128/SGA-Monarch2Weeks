@@ -19,6 +19,8 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 	gameObject::init("unit", color + "Lv1", tileMap::getTilePosFromIndex(index, height), Pivot::CENTER);
 
+
+
 	_pos = _pos / CAMERA->getZoom();
 	_index = index;
 	_height = height;
@@ -103,6 +105,8 @@ void unit::update()
 
 void unit::render()
 {
+	_image = setUnitLvImage(_hp);
+
 	if (_image)
 	{
 		float zoom = CAMERA->getZoom();
@@ -204,6 +208,26 @@ void unit::requestRender()
 	}
 
 	WORLD->getMap()->getTile(maxIndex.x, maxIndex.y)->requestRender(this);
+}
+
+image* unit::setUnitLvImage(int health)
+{
+	if (health < 1000)
+		return  _lv[1];
+	else if (health < 10000)
+		return  _lv[2];
+	else if (health >= 10000)
+		return _lv[3];
+	else
+	{
+		cout << "setUnitLvImage¿À·ù " << endl;
+	}
+}
+void unit::setImage(image* lv1, image* lv2, image* lv3)
+{
+	_lv[1] = lv1;
+	_lv[2] = lv2;
+	_lv[3] = lv3;
 }
 
 bool unit::isMoveable(POINT index)
