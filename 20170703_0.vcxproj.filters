@@ -386,5 +386,8 @@
     <ClCompile Include="unitMerge.cpp">
       <Filter>playGround\unit</Filter>
     </ClCompile>
+    <ClCompile Include="unitAstar.cpp">
+      <Filter>playGround\unit</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

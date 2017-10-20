@@ -1,6 +1,7 @@
 #pragma once
 #include "gameObject.h"
 #include <vector>
+#include <deque>
 
 class unitState;
 class mncObjectBase;
@@ -101,6 +102,8 @@ public:
 	unit* isCanCombin();
 
 	void setMergeUnit(unit* mergeUnit);
+
+	void moveAstar(int x, int y);
 };
 
 class unitState

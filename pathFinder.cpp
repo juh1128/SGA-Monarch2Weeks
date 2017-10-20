@@ -67,7 +67,7 @@ void pathFinder::addOpenList()
 		vector2D temp(i, j);
 		vector2D direct = currentindex + temp;
 
-		if (WORLD->getMap()->getTile(currentindex.x, currentindex.y)->getHeight() - WORLD->getMap()->getTile(direct.x, direct.y)->getHeight() > 1)
+		if (abs(WORLD->getMap()->getTile(currentindex.x, currentindex.y)->getHeight() - WORLD->getMap()->getTile(direct.x, direct.y)->getHeight() )> 1)
 		{
 			return false;
 		}
@@ -166,9 +166,11 @@ pathFinder::tagAstarNode* pathFinder::getChildNode(tagAstarNode* parentNode, ter
 	{
 		node->_costFromStart = parentNode->_costFromStart + 10;
 	}
-	else
+	else if(abs(childTile->getIndex().x - parentNode->_tile->getIndex().x) + 
+			abs(childTile->getIndex().y - parentNode->_tile->getIndex().y) == 1 && 
+			abs(childTile->getHeight() - parentNode->_tile->getHeight() )== 1)
 	{
-		node->_costFromStart = parentNode->_costFromStart + 14;
+		node->_costFromStart = parentNode->_costFromStart + 16;
 	}
 
 	node->_costToGoal = (abs(_destTile->getIndex().x - childTile->getIndex().x) +
