@@ -8,25 +8,35 @@ void unit::setMergeUnit(unit * mergeUnit)
 
 void unitMerge::enter(unit& me)
 {
-	me._state = UnitState::Merge;
-
 	if (me._mergeUnit == NULL)
 	{
 		me.setMergeUnit(_mergeUnit);
 	}
 	if (me._index.x == _mergeUnit->_index.x && me._index.y == _mergeUnit->_index.y)
 	{
-		if (me._hp > _mergeUnit->_hp)
+		//상대유닛이 행동중이면 상대한테 합쳐야한다
+
+		//행동없음
+		if (_mergeUnit->_isMove)
 		{
-			me._hp += _mergeUnit->_hp;
-			_mergeUnit->setDestroy();
-			me._mergeUnit = NULL;
+			if (me._hp > _mergeUnit->_hp)
+			{
+				me._hp += _mergeUnit->_hp;
+				_mergeUnit->setDestroy();
+				me._mergeUnit = NULL;
+			}
+			else
+			{
+				_mergeUnit->_hp += me._hp;
+				me.setDestroy();
+				me._mergeUnit = NULL;
+			}
 		}
+		//행동있음
 		else
 		{
 			_mergeUnit->_hp += me._hp;
 			me.setDestroy();
-			me._mergeUnit = NULL;
 		}
 	}
 	else
