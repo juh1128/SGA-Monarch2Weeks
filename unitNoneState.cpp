@@ -46,7 +46,11 @@ void unitNoneState::update(unit & me)
 		}
 
 		me._state = UnitState::Search;
-
+		mncObjectBase* nature = me.isCanAttackNature();
+		if (nature != nullptr)
+		{
+			return me.changeState(new unitDigObject(nature));
+		}
 		//°Ç¼³
 		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
 		if (me.isBuildableTown(destIndex.toPoint()))

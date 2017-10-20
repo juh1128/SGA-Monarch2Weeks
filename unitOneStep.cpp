@@ -8,7 +8,7 @@ void unitOneStep::enter(unit & unit)
 	vector2D distance = _destIndex - unit._index;
 	if (distance.getLength() > 1)
 	{
-		unit.changeState(new unitNoneState);
+		return unit.changeState(new unitNoneState);
 	}
 
 	_oldIndex = unit._index;

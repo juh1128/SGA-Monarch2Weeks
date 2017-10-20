@@ -3,7 +3,7 @@
 #include <vector>
 
 class unitState;
-
+class mncObjectBase;
 
 namespace UnitDirection
 {
@@ -86,6 +86,7 @@ public:
 	bool isBuildableTown(POINT index);
 	unit* isCanRun();
 	unit* isCanAttack();
+	mncObjectBase* isCanAttackNature();
 };
 
 class unitState
@@ -173,6 +174,20 @@ public:
 	unitFight(unit* enemy)
 	{
 		_enemyUnit = enemy;
+	}
+
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
+};
+class unitDigObject : public unitState
+{
+private:
+	mncObjectBase* _nature;
+public:
+	unitDigObject() {}
+	unitDigObject(mncObjectBase* enemy)
+	{
+		_nature = enemy;
 	}
 
 	virtual void enter(unit& me);
