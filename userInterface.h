@@ -3,8 +3,9 @@
 
 class unit;
 class taxProgress;
-class autoButton;
+class startButton;
 class interfaceBack;
+class commandWindow;
 
 class userInterface : public gameObject
 {
@@ -17,10 +18,11 @@ private:
 
 	//인터페이스 객체들...
 	interfaceBack*		_back;
-	autoButton*			_autoBtn;
+	startButton*		_startBtn;
 	taxProgress*		_taxProgress;
 	image*				_otherCountryInfo;
 	image*				_countryColorSprite;
+	commandWindow*		_commandWindow;
 
 public:
 	userInterface() {}
@@ -37,13 +39,38 @@ public:
 	void pickUnit();
 
 
-
 	//피킹된 타일 위의 오브젝트 정보 표시
 	void renderPickInfo();
 	//각 국가별 현황판 렌더링
 	void renderCountryInfo();
 };
 
+namespace commandWindowState
+{
+	enum Enum
+	{
+		Show, Hide, End
+	};
+}
+class commandWindow : public gameObject
+{
+private:
+	commandWindowState::Enum		_state;
+	unit*							_target;
+	
+
+public:
+	commandWindow() {}
+	virtual ~commandWindow() {}
+
+	HRESULT init();
+	void release();
+	void update();
+	void render();
+
+	void show(unit* target);
+	void hide();
+};
 
 class interfaceBack : public gameObject
 {
@@ -78,22 +105,18 @@ public:
 	float getTaxRate() { return _taxRate; }
 };
 
-class autoButton : public gameObject
+class startButton : public gameObject
 {
 private:
 	gameObject* _parent;
 	vector2D _relativePos;
 
-	bool	_auto;
-
 public:
-	autoButton() {}
-	virtual ~autoButton() {}
+	startButton() {}
+	virtual ~startButton() {}
 
 	HRESULT init(gameObject* parent);
 	void release();
 	void update();
 	void render();
-
-	bool getAutoState() { return _auto; }
 };

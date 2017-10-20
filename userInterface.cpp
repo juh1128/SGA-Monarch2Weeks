@@ -9,7 +9,7 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 
 	//인터페이스 리소스 로드
 	IMAGEMANAGER->addImage("interfaceBack", L"resource/interface/myInterfaceBack.png");
-	IMAGEMANAGER->addFrameImage("autoBtn", L"resource/interface/autoButton.png", 2, 1);
+	IMAGEMANAGER->addFrameImage("startBtn", L"resource/interface/startButton.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("taxProgress", L"resource/interface/taxProgress.png", 1, 2);
 	_otherCountryInfo = IMAGEMANAGER->addImage("otherCountry", L"resource/interface/otherCountry.png");
 	_countryColorSprite = IMAGEMANAGER->addFrameImage("countryColor", L"resource/interface/countryColor.png", 4, 1);
@@ -21,10 +21,13 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 	//인터페이스 객체 생성
 	_back = new interfaceBack;
 	_back->init();
-	_autoBtn = new autoButton;
-	_autoBtn->init(_back);
+	_startBtn = new startButton;
+	_startBtn->init(_back);
 	_taxProgress = new taxProgress;
 	_taxProgress->init(_back, _playerCountry->getTaxRate());
+
+	_commandWindow = new commandWindow;
+	_commandWindow->init();
 
 	return S_OK;
 }
@@ -44,7 +47,10 @@ void userInterface::update()
 
 	//인터페이스 업데이트
 	_taxProgress->update();
-	_autoBtn->update();
+	_startBtn->update();
+
+	//명령 인터페이스
+	_commandWindow->update();
 
 	//동기화
 	_playerCountry->setTaxRate(_taxProgress->getTaxRate());
@@ -52,9 +58,14 @@ void userInterface::update()
 
 void userInterface::render()
 {
+	//피킹 정보 렌더링
 	renderPickInfo();
 
+	//국가 정보 렌더링
 	renderCountryInfo();
+
+	//명령 인터페이스 렌더링
+	_commandWindow->render();
 }
 
 void userInterface::moveCamera()
@@ -114,20 +125,6 @@ void userInterface::pickUnit()
 			}		
 		}
 	}
-
-	//_unitPickingTimer += TIMEMANAGER->getElapsedTime();
-	//if (_pickedUnit)
-	//{
-	//	if (_unitPickingTimer >= 0.5f)
-	//	{
-	//		SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
-	//		_unitPickingTimer = 0;
-	//	}
-	//}
-	//else
-	//{
-	//	SCENEMANAGER->getNowScene()->sendMessage("enableWorld");
-	//}
 }
 
 void userInterface::renderPickInfo()
@@ -177,7 +174,7 @@ void userInterface::renderCountryInfo()
 {
 	//인터페이스 렌더링
 	_back->render();
-	_autoBtn->render();
+	_startBtn->render();
 
 	_taxProgress->render();
 
