@@ -202,7 +202,7 @@ void objectFactory::initUnitImage()
 {
 	//레드, 화이트, 블루, 그린
 	//redLv1, redLv2, redLv3 / whiteLv1, whiteLv2, whiteLv3 
-	char* colorList[] = { "red", "white", "blue", "greed" };
+	char* colorList[] = { "red", "white", "blue", "green" };
 	for (int i = 0; i < 4; ++i)
 	{
 		for (int j = 1; j <= 3; ++j)

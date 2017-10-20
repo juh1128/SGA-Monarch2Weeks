@@ -65,6 +65,7 @@ private:
 	vector<unit*>					_targetList;
 	
 	image*				_whatwhereImage;
+	terrainTile*		_destTile;
 
 public:
 	commandWindow() {}
