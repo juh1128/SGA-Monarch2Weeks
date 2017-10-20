@@ -56,13 +56,16 @@ void unitOneStep::update(unit & me)
 				{
 					me.changeState(new unitMerge(unitList[i]));
 					isMerge = true;
-					break;
+					return;
 				}
 			}
 		}
 
+		if(me._mergeUnit)
+			return me.changeState(new unitMerge(me._mergeUnit));
+
 		if(!isMerge)
-			me.changeState(new unitNoneState);
+			return me.changeState(new unitNoneState);
 	}
 	//°¡´Â Áß
 	else
