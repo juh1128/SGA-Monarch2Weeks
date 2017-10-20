@@ -31,10 +31,10 @@ void unitNoneState::update(unit & me)
 	if (me._isAuto)
 	{
 		//µµ¸Á
-		//unit* dangerousUnit = me.isCanRun();
-		//if (dangerousUnit != NULL)
+		unit* dangerousUnit = me.isCanRun();
+		if (dangerousUnit != NULL)
 		{
-			//return me.changeState(new unitRun(dangerousUnit));
+			return me.changeState(new unitRun(dangerousUnit));
 
 		}
 

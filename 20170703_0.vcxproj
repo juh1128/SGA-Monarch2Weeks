@@ -184,6 +184,7 @@
     </ClCompile>
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unitBuildTown.cpp" />
+    <ClCompile Include="unitMerge.cpp" />
     <ClCompile Include="unitCreateMotion.cpp" />
     <ClCompile Include="unitFight.cpp" />
     <ClCompile Include="unitImageFrame.cpp" />

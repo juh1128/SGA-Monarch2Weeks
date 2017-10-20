@@ -49,12 +49,15 @@ private:
 
 	UnitDirection::DIRECTION _unitDirection;
 
+	unit* _mergeUnit;
+
 	friend class unitCreateMotion;
 	friend class unitNoneState;
 	friend class unitOneStep;
 	friend class unitBuildTown;
 	friend class unitRun;
 	friend class unitFight;
+	friend class unitMerge;
 public:
 	unit();
 	~unit();
@@ -87,6 +90,9 @@ public:
 	unit* isCanRun();
 	unit* isCanAttack();
 	mncObjectBase* isCanAttackNature();
+	unit* isCanCombin();
+
+	void setMergeUnit(unit* mergeUnit);
 };
 
 class unitState
@@ -192,4 +198,17 @@ public:
 
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
+};
+class unitMerge : public unitState
+{
+private:
+	unit* _mergeUnit;
+public:
+	unitMerge(unit* mergeUnit)
+	{
+		_mergeUnit = mergeUnit;
+		
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit & me);
 };

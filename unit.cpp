@@ -324,3 +324,12 @@ string unit::getColorString()
 	}
 	return color;
 }
+
+unit * unit::isCanCombin()
+{
+
+
+	return nullptr;
+}
+
+

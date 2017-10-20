@@ -79,11 +79,13 @@ void unitRun::enter(unit& me)
 			}
 			cout << "대각이동으로 도망" << endl;
 			me.changeState(new unitOneStep(index.x, index.y));
+			return;
 		}
 		else
 		{
 			cout << "대각이동으로 도망" << endl;
 			me.changeState(new unitOneStep(destIndex.x, destIndex.y));
+			return;
 		}
 	}
 
@@ -105,6 +107,7 @@ void unitRun::enter(unit& me)
 		{
 			cout << "좌우이동으로 도망" << endl;
 			me.changeState(new unitOneStep(destIndex.x,destIndex.y));
+			return;
 		}
 		//갈수없다면
 		else
@@ -120,6 +123,7 @@ void unitRun::enter(unit& me)
 			}
 			cout << "좌우이동으로 도망" << endl;
 			me.changeState(new unitOneStep(index.x, index.y));
+			return;
 		}
 	}
 
@@ -142,6 +146,7 @@ void unitRun::enter(unit& me)
 		{
 			cout << "상하이동으로 도망" << endl;
 			me.changeState(new unitOneStep(destIndex.x,destIndex.y));
+			return;
 		}
 		//못간다면
 		else if (!me.isMoveable(destIndex))
@@ -157,6 +162,7 @@ void unitRun::enter(unit& me)
 			}
 			cout << "상하이동으로 도망" << endl;
 			me.changeState(new unitOneStep(index.x, index.y));
+			return;
 		}
 
 	}
