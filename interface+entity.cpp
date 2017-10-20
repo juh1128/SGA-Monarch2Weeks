@@ -168,6 +168,7 @@ void commandWindow::hide()
 HRESULT commandWindow::init()
 {
 	_whatwhereImage = IMAGEMANAGER->addFrameImage("whatwhere", L"resource/interface/whatwhere.png", 2, 1);
+	_destTile = NULL;
 	hide();
 	return S_OK;
 }
@@ -186,6 +187,17 @@ void commandWindow::update()
 		//어디?
 		case commandWindowState::Where:
 		{
+			//타일 클릭 시 What으로 넘어감.
+			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+			{
+				_destTile = WORLD->getMap()->getPickedTile();
+				if (_destTile)
+				{
+					_state = commandWindowState::What;
+				}			
+			}
+
+			//어디? 일 때 어딜 찍었는지에 따라 명령이 열림.
 			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
 				hide();
@@ -221,7 +233,9 @@ void commandWindow::render()
 			{
 				target = _targetList[i];
 				renderPos = target->_pos * zoom;
-				_whatwhereImage->frameRender(renderPos.x, renderPos.y, 1, 0, Pivot::BOTTOM);
+				float yOffset = target->getSize().y*zoom*0.5f;
+				_whatwhereImage->setScaleOption(vector2D(zoom, zoom));
+				_whatwhereImage->frameRender(renderPos.x, renderPos.y - yOffset, 1, 0, Pivot::BOTTOM);
 			}
 		}
 		break;
@@ -233,7 +247,9 @@ void commandWindow::render()
 			{
 				target = _targetList[i];
 				renderPos = target->_pos * zoom;
-				_whatwhereImage->frameRender(renderPos.x, renderPos.y, 0, 0, Pivot::BOTTOM);
+				float yOffset = target->getSize().y*zoom*0.5f;
+				_whatwhereImage->setScaleOption(vector2D(zoom, zoom));
+				_whatwhereImage->frameRender(renderPos.x, renderPos.y - yOffset, 0, 0, Pivot::BOTTOM);
 			}
 		}
 		break;
