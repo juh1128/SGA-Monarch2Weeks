@@ -82,23 +82,23 @@ void taxProgress::render()
 }
 
 
-//세율 오토 버튼
-HRESULT autoButton::init(gameObject* parent)
+//시작 버튼
+HRESULT startButton::init(gameObject* parent)
 {
 	_parent = parent;
 	_relativePos = vector2D(7, 9);
-	_auto = true;
+	SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
 
-	gameObject::init("오토버튼", "autoBtn", _parent->_pos + _relativePos, Pivot::LEFT_TOP);
+	gameObject::init("시작버튼", "startBtn", _parent->_pos + _relativePos, Pivot::LEFT_TOP);
 	return S_OK;
 }
 
-void autoButton::release()
+void startButton::release()
 {
 	gameObject::release();
 }
 
-void autoButton::update()
+void startButton::update()
 {
 	gameObject::update();
 
@@ -111,12 +111,69 @@ void autoButton::update()
 		RECT rc = RectMake(_pos.x, _pos.y, _size.x, _size.y);
 		if (PtInRect(&rc, _ptMouse))
 		{
-			_auto = !_auto;
+			if (SCENEMANAGER->getNowScene()->isStopedWorld())
+			{
+				SCENEMANAGER->getNowScene()->sendMessage("enableWorld");
+			}
+			else
+			{
+				SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
+			}
 		}
 	}
 }
 
-void autoButton::render()
+void startButton::render()
 {
-	_image->frameRender(_pos.x, _pos.y, _auto, 0, Pivot::LEFT_TOP, false);
+	bool isStop = SCENEMANAGER->getNowScene()->isStopedWorld();
+	_image->frameRender(_pos.x, _pos.y, !isStop, 0, Pivot::LEFT_TOP, false);
+}
+
+
+
+//==============================================================
+// 명령 인터페이스
+
+void commandWindow::show(unit* target)
+{
+	_state = commandWindowState::Show;
+	_target = target;
+	SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
+}
+void commandWindow::hide()
+{
+	_state = commandWindowState::Hide;
+	_target = NULL;
+	SCENEMANAGER->getNowScene()->sendMessage("enableWorld");
+}
+
+HRESULT commandWindow::init()
+{
+	hide();
+	return S_OK;
+}
+
+void commandWindow::release()
+{
+	gameObject::release();
+}
+
+void commandWindow::update()
+{
+	gameObject::update();
+
+	//명령 창 충돌체크
+	if (_state == commandWindowState::Show)
+	{
+
+	}
+}
+
+void commandWindow::render()
+{
+	//명령 창 렌더링
+	if (_state == commandWindowState::Show)
+	{
+
+	}
 }
