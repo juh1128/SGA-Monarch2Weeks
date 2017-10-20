@@ -215,12 +215,10 @@ public:
 class unitMerge : public unitState
 {
 private:
-	unit* _mergeUnit;
 public:
-	unitMerge(unit* mergeUnit)
+	unitMerge(unit* mergeUnit,unit& me)
 	{
-		_mergeUnit = mergeUnit;
-		
+		me._mergeUnit = mergeUnit;
 	}
 	virtual void enter(unit& me);
 	virtual void update(unit & me);
