@@ -42,7 +42,7 @@ void pathFinder::addOpenList()
 			_currentNode->_tile->getIndex().y + i >= WORLD->getMapSize().y)
 			return false;
 
-		terrainTile* tile = WORLD->getMap->getTile(_currentNode->_tile->getIndex().x + j, _currentNode->_tile->getIndex().y + i);
+		terrainTile* tile = WORLD->getMap()->getTile(_currentNode->_tile->getIndex().x + j, _currentNode->_tile->getIndex().y + i);
 		//해당 타일이 close리스트에 있는지 확인
 		for (int cnt = 0; cnt < _closeList.size(); ++cnt)
 		{
