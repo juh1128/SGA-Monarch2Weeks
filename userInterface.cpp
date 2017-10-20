@@ -13,7 +13,6 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 	IMAGEMANAGER->addFrameImage("taxProgress", L"resource/interface/taxProgress.png", 1, 2);
 	_otherCountryInfo = IMAGEMANAGER->addImage("otherCountry", L"resource/interface/otherCountry.png");
 	_countryColorSprite = IMAGEMANAGER->addFrameImage("countryColor", L"resource/interface/countryColor.png", 4, 1);
-	_whatwhereImage = IMAGEMANAGER->addFrameImage("whatwhere", L"resource/interface/whatwhere.png", 2, 1);
 
 	_pickedUnit = NULL;
 	_map = WORLD->getMap();
@@ -239,9 +238,12 @@ void userInterface::renderCountryInfo()
 
 void userInterface::clickedMouse()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 	{
-
+		if (_pickedUnit)
+		{
+			_commandWindow->show(_pickedUnit);
+		}
 	}
 }
 

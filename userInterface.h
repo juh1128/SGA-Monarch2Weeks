@@ -25,7 +25,6 @@ private:
 	//¿ÃπÃ¡ˆ
 	image*				_otherCountryInfo;
 	image*				_countryColorSprite;
-	image*				_whatwhereImage;
 
 public:
 	userInterface() {}
@@ -56,15 +55,16 @@ namespace commandWindowState
 {
 	enum Enum
 	{
-		Show, Hide, End
+		Where, What, Hide, End
 	};
 }
 class commandWindow : public gameObject
 {
 private:
 	commandWindowState::Enum		_state;
-	unit*							_target;
+	vector<unit*>					_targetList;
 	
+	image*				_whatwhereImage;
 
 public:
 	commandWindow() {}
@@ -76,6 +76,7 @@ public:
 	void render();
 
 	void show(unit* target);
+	void show(vector<unit*> targetList);
 	void hide();
 };
 

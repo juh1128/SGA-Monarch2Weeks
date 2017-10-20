@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "userInterface.h"
-
-
+#include "unit.h"
+#include "mncObjectBase.h"
 
 
 
@@ -133,22 +133,41 @@ void startButton::render()
 
 //==============================================================
 // 명령 인터페이스
-
+//클릭 시
 void commandWindow::show(unit* target)
 {
-	_state = commandWindowState::Show;
-	_target = target;
-	SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
+	if (_state == commandWindowState::Hide)
+	{
+		_state = commandWindowState::Where;
+		_targetList.clear();
+		_targetList.push_back(target);
+		SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
+	}
 }
+//드래그 시
+void commandWindow::show(vector<unit*> targetList)
+{
+	if (_state == commandWindowState::Hide)
+	{
+		_state = commandWindowState::Where;
+		_targetList.clear();
+		for (size_t i = 0; i < targetList.size(); ++i)
+		{
+			_targetList.push_back(targetList[i]);
+		}	
+		SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
+	}
+}
+
 void commandWindow::hide()
 {
 	_state = commandWindowState::Hide;
-	_target = NULL;
 	SCENEMANAGER->getNowScene()->sendMessage("enableWorld");
 }
 
 HRESULT commandWindow::init()
 {
+	_whatwhereImage = IMAGEMANAGER->addFrameImage("whatwhere", L"resource/interface/whatwhere.png", 2, 1);
 	hide();
 	return S_OK;
 }
@@ -162,18 +181,61 @@ void commandWindow::update()
 {
 	gameObject::update();
 
-	//명령 창 충돌체크
-	if (_state == commandWindowState::Show)
+	switch (_state)
 	{
-
+		//어디?
+		case commandWindowState::Where:
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+			{
+				hide();
+			}
+		}
+		break;
+		//뭐?
+		case commandWindowState::What:
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+			{
+				_state = commandWindowState::Where;
+			}
+		}
+		break;
 	}
+
 }
 
 void commandWindow::render()
 {
-	//명령 창 렌더링
-	if (_state == commandWindowState::Show)
-	{
+	float zoom = CAMERA->getZoom();
+	unit* target = NULL;
+	vector2D renderPos;
 
+	switch (_state)
+	{
+		//어디?
+		case commandWindowState::Where:
+		{
+			//말풍선 렌더링
+			for (size_t i = 0; i < _targetList.size(); ++i)
+			{
+				target = _targetList[i];
+				renderPos = target->_pos * zoom;
+				_whatwhereImage->frameRender(renderPos.x, renderPos.y, 1, 0, Pivot::BOTTOM);
+			}
+		}
+		break;
+		//뭐?
+		case commandWindowState::What:
+		{
+			//말풍선 렌더링
+			for (size_t i = 0; i < _targetList.size(); ++i)
+			{
+				target = _targetList[i];
+				renderPos = target->_pos * zoom;
+				_whatwhereImage->frameRender(renderPos.x, renderPos.y, 0, 0, Pivot::BOTTOM);
+			}
+		}
+		break;
 	}
 }
