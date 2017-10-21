@@ -26,6 +26,9 @@ private:
 	image*				_otherCountryInfo;
 	image*				_countryColorSprite;
 
+	//드래그 중인지 확인용
+	vector2D			_clickedPos;
+
 public:
 	userInterface() {}
 	virtual ~userInterface() {}
@@ -44,9 +47,6 @@ public:
 	void pickUnit();
 	//클릭 시 처리
 	void clickedMouse();
-	//드래그 시 처리
-	void dragedMouse();
-
 
 	//피킹된 타일 위의 오브젝트 정보 표시
 	void renderPickInfo();
