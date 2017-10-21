@@ -141,5 +141,5 @@ void unitMerge::enter(unit& me)
 
 void unitMerge::update(unit& me)
 {
-
+	me.changeState(new unitNoneState);
 }
