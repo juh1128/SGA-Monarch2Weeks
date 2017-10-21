@@ -203,7 +203,7 @@ void commandWindow::update()
 					if (_destUnit->isLive())
 					{
 						vector2D unitIndex = _destUnit->getIndex();
-						_chooseTile = WORLD->getMap()->getTile(unitIndex.x, unitIndex.y);
+						_chooseObject = _destUnit;
 
 						//뭘 눌렀느냐에 따라 메뉴를 셋팅한다.
 						if(setMenuList()) _state = commandWindowState::What;					
@@ -211,7 +211,7 @@ void commandWindow::update()
 				}
 				else if (_destTile)
 				{
-					_chooseTile = _destTile;
+					_chooseObject = _destTile;
 					if (setMenuList()) _state = commandWindowState::What;
 				}	
 				_renderPos = _ptMouse;
@@ -255,7 +255,7 @@ void commandWindow::update()
 						if (_targetList[i]->isLive())
 						{
 							vector<gameObject*> vTarget;
-							vTarget.push_back(_chooseTile);
+							vTarget.push_back(_chooseObject);
 							_targetList[i]->sendMessage(_menuList[_chooseIndex], 0.0f, 0, 0.0f, POINT(), vTarget);
 						}
 						hide();
