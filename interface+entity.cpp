@@ -202,6 +202,8 @@ void commandWindow::update()
 				{
 					if (_destUnit->isLive())
 					{
+						vector2D unitIndex = _destUnit->getIndex();
+						_chooseTile = WORLD->getMap()->getTile(unitIndex.x, unitIndex.y);
 						_state = commandWindowState::What;
 						setMenuList();	//뭘 눌렀느냐에 따라 메뉴를 셋팅한다.
 						_renderPos = _ptMouse;
@@ -209,6 +211,7 @@ void commandWindow::update()
 				}
 				else if (_destTile)
 				{
+					_chooseTile = _destTile;
 					_state = commandWindowState::What;
 					setMenuList();	
 					_renderPos = _ptMouse;
@@ -217,7 +220,14 @@ void commandWindow::update()
 
 			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
-				hide();
+				_clickedPos = _ptMouse;
+			}
+			if (KEYMANAGER->isOnceKeyUp(VK_RBUTTON))
+			{
+				if ((_clickedPos - vector2D(_ptMouse)).getLength() < 10)
+				{
+					hide();
+				}
 			}
 		}
 		break;
@@ -236,9 +246,33 @@ void commandWindow::update()
 				}
 			}	
 
+			//메뉴 클릭 시
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				if (_chooseIndex >= 0)
+				{
+					for (size_t i = 0; i < _targetList.size(); ++i)
+					{
+						if (_targetList[i]->isLive())
+						{
+							vector<gameObject*> vTarget;
+							vTarget.push_back(_chooseTile);
+							_targetList[i]->sendMessage(_menuList[_chooseIndex], 0.0f, 0, 0.0f, POINT(), vTarget);
+						}
+					}
+				}
+			}
+
 			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
-				_state = commandWindowState::Where;
+				_clickedPos = _ptMouse;
+			}
+			if (KEYMANAGER->isOnceKeyUp(VK_RBUTTON))
+			{
+				if ((_clickedPos - vector2D(_ptMouse)).getLength() < 10)
+				{
+					_state = commandWindowState::Where;
+				}				
 			}
 		}
 		break;
