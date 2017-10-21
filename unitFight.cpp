@@ -39,6 +39,8 @@ unit* unit::isCanAttack()
 }
 mncObjectBase* unit::isCanAttackNature()
 {
+	if (this->getCountryColor() != CountryColor::BLUE) return nullptr ;
+
 	vector<mncObjectBase*> nature;
 	vector2D direct = _index + getDirectionVector(_unitDirection);
 
