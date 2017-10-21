@@ -79,8 +79,12 @@ private:
 
 	//메뉴
 	int					_chooseIndex;
+	terrainTile*		_chooseTile;
 	int					_menuWidth;
 	int					_menuHeight;
+
+	//드래그 중인지 확인용
+	vector2D			_clickedPos;
 
 public:
 	commandWindow() {}

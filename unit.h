@@ -93,6 +93,7 @@ public:
 	void setImage(image* lv1, image* lv2, image* lv3);
 
 	string getColorString();
+	vector2D getIndex() { return _index; }
 
 	bool isMoveable(POINT index);
 	bool isBuildableTown(POINT index);
