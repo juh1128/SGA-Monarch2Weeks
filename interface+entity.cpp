@@ -280,6 +280,61 @@ void commandWindow::update()
 
 }
 
+void commandWindow::render()
+{
+	float zoom = CAMERA->getZoom();
+	unit* target = NULL;
+	vector2D renderPos;
+
+	switch (_state)
+	{
+		//어디?
+		case commandWindowState::Where:
+		{
+			//말풍선 렌더링
+			for (size_t i = 0; i < _targetList.size(); ++i)
+			{
+				target = _targetList[i];
+				renderPos = target->_pos * zoom;
+				float yOffset = target->getSize().y*zoom*0.5f;
+				_whatwhereImage->setScaleOption(vector2D(zoom, zoom));
+				_whatwhereImage->frameRender(renderPos.x, renderPos.y - yOffset, 1, 0, Pivot::BOTTOM);
+			}
+		}
+		break;
+		//뭐?
+		case commandWindowState::What:
+		{
+			//말풍선 렌더링
+			for (size_t i = 0; i < _targetList.size(); ++i)
+			{
+				target = _targetList[i];
+				renderPos = target->_pos * zoom;
+				float yOffset = target->getSize().y*zoom*0.5f;
+				_whatwhereImage->setScaleOption(vector2D(zoom, zoom));
+				_whatwhereImage->frameRender(renderPos.x, renderPos.y - yOffset, 0, 0, Pivot::BOTTOM);
+			}
+
+			//메뉴 리스트 렌더링
+			for (size_t i = 0; i < _menuList.size(); ++i)
+			{
+				RECT rc = RectMake(_renderPos.x, _renderPos.y + i * _menuHeight, _menuWidth, _menuHeight);
+				IMAGEMANAGER->fillRectangle(rc, DefaultBrush::white);
+				IMAGEMANAGER->drawRectangle(rc);
+				IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * _menuHeight, UTIL::string_to_wstring(_menuList[i]), 14, _menuWidth, _menuHeight);
+			}
+			//선택 메뉴 렌더링
+			if (_chooseIndex >= 0)
+			{
+				RECT rc = RectMake(_renderPos.x, _renderPos.y + _chooseIndex * _menuHeight, _menuWidth, _menuHeight);
+				IMAGEMANAGER->fillRectangle(rc, D2D1::ColorF::LightSteelBlue, 0.5f);
+			}
+		}
+		break;
+	}
+}
+
+
 bool commandWindow::setMenuList()
 {
 	_menuList.clear();
@@ -350,7 +405,7 @@ bool commandWindow::setMenuList()
 				else if (checkMovable(tileIndex.x, tileIndex.y - 1) && checkMovable(tileIndex.x, tileIndex.y + 1))
 				{
 					_menuList.push_back("다리 건설");
-				}	
+				}
 			}
 		}
 		else
@@ -365,66 +420,12 @@ bool commandWindow::setMenuList()
 			//오브젝트가 있는데 이동 불가능한 오브젝트일 경우 => 파괴
 			else
 			{
-				if(objectOnTile->_name != "돌")
+				if (objectOnTile->_name != "돌")
 					_menuList.push_back("파괴");
 			}
-		}	
+		}
 	}
 
 	if (_menuList.size() > 0) return true;
 	return false;
-}
-
-void commandWindow::render()
-{
-	float zoom = CAMERA->getZoom();
-	unit* target = NULL;
-	vector2D renderPos;
-
-	switch (_state)
-	{
-		//어디?
-		case commandWindowState::Where:
-		{
-			//말풍선 렌더링
-			for (size_t i = 0; i < _targetList.size(); ++i)
-			{
-				target = _targetList[i];
-				renderPos = target->_pos * zoom;
-				float yOffset = target->getSize().y*zoom*0.5f;
-				_whatwhereImage->setScaleOption(vector2D(zoom, zoom));
-				_whatwhereImage->frameRender(renderPos.x, renderPos.y - yOffset, 1, 0, Pivot::BOTTOM);
-			}
-		}
-		break;
-		//뭐?
-		case commandWindowState::What:
-		{
-			//말풍선 렌더링
-			for (size_t i = 0; i < _targetList.size(); ++i)
-			{
-				target = _targetList[i];
-				renderPos = target->_pos * zoom;
-				float yOffset = target->getSize().y*zoom*0.5f;
-				_whatwhereImage->setScaleOption(vector2D(zoom, zoom));
-				_whatwhereImage->frameRender(renderPos.x, renderPos.y - yOffset, 0, 0, Pivot::BOTTOM);
-			}
-
-			//메뉴 리스트 렌더링
-			for (size_t i = 0; i < _menuList.size(); ++i)
-			{
-				RECT rc = RectMake(_renderPos.x, _renderPos.y + i * _menuHeight, _menuWidth, _menuHeight);
-				IMAGEMANAGER->fillRectangle(rc, DefaultBrush::white);
-				IMAGEMANAGER->drawRectangle(rc);
-				IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * _menuHeight, UTIL::string_to_wstring(_menuList[i]), 14, _menuWidth, _menuHeight);
-			}
-			//선택 메뉴 렌더링
-			if (_chooseIndex >= 0)
-			{
-				RECT rc = RectMake(_renderPos.x, _renderPos.y + _chooseIndex * _menuHeight, _menuWidth, _menuHeight);
-				IMAGEMANAGER->fillRectangle(rc, D2D1::ColorF::LightSteelBlue, 0.5f);
-			}
-		}
-		break;
-	}
 }

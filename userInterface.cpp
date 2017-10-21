@@ -52,7 +52,6 @@ void userInterface::update()
 	//명령 인터페이스
 	_commandWindow->update();
 	clickedMouse();
-	dragedMouse();
 
 	//동기화
 	_playerCountry->setTaxRate(_taxProgress->getTaxRate());
@@ -68,6 +67,13 @@ void userInterface::render()
 
 	//명령 인터페이스 렌더링
 	_commandWindow->render();
+
+	//드래그 UI 렌더링
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+	{
+		RECT rc = RectMake(_clickedPos.x, _clickedPos.y, _ptMouse.x - _clickedPos.x, _ptMouse.y - _clickedPos.y);
+		IMAGEMANAGER->drawRectangle(rc, DefaultBrush::black, 2);
+	}
 }
 
 void userInterface::moveCamera()
@@ -240,14 +246,29 @@ void userInterface::clickedMouse()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
-		if (_pickedUnit)
+		_clickedPos = _ptMouse;
+	}
+	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+	{
+		//클릭
+		if ((_clickedPos - vector2D(_ptMouse)).getLength() < 10)
 		{
-			if(_pickedUnit->getCountryColor() == _playerCountry->getColor())
-				_commandWindow->show(_pickedUnit);
+			if (_pickedUnit)
+			{
+				if (_pickedUnit->getCountryColor() == _playerCountry->getColor())
+					_commandWindow->show(_pickedUnit);
+			}
+		}
+		//드래그
+		else
+		{
+			RECT rc = RectMake(_clickedPos.x, _clickedPos.y, _ptMouse.x - _clickedPos.x, _ptMouse.y - _clickedPos.y);
+			//아군 유닛과 충돌체크
+			auto unitList = _playerCountry->getUnitList();
+			for (size_t i = 0; i < unitList->size(); ++i)
+			{
+
+			}
 		}
 	}
-}
-
-void userInterface::dragedMouse()
-{
 }
