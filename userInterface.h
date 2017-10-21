@@ -77,6 +77,11 @@ private:
 	unit*				_destUnit;
 	vector2D			_renderPos;
 
+	//¸Þ´º
+	int					_chooseIndex;
+	int					_menuWidth;
+	int					_menuHeight;
+
 public:
 	commandWindow() {}
 	virtual ~commandWindow() {}
