@@ -86,7 +86,12 @@ void castle::update()
 
 void castle::render()
 {
-	mncObjectBase::frameRender(_frameX,_frameY);
+	float zoom = CAMERA->getZoom();
+	float imageHalfHeight = _image->getFrameSize(_frameX).y * zoom * 0.5f;
+
+	_image->setAlphaOption(_alpha);
+	_image->setScaleOption(vector2D(zoom, zoom));
+	_image->frameRender(_pos.x*zoom, _pos.y*zoom + imageHalfHeight - 10, _frameX, _frameY, _pivot);
 }
 
 string castle::getSpriteKey(CountryColor::Enum color)

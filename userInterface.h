@@ -79,7 +79,7 @@ private:
 
 	//¸Þ´º
 	int					_chooseIndex;
-	terrainTile*		_chooseTile;
+	gameObject*			_chooseObject;
 	int					_menuWidth;
 	int					_menuHeight;
 

@@ -33,8 +33,6 @@ unit* unit::isCanAttack()
 		return false;
 	});
 
-	cout << "ÀûÀÖ´ç" << endl;
-
 	return enemy[0];
 }
 mncObjectBase* unit::isCanAttackNature()

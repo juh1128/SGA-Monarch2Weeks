@@ -25,33 +25,38 @@ void unitMerge::enter(unit& me)
 	if (me._index.x == me._mergeUnit->_index.x && me._index.y == me._mergeUnit->_index.y)
 	{
 		//상대유닛이 행동중이면 상대한테 합쳐야한다
+		auto merge = [](unit& destroyUnit, unit& addedUnit)
+		{
+			addedUnit.setHp(addedUnit.getHealth() + destroyUnit.getHealth());
+			destroyUnit.setDestroy();
+		};
 
 		//행동없음
 		if (me._mergeUnit->_isMove)
 		{
 			if (me._hp > me._mergeUnit->_hp)
 			{
-				me._hp += me._mergeUnit->_hp;
-				me._mergeUnit->setDestroy();
+				merge(*me._mergeUnit, me);
 				me._mergeUnit = NULL;
 			}
 			else
 			{
-				me._mergeUnit->_hp += me._hp;
-				me.setDestroy();
+				merge(me, *me._mergeUnit);
 				me._mergeUnit = NULL;
 			}
 		}
 		//행동있음
 		else
 		{
-			me._mergeUnit->_hp += me._hp;
-			me.setDestroy();
+			merge(me, *me._mergeUnit);
 			me._mergeUnit = NULL;
 		}
 	}
 	else
 	{
+		//======================================
+		// - 병합하려했는데 도망가야되거나 싸울 상황일 경우
+
 		unit* runTarget = me.isCanRun();
 		if (runTarget)
 		{
@@ -64,6 +69,11 @@ void unitMerge::enter(unit& me)
 			me.changeState(new unitFight(attackTarget));
 			return;
 		}
+
+
+		//====================================
+		// - 병합할 대상에게 추적하는 상황
+
 		//방향정하기
 		int xDistance = UTIL::getDistance(me._index.x, 0, me._mergeUnit->_index.x, 0);
 		int yDistance = UTIL::getDistance(0, me._index.y, 0, me._mergeUnit->_index.y);

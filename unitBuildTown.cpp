@@ -34,7 +34,6 @@ void unitBuildTown::update(unit& me)
 
 	if (objHp >= 50)
 	{
-		cout << "ÀâŠi" << endl;
 		return me.changeState(new unitNoneState);
 	}
 }

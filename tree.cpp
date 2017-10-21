@@ -3,7 +3,7 @@
 
 HRESULT tree::init(int xIndex, int yIndex)
 {
-	mncObjectBase::init("나무", "tree", xIndex, yIndex, 80, false);
+	mncObjectBase::init("나무", "tree", xIndex, yIndex, 50, false);
 
 	_frame = 0;
 	return S_OK;

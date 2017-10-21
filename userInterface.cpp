@@ -72,7 +72,7 @@ void userInterface::render()
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
 		RECT rc = RectMake(_clickedPos.x, _clickedPos.y, _ptMouse.x - _clickedPos.x, _ptMouse.y - _clickedPos.y);
-		IMAGEMANAGER->drawRectangle(rc, DefaultBrush::black, 2);
+		IMAGEMANAGER->drawRectangle(rc, D2D1::ColorF::BurlyWood, 1.0f, 2);
 	}
 }
 
@@ -265,10 +265,19 @@ void userInterface::clickedMouse()
 			RECT rc = RectMake(_clickedPos.x, _clickedPos.y, _ptMouse.x - _clickedPos.x, _ptMouse.y - _clickedPos.y);
 			//아군 유닛과 충돌체크
 			auto unitList = _playerCountry->getUnitList();
+			vector<unit*> targetList;
+			float zoom = CAMERA->getZoom();
 			for (size_t i = 0; i < unitList->size(); ++i)
 			{
-
+				vector2D pos = CAMERA->getRelativeVector2D(unitList->at(i)->_pos*zoom);
+				if (PtInRect(&rc, pos.toPoint()))
+				{
+					targetList.push_back(unitList->at(i));
+				}
 			}
+			
+			if(targetList.size() > 0)
+				_commandWindow->show(targetList);
 		}
 	}
 }

@@ -151,16 +151,16 @@ void unit::update()
 
 void unit::render()
 {
-	_image = setUnitLvImage(_hp);
-
 	if (_image)
 	{
 		float zoom = CAMERA->getZoom();
+		float imageHalfHeight = _image->getFrameSize(_imageFrameX).y * zoom * 0.5f;
+
 		_scale = vector2D(zoom, zoom);
 
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
-		_image->frameRender(_pos.x*zoom, _pos.y*zoom, _imageFrameX, _unitDirection, _pivot);
+		_image->frameRender(_pos.x*zoom, _pos.y*zoom + imageHalfHeight-10, _imageFrameX, _unitDirection, _pivot);
 
 		vector2D renderPos = _pos*zoom;
 		renderPos = CAMERA->getRelativeVector2D(renderPos);
@@ -231,6 +231,8 @@ void unit::syncIndexFromPos()
 
 void unit::requestRender()
 {
+	_image = setUnitLvImage(_hp);
+
 	//가만히 서있을 경우 다른 연산 필요없음
 	if (!_isMove)
 	{
@@ -241,8 +243,10 @@ void unit::requestRender()
 	//이동 중일 경우 캐릭터 이미지 LEFT, TOP, RIGHT, BOTTOM 부분 검사 후
 	//가장 적당한 타일에 렌더링을 요청한다.
 	float zoom = CAMERA->getZoom();
+	vector2D frameSize = _image->getFrameSize(_imageFrameX);
+	float imageHalfHeight = frameSize.y * zoom * 0.5f;
 	vector2D zoomedPos = _pos * zoom;
-	RECT rc = RectMakeCenter(zoomedPos.x, zoomedPos.y, _size.x*zoom, _size.y*zoom);
+	RECT rc = RectMakeCenter(zoomedPos.x, zoomedPos.y + imageHalfHeight - 10, frameSize.x*zoom, frameSize.y*zoom);
 
 	vector2D top = vector2D(zoomedPos.x, (float)rc.top);
 	vector2D right = vector2D((float)rc.right, zoomedPos.y);
