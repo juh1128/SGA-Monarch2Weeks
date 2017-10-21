@@ -38,7 +38,9 @@ void unitNoneState::update(unit & me)
 			return me.changeState(new unitFight(enemy));
 		}
 
-		me._state = UnitState::Search;
+		if (me._mergeUnit == nullptr)
+			me._state = UnitState::Search;
+
 		mncObjectBase* nature = me.isCanAttackNature();
 		if (nature != nullptr)
 		{
@@ -73,7 +75,9 @@ void unitNoneState::update(unit & me)
 			return me.changeState(new unitFight(enemy));
 		}
 
-		me._state = UnitState::Search;
+		if(me._mergeUnit == nullptr)
+			me._state = UnitState::Search;
+
 		mncObjectBase* nature = me.isCanAttackNature();
 		if (nature != nullptr)
 		{

@@ -107,6 +107,8 @@ public:
 	void moveAstar(int x, int y);
 
 	void setAuto(bool autounit) { _isAuto = autounit; }
+	
+	void setUnitState(UnitState::Enum state) { _state = state; }
 };
 
 class unitState

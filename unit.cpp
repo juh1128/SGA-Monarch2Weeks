@@ -80,6 +80,8 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 		this->moveAstar(target->getIndex().x, target->getIndex().y);
 		this->reserveState(new unitMerge(target,*this));
 		this->setAuto(true);
+		this->setUnitState(UnitState::Merge);
+		
 	});
 
 	return S_OK;
@@ -187,6 +189,11 @@ void unit::render()
 		else if (_state == UnitState::BuildTown)
 		{
 			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"건설", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+		else if (_state == UnitState::Merge)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"원군", 14, DefaultBrush::white,
 				DWRITE_TEXT_ALIGNMENT_LEADING);
 		}
 

@@ -10,16 +10,17 @@ void unitMerge::enter(unit& me)
 {
 	me._state = UnitState::Merge;
 
+	if (me._mergeUnit == NULL)
+	{
+		return me.changeState(new unitNoneState);
+	}
+
 	if (!me._mergeUnit->isLive())
 	{
 		me._mergeUnit = NULL;
 		return me.changeState(new unitNoneState);
 	}
 
-	if (me._mergeUnit == NULL)
-	{
-		me.setMergeUnit(me._mergeUnit);
-	}
 	me.syncIndexFromPos();
 	me._mergeUnit->syncIndexFromPos();
 	if (me._index.x == me._mergeUnit->_index.x && me._index.y == me._mergeUnit->_index.y)
