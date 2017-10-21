@@ -39,7 +39,11 @@ unit* unit::isCanAttack()
 }
 mncObjectBase* unit::isCanAttackNature()
 {
+
 	vector<mncObjectBase*> nature;
+
+	nature.clear();
+
 	vector2D direct = _index + getDirectionVector(_unitDirection);
 
 	if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) return nullptr;
@@ -88,42 +92,46 @@ void unitFight::enter(unit & me)
 
 void unitFight::update(unit & me)
 {
-	
+	_frameTimer++;
+
 	int health = me.getHealth();
 	int emHealth = _enemyUnit->getHealth();
 
 	if (emHealth <= 0) return me.changeState(new unitNoneState);
 	
-	if (health > emHealth)
+	if (_frameTimer % 4 == 0)
 	{
-		health -= _enemyUnit->getHealth()*0.001f;
-		emHealth -= me.getHealth()*0.002f;
 
-		_enemyUnit->setHp(emHealth);
-		if (_enemyUnit->getHealth() <= 0) return me.changeState(new unitNoneState);
-		me.setHp(health);
+		if (health > emHealth)
+		{
+			health -= _enemyUnit->getHealth()*0.001f;
+			emHealth -= me.getHealth()*0.002f;
+
+			_enemyUnit->setHp(emHealth);
+			if (_enemyUnit->getHealth() <= 0) return me.changeState(new unitNoneState);
+			me.setHp(health);
+		}
+		else if (health == emHealth)
+		{
+			health -= _enemyUnit->getHealth()*0.002f;
+			emHealth -= me.getHealth()*0.002f;
+
+			me.setHp(health);
+			_enemyUnit->setHp(emHealth);
+
+		}
+		else if (health < emHealth)
+		{
+			health -= _enemyUnit->getHealth()*0.002f;
+			emHealth -= me.getHealth()*0.001f;
+
+			me.setHp(health);
+			if (me.getHealth() <= 0) return me.changeState(new unitNoneState);
+			_enemyUnit->setHp(emHealth);
+
+		}
+		_frameTimer = 0;
 	}
-	else if (health == emHealth)
-	{
-		health -= _enemyUnit->getHealth()*0.002f;
-		emHealth -= me.getHealth()*0.002f;
-
-		me.setHp(health);
-		_enemyUnit->setHp(emHealth);
-
-	}
-	else if (health < emHealth)
-	{
-		health -= _enemyUnit->getHealth()*0.002f;
-		emHealth -= me.getHealth()*0.001f;
-
-		me.setHp(health);
-		if (me.getHealth() <= 0) return me.changeState(new unitNoneState);
-		_enemyUnit->setHp(emHealth);
-
-	}
-
-
 }
 void unitDigObject::enter(unit& me)
 {
@@ -131,14 +139,21 @@ void unitDigObject::enter(unit& me)
 }
 void unitDigObject::update(unit& me)
 {
+	_frameTimer++;
+
 	int health = me.getHealth();
 	int natureHP = _nature->getHp();
 
 	if (natureHP <= 0) return me.changeState(new unitNoneState);
 
-	natureHP -= me.getHealth()*0.03f * 0.2f;
-	health -= _nature->getHp()*0.05f;
+	if (_frameTimer % 4 == 0)
+	{
+		natureHP -= me.getHealth()*0.03f * 0.2f;
+		health -= _nature->getHp()*0.05f;
 
-	me.setHp(health);
-	_nature->setHp(natureHP);
+		me.setHp(health);
+		_nature->setHp(natureHP);
+
+		_frameTimer = 0;
+	}
 }

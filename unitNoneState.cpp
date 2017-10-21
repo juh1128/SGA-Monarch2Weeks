@@ -31,6 +31,26 @@ void unitNoneState::update(unit & me)
 	//예약 상태 확인
 	if (me._reservedState.size() > 0)
 	{
+		//공격
+		unit* enemy = me.isCanAttack();
+		if (enemy != NULL)
+		{
+			return me.changeState(new unitFight(enemy));
+		}
+
+		me._state = UnitState::Search;
+		mncObjectBase* nature = me.isCanAttackNature();
+		if (nature != nullptr)
+		{
+			return me.changeState(new unitDigObject(nature));
+		}
+		//건설
+		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
+		if (me.isBuildableTown(destIndex.toPoint()))
+		{
+			return me.changeState(new unitBuildTown(destIndex.toPoint()));
+		}
+
 		me.changeState(me._reservedState[0]);
 		me._reservedState.erase(me._reservedState.begin());
 		return;

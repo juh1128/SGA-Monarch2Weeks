@@ -189,11 +189,14 @@ class unitFight : public unitState
 {
 private:
 	unit* _enemyUnit;
+	int _frameTimer;
+
 public:
 	unitFight() {}
 	unitFight(unit* enemy)
 	{
 		_enemyUnit = enemy;
+		_frameTimer = 0;
 	}
 
 	virtual void enter(unit& me);
@@ -203,11 +206,14 @@ class unitDigObject : public unitState
 {
 private:
 	mncObjectBase* _nature;
+	int _frameTimer;
+
 public:
 	unitDigObject() {}
 	unitDigObject(mncObjectBase* enemy)
 	{
 		_nature = enemy;
+		_frameTimer = 0;
 	}
 
 	virtual void enter(unit& me);
