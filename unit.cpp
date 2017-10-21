@@ -41,6 +41,32 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	
 	changeState(new unitCreateMotion);
 
+	this->addCallback("대기", [&](tagMessage msg) {
+		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		this->reserveState(new unitNoneState);
+		this->setAuto(false);
+	});
+
+	this->addCallback("자동", [&](tagMessage msg) {
+		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		this->reserveState(new unitNoneState);
+		this->setAuto(true);
+	});
+	this->addCallback("마을건축", [&](tagMessage msg) {
+		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		this->reserveState(new unitBuildTown(msg.ptData));
+		this->setAuto(true);
+	});
+	this->addCallback("목책건축", [&](tagMessage msg) {
+		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		this->reserveState(new unitNoneState);
+		this->setAuto(true);
+	});
+	this->addCallback("원군", [&](tagMessage msg) {
+		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		this->reserveState(new unitBuildTown(msg.ptData));
+		this->setAuto(true);
+	});
 
 	return S_OK;
 }
