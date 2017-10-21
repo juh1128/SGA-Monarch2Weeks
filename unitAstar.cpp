@@ -3,6 +3,8 @@
 
 void unit::moveAstar(int x, int y)
 {
+	_reservedState.clear();
+
 	if (this->getCountryColor() != CountryColor::BLUE) return;
 	
 	deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(_index.x, _index.y), WORLD->getMap()->getTile(x, y));
