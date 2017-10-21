@@ -165,8 +165,9 @@ void commandWindow::hide()
 	SCENEMANAGER->getNowScene()->sendMessage("enableWorld");
 }
 
-HRESULT commandWindow::init()
+HRESULT commandWindow::init(userInterface* parent)
 {
+	_parent = parent;
 	_whatwhereImage = IMAGEMANAGER->addFrameImage("whatwhere", L"resource/interface/whatwhere.png", 2, 1);
 	_destTile = NULL;
 	hide();
@@ -191,13 +192,17 @@ void commandWindow::update()
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
 				_destTile = WORLD->getMap()->getPickedTile();
-				if (_destTile)
+				_destUnit = _parent->getPickedUnit();
+				if (_destTile || _destUnit)
 				{
-					_state = commandWindowState::What;
+					if (_destUnit->isLive())
+					{
+						_state = commandWindowState::What;
+						setMenuList();	//뭘 눌렀느냐에 따라 메뉴를 셋팅한다.
+					}
 				}	
 			}
 
-			//어디? 일 때 어딜 찍었는지에 따라 명령이 열림.
 			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
 				hide();
@@ -215,6 +220,30 @@ void commandWindow::update()
 		break;
 	}
 
+}
+
+void commandWindow::setMenuList()
+{
+	_menuList.clear();
+
+	//유닛 찍음.
+	if (_destUnit)
+	{
+		//아군을 찍었을 경우 => 대기, 자동, 원군
+		//적 유닛을 찍었을 경우 => 대기, 자동, 추적
+	}
+	//타일 찍음.
+	else if (_destTile)
+	{
+		//오브젝트가 없는 땅인데 이동 가능할 경우 => 대기, 자동, 
+		//오브젝트가 없는 땅인데 이동 불가능하고 물일 경우 => 
+		//오브젝트가 있는데 이동 가능한 오브젝트일 경우 => 대기, 자동, 파괴
+		//오브젝트가 있는데 이동 불가능한 오브젝트일 경우 => 파괴
+	}
+
+	//	->물을 찍었을 경우
+	//	다리를 건설할 수 있는지 확인->건설 가능한 경우
+	//	xxx, xxx, xxx, xxx, xxx, 다리건축, xxx, xxx
 }
 
 void commandWindow::render()

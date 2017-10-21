@@ -35,6 +35,8 @@ public:
 	void render();
 	void update();
 
+	unit* getPickedUnit() { return _pickedUnit; }
+
 	//카메라 이동
 	void moveCamera();
 	//유닛 피킹
@@ -61,17 +63,21 @@ namespace commandWindowState
 class commandWindow : public gameObject
 {
 private:
+	userInterface*		_parent;
+
 	commandWindowState::Enum		_state;
 	vector<unit*>					_targetList;
+	vector<string>					_menuList;
 	
 	image*				_whatwhereImage;
 	terrainTile*		_destTile;
+	unit*				_destUnit;
 
 public:
 	commandWindow() {}
 	virtual ~commandWindow() {}
 
-	HRESULT init();
+	HRESULT init(userInterface* parent);
 	void release();
 	void update();
 	void render();
@@ -79,6 +85,8 @@ public:
 	void show(unit* target);
 	void show(vector<unit*> targetList);
 	void hide();
+
+	void setMenuList();
 };
 
 class interfaceBack : public gameObject
