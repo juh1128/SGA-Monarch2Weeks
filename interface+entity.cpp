@@ -259,6 +259,7 @@ void commandWindow::update()
 							vTarget.push_back(_chooseTile);
 							_targetList[i]->sendMessage(_menuList[_chooseIndex], 0.0f, 0, 0.0f, POINT(), vTarget);
 						}
+						hide();
 					}
 				}
 			}
