@@ -99,7 +99,7 @@ public:
 	void show(vector<unit*> targetList);
 	void hide();
 
-	void setMenuList();
+	bool setMenuList();
 };
 
 class interfaceBack : public gameObject

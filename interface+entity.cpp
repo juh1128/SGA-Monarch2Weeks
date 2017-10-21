@@ -204,18 +204,17 @@ void commandWindow::update()
 					{
 						vector2D unitIndex = _destUnit->getIndex();
 						_chooseTile = WORLD->getMap()->getTile(unitIndex.x, unitIndex.y);
-						_state = commandWindowState::What;
-						setMenuList();	//뭘 눌렀느냐에 따라 메뉴를 셋팅한다.
-						_renderPos = _ptMouse;
+
+						//뭘 눌렀느냐에 따라 메뉴를 셋팅한다.
+						if(setMenuList()) _state = commandWindowState::What;					
 					}
 				}
 				else if (_destTile)
 				{
 					_chooseTile = _destTile;
-					_state = commandWindowState::What;
-					setMenuList();	
-					_renderPos = _ptMouse;
-				}				
+					if (setMenuList()) _state = commandWindowState::What;
+				}	
+				_renderPos = _ptMouse;
 			}
 
 			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
@@ -259,6 +258,7 @@ void commandWindow::update()
 							vTarget.push_back(_chooseTile);
 							_targetList[i]->sendMessage(_menuList[_chooseIndex], 0.0f, 0, 0.0f, POINT(), vTarget);
 						}
+						hide();
 					}
 				}
 			}
@@ -280,7 +280,7 @@ void commandWindow::update()
 
 }
 
-void commandWindow::setMenuList()
+bool commandWindow::setMenuList()
 {
 	_menuList.clear();
 
@@ -316,13 +316,41 @@ void commandWindow::setMenuList()
 				//대기, 자동 + (건설 가능한 땅이면, 마을건축, 목책건축)
 				if (_destTile->isBuildable())
 				{
-					_menuList.push_back("마을건축");
-					_menuList.push_back("목책건축");
+					_menuList.push_back("마을 건축");
+					_menuList.push_back("목책 건축");
 				}
 			}
 			else
 			{
+				auto checkMovable = [this](int x, int y)
+				{
+					vector2D tileCount = WORLD->getMap()->getTileCount();
+
+					// - 오버플로우 체크
+					if (x < 0 || x >= tileCount.x || y < 0 || y >= tileCount.y)
+					{
+						return false;
+					}
+					// - 높이, 이동불가능 타일 체크
+					terrainTile* checkTile = WORLD->getMap()->getTile(x, y);
+					int distanceHeight = abs(checkTile->getHeight(true) - _destTile->getHeight());
+					if (!checkTile->isWalkable() || distanceHeight > 1)
+					{
+						return false;
+					}
+					return true;
+				};
 				//다리 건설이 가능한지 확인
+				//(x -1, +1에 이동 가능한 타일이 있을 경우) 또는 (y-1,+1에 이동 가능한 타일이 있을 경우)	
+				vector2D tileIndex = _destTile->getIndex();
+				if (checkMovable(tileIndex.x - 1, tileIndex.y) && checkMovable(tileIndex.x + 1, tileIndex.y))
+				{
+					_menuList.push_back("다리 건설");
+				}
+				else if (checkMovable(tileIndex.x, tileIndex.y - 1) && checkMovable(tileIndex.x, tileIndex.y + 1))
+				{
+					_menuList.push_back("다리 건설");
+				}	
 			}
 		}
 		else
@@ -337,10 +365,14 @@ void commandWindow::setMenuList()
 			//오브젝트가 있는데 이동 불가능한 오브젝트일 경우 => 파괴
 			else
 			{
-				_menuList.push_back("파괴");
+				if(objectOnTile->_name != "돌")
+					_menuList.push_back("파괴");
 			}
 		}	
 	}
+
+	if (_menuList.size() > 0) return true;
+	return false;
 }
 
 void commandWindow::render()
