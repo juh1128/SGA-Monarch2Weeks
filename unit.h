@@ -105,6 +105,8 @@ public:
 	void setMergeUnit(unit* mergeUnit);
 
 	void moveAstar(int x, int y);
+
+	void setAuto(bool autounit) { _isAuto = autounit; }
 };
 
 class unitState
