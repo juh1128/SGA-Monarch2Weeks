@@ -8,28 +8,34 @@ void unit::setMergeUnit(unit * mergeUnit)
 
 void unitMerge::enter(unit& me)
 {
-	if (!_mergeUnit) return me.changeState(new unitNoneState);
+	if (!me._mergeUnit->isLive())
+	{
+		me._mergeUnit = NULL;
+		return me.changeState(new unitNoneState);
+	}
 
 	if (me._mergeUnit == NULL)
 	{
-		me.setMergeUnit(_mergeUnit);
+		me.setMergeUnit(me._mergeUnit);
 	}
-	if (me._index.x == _mergeUnit->_index.x && me._index.y == _mergeUnit->_index.y)
+	me.syncIndexFromPos();
+	me._mergeUnit->syncIndexFromPos();
+	if (me._index.x == me._mergeUnit->_index.x && me._index.y == me._mergeUnit->_index.y)
 	{
 		//상대유닛이 행동중이면 상대한테 합쳐야한다
 
 		//행동없음
-		if (_mergeUnit->_isMove)
+		if (me._mergeUnit->_isMove)
 		{
-			if (me._hp > _mergeUnit->_hp)
+			if (me._hp > me._mergeUnit->_hp)
 			{
-				me._hp += _mergeUnit->_hp;
-				_mergeUnit->setDestroy();
+				me._hp += me._mergeUnit->_hp;
+				me._mergeUnit->setDestroy();
 				me._mergeUnit = NULL;
 			}
 			else
 			{
-				_mergeUnit->_hp += me._hp;
+				me._mergeUnit->_hp += me._hp;
 				me.setDestroy();
 				me._mergeUnit = NULL;
 			}
@@ -37,8 +43,9 @@ void unitMerge::enter(unit& me)
 		//행동있음
 		else
 		{
-			_mergeUnit->_hp += me._hp;
+			me._mergeUnit->_hp += me._hp;
 			me.setDestroy();
+			me._mergeUnit = NULL;
 		}
 	}
 	else
@@ -56,8 +63,8 @@ void unitMerge::enter(unit& me)
 			return;
 		}
 		//방향정하기
-		int xDistance = UTIL::getDistance(me._index.x, 0, _mergeUnit->_index.x, 0);
-		int yDistance = UTIL::getDistance(0, me._index.y, 0, _mergeUnit->_index.y);
+		int xDistance = UTIL::getDistance(me._index.x, 0, me._mergeUnit->_index.x, 0);
+		int yDistance = UTIL::getDistance(0, me._index.y, 0, me._mergeUnit->_index.y);
 		vector2D destIndex = me._index;
 		bool isCanGo = true;
 
@@ -65,11 +72,11 @@ void unitMerge::enter(unit& me)
 		if(xDistance >= yDistance)
 		{
 			//내가 왼쪽에있다면
-			if (me._index.x < _mergeUnit->_index.x)
+			if (me._index.x < me._mergeUnit->_index.x)
 			{
 				destIndex.x += 1;
 			}
-			else if (me._index.x > _mergeUnit->_index.x)
+			else if (me._index.x > me._mergeUnit->_index.x)
 			{
 				destIndex.x -= 1;
 			}
@@ -99,11 +106,11 @@ void unitMerge::enter(unit& me)
 		if (xDistance < yDistance)
 		{
 			//내가 왼쪽에있다면
-			if (me._index.y < _mergeUnit->_index.y)
+			if (me._index.y < me._mergeUnit->_index.y)
 			{
 				destIndex.y += 1;
 			}
-			else if (me._index.y > _mergeUnit->_index.y)
+			else if (me._index.y > me._mergeUnit->_index.y)
 			{
 				destIndex.y -= 1;
 			}

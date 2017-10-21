@@ -3,7 +3,6 @@
 
 
 
-
 void pathFinder::init()
 {
 	_startTile = NULL;
@@ -22,7 +21,7 @@ void pathFinder::render()
 
 void pathFinder::addOpenList()
 {
-//	//주변 8방향 타일을 확인해서 노드화시키고 리스트를 반환한다.
+//	//주변 4방향 타일을 확인해서 노드화시키고 리스트를 반환한다.
 	vector<vector2D> _passList;
 	_passList.emplace_back(0, 0); //0,0은 현재 타일이므로 passList에 추가한다.
 
@@ -37,12 +36,12 @@ void pathFinder::addOpenList()
 				return false;
 		}
 		//조사 범위가 맵을 넘어가면 continue;
-		if (_currentNode->_tile->getIndex().x + j < 0 || _currentNode->_tile->getIndex().y + i < 0 ||
-			_currentNode->_tile->getIndex().x + j >= WORLD->getMapSize().x ||
-			_currentNode->_tile->getIndex().y + i >= WORLD->getMapSize().y)
+		if (_currentNode->_tile->getIndex().x + i < 0 || _currentNode->_tile->getIndex().y + j < 0 ||
+			_currentNode->_tile->getIndex().x + i >= WORLD->getMapSize().x ||
+			_currentNode->_tile->getIndex().y + j >= WORLD->getMapSize().y)
 			return false;
 
-		terrainTile* tile = WORLD->getMap()->getTile(_currentNode->_tile->getIndex().x + j, _currentNode->_tile->getIndex().y + i);
+		terrainTile* tile = WORLD->getMap()->getTile(_currentNode->_tile->getIndex().x + i, _currentNode->_tile->getIndex().y + j);
 		//해당 타일이 close리스트에 있는지 확인
 		for (int cnt = 0; cnt < _closeList.size(); ++cnt)
 		{
@@ -67,7 +66,7 @@ void pathFinder::addOpenList()
 		vector2D temp(i, j);
 		vector2D direct = currentindex + temp;
 
-		if (WORLD->getMap()->getTile(currentindex.x, currentindex.y)->getHeight() - WORLD->getMap()->getTile(direct.x, direct.y)->getHeight() > 1)
+		if (abs(WORLD->getMap()->getTile(currentindex.x, currentindex.y)->getHeight() - WORLD->getMap()->getTile(direct.x, direct.y)->getHeight() )> 1)
 		{
 			return false;
 		}
@@ -161,18 +160,27 @@ pathFinder::tagAstarNode* pathFinder::getChildNode(tagAstarNode* parentNode, ter
 	node->_parentNode = parentNode;
 	node->_tile = childTile;
 
+	//x,y 만 비교할게 아니라 높이도 동시에 비교를 해야된다 
+	//높이는 1만 차이나야 이동가능
 	if (abs(childTile->getIndex().x - parentNode->_tile->getIndex().x) +
-		abs(childTile->getIndex().y - parentNode->_tile->getIndex().y) == 1)
+		abs(childTile->getIndex().y - parentNode->_tile->getIndex().y) == 1 && 
+		abs(childTile->getHeight() - parentNode->_tile->getHeight()) == 0)
 	{
+	//높이가 같은결우 가중치가 없다
 		node->_costFromStart = parentNode->_costFromStart + 10;
 	}
-	else
+	else if(abs(childTile->getIndex().x - parentNode->_tile->getIndex().x) + 
+			abs(childTile->getIndex().y - parentNode->_tile->getIndex().y) == 1 && 
+			abs(childTile->getHeight() - parentNode->_tile->getHeight() ) == 1)
 	{
-		node->_costFromStart = parentNode->_costFromStart + 14;
+	//높이가 다른경우 가중치를 주어서 최대한 높이변경이 없이 이동하게 한다
+		node->_costFromStart = parentNode->_costFromStart + 16;
 	}
 
 	node->_costToGoal = (abs(_destTile->getIndex().x - childTile->getIndex().x) +
-		abs(_destTile->getIndex().y - childTile->getIndex().y))*10;
+							abs(_destTile->getIndex().y - childTile->getIndex().y))*10;
+	//남은 높이 코스트 추가
+	node->_costToGoal += (abs(_destTile->getHeight() - childTile->getHeight()) * 16);
 
 	node->_totalCost = node->_costFromStart + node->_costToGoal;
 

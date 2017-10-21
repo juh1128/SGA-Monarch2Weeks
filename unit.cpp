@@ -91,7 +91,11 @@ void unit::update()
 	{
 		keyboardTest(UnitDirection::UNIT_DOWN);
 	}
-
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		vector2D temp = WORLD->getMap()->getPickedTile()->getIndex();
+		moveAstar(temp.x, temp.y);
+	}
 	_unitState->update(*this);
 
 	//pos <-> 인덱스 동기화

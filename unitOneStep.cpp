@@ -54,7 +54,7 @@ void unitOneStep::update(unit & me)
 			{
 				if (unitList[i] != &me && unitList[i]->getCountryColor() == me._unitColor)
 				{
-					me.changeState(new unitMerge(unitList[i]));
+					me.changeState(new unitMerge(unitList[i],me));
 					isMerge = true;
 					return;
 				}
@@ -62,7 +62,7 @@ void unitOneStep::update(unit & me)
 		}
 
 		if(me._mergeUnit)
-			return me.changeState(new unitMerge(me._mergeUnit));
+			return me.changeState(new unitMerge(me._mergeUnit,me));
 
 		if(!isMerge)
 			return me.changeState(new unitNoneState);
