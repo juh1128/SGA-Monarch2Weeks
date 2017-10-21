@@ -27,7 +27,7 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 	_taxProgress->init(_back, _playerCountry->getTaxRate());
 
 	_commandWindow = new commandWindow;
-	_commandWindow->init();
+	_commandWindow->init(this);
 
 	return S_OK;
 }

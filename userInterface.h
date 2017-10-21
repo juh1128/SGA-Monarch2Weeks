@@ -36,6 +36,7 @@ public:
 	void update();
 
 	unit* getPickedUnit() { return _pickedUnit; }
+	country* getPlayerCountry() { return _playerCountry; }
 
 	//카메라 이동
 	void moveCamera();
@@ -60,6 +61,8 @@ namespace commandWindowState
 		Where, What, Hide, End
 	};
 }
+
+//명령 창
 class commandWindow : public gameObject
 {
 private:
@@ -72,6 +75,7 @@ private:
 	image*				_whatwhereImage;
 	terrainTile*		_destTile;
 	unit*				_destUnit;
+	vector2D			_renderPos;
 
 public:
 	commandWindow() {}

@@ -193,14 +193,21 @@ void commandWindow::update()
 			{
 				_destTile = WORLD->getMap()->getPickedTile();
 				_destUnit = _parent->getPickedUnit();
-				if (_destTile || _destUnit)
+				if (_destUnit)
 				{
 					if (_destUnit->isLive())
 					{
 						_state = commandWindowState::What;
 						setMenuList();	//뭘 눌렀느냐에 따라 메뉴를 셋팅한다.
+						_renderPos = _ptMouse;
 					}
-				}	
+				}
+				else if (_destTile)
+				{
+					_state = commandWindowState::What;
+					setMenuList();	
+					_renderPos = _ptMouse;
+				}				
 			}
 
 			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
@@ -230,20 +237,59 @@ void commandWindow::setMenuList()
 	if (_destUnit)
 	{
 		//아군을 찍었을 경우 => 대기, 자동, 원군
+		if (_parent->getPlayerCountry()->getColor() == _destUnit->getCountryColor())
+		{
+			_menuList.push_back("대기");
+			_menuList.push_back("자동");
+			_menuList.push_back("원군");
+		}
 		//적 유닛을 찍었을 경우 => 대기, 자동, 추적
+		else
+		{
+			_menuList.push_back("대기");
+			_menuList.push_back("자동");
+			_menuList.push_back("추적");
+		}
 	}
 	//타일 찍음.
 	else if (_destTile)
 	{
-		//오브젝트가 없는 땅인데 이동 가능할 경우 => 대기, 자동, 
-		//오브젝트가 없는 땅인데 이동 불가능하고 물일 경우 => 
-		//오브젝트가 있는데 이동 가능한 오브젝트일 경우 => 대기, 자동, 파괴
-		//오브젝트가 있는데 이동 불가능한 오브젝트일 경우 => 파괴
+		gameObject* objectOnTile = _destTile->getObjectOnTile();
+		//오브젝트가 없는 땅인데 이동 가능할 경우 => 대기, 자동 + (건설 가능한 땅이면, 마을건축, 목책건축)
+		if (!objectOnTile)
+		{
+			if (_destTile->isWalkable())
+			{
+				_menuList.push_back("대기");
+				_menuList.push_back("자동");
+				//대기, 자동 + (건설 가능한 땅이면, 마을건축, 목책건축)
+				if (_destTile->isBuildable())
+				{
+					_menuList.push_back("마을건축");
+					_menuList.push_back("목책건축");
+				}
+			}
+			else
+			{
+				//다리 건설이 가능한지 확인
+			}
+		}
+		else
+		{
+			//오브젝트가 있는데 이동 가능한 오브젝트일 경우 => 대기, 자동, 파괴
+			if (_destTile->isWalkable())
+			{
+				_menuList.push_back("대기");
+				_menuList.push_back("자동");
+				_menuList.push_back("파괴");
+			}
+			//오브젝트가 있는데 이동 불가능한 오브젝트일 경우 => 파괴
+			else
+			{
+				_menuList.push_back("파괴");
+			}
+		}	
 	}
-
-	//	->물을 찍었을 경우
-	//	다리를 건설할 수 있는지 확인->건설 가능한 경우
-	//	xxx, xxx, xxx, xxx, xxx, 다리건축, xxx, xxx
 }
 
 void commandWindow::render()
@@ -279,6 +325,17 @@ void commandWindow::render()
 				float yOffset = target->getSize().y*zoom*0.5f;
 				_whatwhereImage->setScaleOption(vector2D(zoom, zoom));
 				_whatwhereImage->frameRender(renderPos.x, renderPos.y - yOffset, 0, 0, Pivot::BOTTOM);
+			}
+
+			//메뉴 리스트 렌더링
+			int width = 120;
+			int height = 20;
+			for (size_t i = 0; i < _menuList.size(); ++i)
+			{
+				RECT rc = RectMake(_renderPos.x, _renderPos.y + i * height, width, height);
+				IMAGEMANAGER->fillRectangle(rc, DefaultBrush::white);
+				IMAGEMANAGER->drawRectangle(rc);
+				IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * height, UTIL::string_to_wstring(_menuList[i]), 14, width, height);
 			}
 		}
 		break;
