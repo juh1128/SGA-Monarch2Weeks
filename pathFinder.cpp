@@ -174,13 +174,13 @@ pathFinder::tagAstarNode* pathFinder::getChildNode(tagAstarNode* parentNode, ter
 			abs(childTile->getHeight() - parentNode->_tile->getHeight() ) == 1)
 	{
 	//높이가 다른경우 가중치를 주어서 최대한 높이변경이 없이 이동하게 한다
-		node->_costFromStart = parentNode->_costFromStart + 14;
+		node->_costFromStart = parentNode->_costFromStart + 16;
 	}
 
 	node->_costToGoal = (abs(_destTile->getIndex().x - childTile->getIndex().x) +
 							abs(_destTile->getIndex().y - childTile->getIndex().y))*10;
 	//남은 높이 코스트 추가
-	node->_costToGoal += (abs(_destTile->getHeight() - childTile->getHeight()) * 14);
+	node->_costToGoal += (abs(_destTile->getHeight() - childTile->getHeight()) * 16);
 
 	node->_totalCost = node->_costFromStart + node->_costToGoal;
 

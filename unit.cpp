@@ -75,9 +75,9 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	});
 
 	this->addCallback("¿ø±º", [&](tagMessage msg) {
-		terrainTile* tile = (terrainTile*)msg.targetList[0];
-		unit* target = tile->getUnitOnTile()[0];
-		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+		
+		unit* target = (unit*)msg.targetList[0];
+		this->moveAstar(target->getIndex().x, target->getIndex().y);
 		this->reserveState(new unitMerge(target,*this));
 		this->setAuto(true);
 	});
@@ -130,11 +130,6 @@ void unit::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
 		keyboardTest(UnitDirection::UNIT_DOWN);
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-	{
-		vector2D temp = WORLD->getMap()->getPickedTile()->getIndex();
-		moveAstar(temp.x, temp.y);
 	}
 	_unitState->update(*this);
 
