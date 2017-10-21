@@ -61,29 +61,31 @@ gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 	}
 	else if (name == "blueStartUnit")
 	{
-		newObj = new unit;
-		((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::BLUE);
-		((unit*)newObj)->setHp(500);
+		unit* newUnit = new unit;
+		newUnit->init(vector2D(xIndex, yIndex), 0, CountryColor::BLUE);
+		newUnit->setHp(500);
+		WORLD->addUnit(newUnit, CountryColor::BLUE);
 	}
 	else if (name == "greenStartUnit")
 	{
-		newObj = new unit;
-		((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::GREEN);
-		((unit*)newObj)->setHp(500);
+		unit* newUnit = new unit;
+		newUnit->init(vector2D(xIndex, yIndex), 0, CountryColor::GREEN);
+		newUnit->setHp(500);
+		WORLD->addUnit(newUnit, CountryColor::GREEN);
 	}
 	else if (name == "redStartUnit")
 	{
-		newObj = new unit;
-		((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::RED);
-		((unit*)newObj)->setHp(500);
+		unit* newUnit = new unit;
+		newUnit->init(vector2D(xIndex, yIndex), 0, CountryColor::RED);
+		newUnit->setHp(500);
+		WORLD->addUnit(newUnit, CountryColor::RED);
 	}
 	else if (name == "whiteStartUnit")
 	{
-		//newObj = new unit;
-		//((unit*)newObj)->init(vector2D(xIndex, yIndex), 0, CountryColor::WHITE);
-		//((unit*)newObj)->setImage(getUnitImage(CountryColor::WHITE, 1), getUnitImage(CountryColor::WHITE, 2),
-			//getUnitImage(CountryColor::WHITE, 3));
-		//((unit*)newObj)->setHp(500);
+		//unit* newUnit = new unit;
+		//newUnit->init(vector2D(xIndex, yIndex), 0, CountryColor::WHITE);
+		//newUnit->setHp(500);
+		//WORLD->addUnit(newUnit, CountryColor::WHITE);
 	}
 	else
 	{
