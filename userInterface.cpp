@@ -242,7 +242,8 @@ void userInterface::clickedMouse()
 	{
 		if (_pickedUnit)
 		{
-			_commandWindow->show(_pickedUnit);
+			if(_pickedUnit->getCountryColor() == _playerCountry->getColor())
+				_commandWindow->show(_pickedUnit);
 		}
 	}
 }

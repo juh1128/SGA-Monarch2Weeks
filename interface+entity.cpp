@@ -170,6 +170,11 @@ HRESULT commandWindow::init(userInterface* parent)
 	_parent = parent;
 	_whatwhereImage = IMAGEMANAGER->addFrameImage("whatwhere", L"resource/interface/whatwhere.png", 2, 1);
 	_destTile = NULL;
+
+	_chooseIndex = -1;
+	_menuWidth = 120;
+	_menuHeight = 20;
+
 	hide();
 	return S_OK;
 }
@@ -219,6 +224,18 @@ void commandWindow::update()
 		//뭐?
 		case commandWindowState::What:
 		{
+			//메뉴 충돌체크
+			_chooseIndex = -1;
+			for (size_t i = 0; i < _menuList.size(); ++i)
+			{
+				RECT rc = RectMake(_renderPos.x, _renderPos.y + i * _menuHeight, _menuWidth, _menuHeight);
+				if (PtInRect(&rc, _ptMouse))
+				{
+					_chooseIndex = i;
+					break;
+				}
+			}	
+
 			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
 				_state = commandWindowState::Where;
@@ -328,14 +345,18 @@ void commandWindow::render()
 			}
 
 			//메뉴 리스트 렌더링
-			int width = 120;
-			int height = 20;
 			for (size_t i = 0; i < _menuList.size(); ++i)
 			{
-				RECT rc = RectMake(_renderPos.x, _renderPos.y + i * height, width, height);
+				RECT rc = RectMake(_renderPos.x, _renderPos.y + i * _menuHeight, _menuWidth, _menuHeight);
 				IMAGEMANAGER->fillRectangle(rc, DefaultBrush::white);
 				IMAGEMANAGER->drawRectangle(rc);
-				IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * height, UTIL::string_to_wstring(_menuList[i]), 14, width, height);
+				IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * _menuHeight, UTIL::string_to_wstring(_menuList[i]), 14, _menuWidth, _menuHeight);
+			}
+			//선택 메뉴 렌더링
+			if (_chooseIndex >= 0)
+			{
+				RECT rc = RectMake(_renderPos.x, _renderPos.y + _chooseIndex * _menuHeight, _menuWidth, _menuHeight);
+				IMAGEMANAGER->fillRectangle(rc, D2D1::ColorF::LightSteelBlue, 0.5f);
 			}
 		}
 		break;
