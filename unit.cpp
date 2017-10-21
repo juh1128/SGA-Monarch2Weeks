@@ -144,6 +144,12 @@ void unit::render()
 			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"대기", 14, DefaultBrush::white,
 				DWRITE_TEXT_ALIGNMENT_LEADING);
 		}
+		else if (_state == UnitState::BuildTown)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"건설", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+
 	}
 }
 

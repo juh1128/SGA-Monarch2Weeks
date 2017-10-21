@@ -8,6 +8,8 @@ void unit::setMergeUnit(unit * mergeUnit)
 
 void unitMerge::enter(unit& me)
 {
+	me._state = UnitState::Merge;
+
 	if (!me._mergeUnit->isLive())
 	{
 		me._mergeUnit = NULL;
