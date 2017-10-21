@@ -42,35 +42,43 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	changeState(new unitCreateMotion);
 
 	this->addCallback("대기", [&](tagMessage msg) {
-		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
 		this->reserveState(new unitNoneState);
 		this->setAuto(false);
 	});
 
 	this->addCallback("자동", [&](tagMessage msg) {
-		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
 		this->reserveState(new unitNoneState);
 		this->setAuto(true);
 	});
+
 	this->addCallback("마을 건축", [&](tagMessage msg) {
-		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
 		this->reserveState(new unitBuildTown(msg.ptData));
 		this->setAuto(true);
 	});
 	this->addCallback("목책 건축", [&](tagMessage msg) {
-		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
 		this->reserveState(new unitNoneState);
 		this->setAuto(true);
 	});
 	this->addCallback("다리 건설", [&](tagMessage msg) {
-		this->moveAstar(msg.ptData.x, msg.ptData.y);
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
 		this->reserveState(new unitNoneState);
 		this->setAuto(true);
 	});
 
 	this->addCallback("원군", [&](tagMessage msg) {
-		this->moveAstar(msg.ptData.x, msg.ptData.y);
-		this->reserveState(new unitBuildTown(msg.ptData));
+		
+		unit* target = (unit*)msg.targetList[0];
+		this->moveAstar(target->getIndex().x, target->getIndex().y);
+		this->reserveState(new unitMerge(target,*this));
 		this->setAuto(true);
 	});
 
