@@ -17,6 +17,7 @@ unit* unit::isCanAttack()
 			continue;
 		vector<unit*> emUnit = WORLD->getMap()->getTile(direct.x, direct.y)->getUnitOnTile();
 
+
 		if (emUnit.size() <= 0) continue;
 
 		for (int i = 0; i < emUnit.size(); ++i)
@@ -61,6 +62,19 @@ mncObjectBase* unit::isCanAttackNature()
 
 	vector2D direct = _index + getDirectionVector(_unitDirection);
 
+	vector2D kingCheck[2];
+	//string str = "군주";
+	kingCheck[0] = _index + getDirectionVector(UnitDirection::UNIT_LEFT);
+	kingCheck[1] = _index + getDirectionVector(UnitDirection::UNIT_RIGHT);
+	for (int i = 0; i < 2; i++)
+	{
+		if (WORLD->getMap()->getTile(kingCheck[i].x, kingCheck[i].y) != nullptr)
+		{
+			mncObjectBase* king = (mncObjectBase*)WORLD->getMap()->getTile(kingCheck[i].x, kingCheck[i].y)->getObjectOnTile();
+			if (king == nullptr) continue;
+			if (king->_name == "군주") return king;
+		}
+	}
 	if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) return nullptr;
 	if (direct.y <0 || direct.y > WORLD->getMap()->getTileCount().y - 1) return nullptr;
 
@@ -152,6 +166,31 @@ void unitFight::update(unit & me)
 void unitDigObject::enter(unit& me)
 {
 	me._state = UnitState::Fight;
+
+	if (_nature->_name == "군주")
+	{
+		vector2D direction = _nature->getIndex() - me._index;
+
+		int length = direction.getLength();
+
+		if (length> 1 || length == 0)
+		{
+			return me.changeState(new unitNoneState);
+		}
+
+		if (direction.x == 1)
+			me._unitDirection = UnitDirection::UNIT_RIGHT;
+		else if (direction.x == -1)
+			me._unitDirection = UnitDirection::UNIT_LEFT;
+		else if (direction.y == 1)
+			me._unitDirection = UnitDirection::UNIT_DOWN;
+		else if (direction.y == -1)
+			me._unitDirection = UnitDirection::UNIT_UP;
+		else
+			cout << direction.x << " , " << direction.y << "unitDigObject enter 방향설정 오류" << endl;
+
+	}
+
 }
 void unitDigObject::update(unit& me)
 {

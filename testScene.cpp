@@ -59,7 +59,7 @@ void testScene::update()
 	if (KEYMANAGER->isOnceKeyDown('B'))
 	{
 		unit* _unit = new unit;
-		_unit->init(vector2D(4, 8), 0, CountryColor::BLUE);
+		_unit->init(vector2D(1, 23), 0, CountryColor::BLUE);
 		_unit->setHp(400);
 		WORLD->addUnit(_unit, CountryColor::BLUE);
 	}

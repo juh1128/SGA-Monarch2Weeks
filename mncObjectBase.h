@@ -25,7 +25,7 @@ public:
 	int getHp() { return _hp; }
 	void addHp(int add) { _hp += add; }
 	void setHp(int set) { _hp = set; }
-
+	vector2D getIndex() { return _index; }
 	CountryColor::Enum getCountryColor() { return _countryColor; }
 	void setCountryColor(CountryColor::Enum color) { _countryColor = color; }
 };
