@@ -82,8 +82,12 @@ void userInterface::render()
 	//드래그 UI 렌더링
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
-		RECT rc = RectMake(_clickedPos.x, _clickedPos.y, _ptMouse.x - _clickedPos.x, _ptMouse.y - _clickedPos.y);
-		IMAGEMANAGER->drawRectangle(rc, D2D1::ColorF::BurlyWood, 1.0f, 2);
+		RECT backInterfaceRC = RectMake(0, 0, 300, 70);
+		if (!PtInRect(&backInterfaceRC, _clickedPos.toPoint()))
+		{
+			RECT rc = RectMake(_clickedPos.x, _clickedPos.y, _ptMouse.x - _clickedPos.x, _ptMouse.y - _clickedPos.y);
+			IMAGEMANAGER->drawRectangle(rc, D2D1::ColorF::BurlyWood, 1.0f, 2);
+		}
 	}
 }
 
