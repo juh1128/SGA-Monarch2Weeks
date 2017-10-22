@@ -13,7 +13,7 @@ unit* unit::isCanAttack()
 		if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) continue;
 		if (direct.y <0 || direct.y > WORLD->getMap()->getTileCount().y - 1) continue;
 
-		if (abs(WORLD->getMap()->getTile(_index.x, _index.y)->getHeight() - WORLD->getMap()->getTile(direct.x, direct.y)->getHeight()) > 1)
+		if (abs(WORLD->getMap()->getTile(_index.x, _index.y)->getHeight() - WORLD->getMap()->getTile(direct.x, direct.y)->getHeight()) > 2)
 			continue;
 		vector<unit*> emUnit = WORLD->getMap()->getTile(direct.x, direct.y)->getUnitOnTile();
 
@@ -25,7 +25,10 @@ unit* unit::isCanAttack()
 			if (this->getCountryColor() != emUnit[i]->getCountryColor())
 				enemy.push_back(emUnit[i]);
 		}
+
+		emUnit.clear();
 	}
+	
 	if (enemy.size() <= 0) return NULL;
 
 	sort(enemy.begin(), enemy.end(), [](unit* a, unit* b)
@@ -34,6 +37,18 @@ unit* unit::isCanAttack()
 			return true;
 		return false;
 	});
+
+	if(this->getCountryColor() == CountryColor::BLUE)
+		cout << _index.x <<" , "<< _index.y << enemy[0]->getColorString() << endl;
+
+	vector2D direction = enemy[0]->_index - _index;
+
+	int length = direction.getLength();
+
+	if (length> 1 || length == 0)
+	{
+		return nullptr;
+	}
 
 	return enemy[0];
 }
@@ -56,6 +71,7 @@ mncObjectBase* unit::isCanAttackNature()
 	if (nature.size() <= 0) return nullptr;
 	if (nature[0]->getCountryColor() == this->getCountryColor()) return nullptr;
 	if (nature[0]->_name == "µ¹") return nullptr;
+	if (!nature[0]->isLive()) return nullptr;
 
 	return nature[0];
 
