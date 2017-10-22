@@ -54,6 +54,7 @@ private:
 	UnitDirection::DIRECTION _unitDirection;
 
 	unit* _mergeUnit;
+	vector<terrainTile*> _myTiles;//버그막기용 어쩔수없어
 
 	friend class unitCreateMotion;
 	friend class unitNoneState;
@@ -75,6 +76,7 @@ public:
 
 	void changeState(unitState* newstate);
 	void reserveState(unitState* newstate);
+	void removeReserveState();	//첫번째 예약된 상태 삭제
 	void imageFrame(void);
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
@@ -102,7 +104,7 @@ public:
 	mncObjectBase* isCanAttackNature();
 	unit* isCanCombin();
 
-	void setMergeUnit(unit* mergeUnit);
+	unit* isCanMerge(unit* mergeunit);
 
 	void moveAstar(int x, int y);
 
@@ -114,7 +116,9 @@ public:
 class unitState
 {
 private:
+	
 public:
+	string _stateName;
 	virtual ~unitState() {}
 
 	virtual void enter(unit& unit) {}
@@ -124,7 +128,9 @@ public:
 class unitNoneState : public unitState
 {
 private:
+	
 public:
+	unitNoneState() { _stateName = "NONE"; }
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
 
@@ -141,9 +147,12 @@ private:
 	vector2D _destIndex;
 	vector2D _oldIndex;
 
+	bool _isFinish;
+
 public:
 	unitOneStep(int xIndex, int yIndex)
 	{
+		_stateName = "한걸음";
 		_destIndex.x = xIndex;
 		_destIndex.y = yIndex;
 	}
@@ -158,7 +167,11 @@ private:
 	mncObjectBase* _obj;
 	int _frameTimer;
 public:
-	unitBuildTown(POINT index) { _destIndex = index; }
+	unitBuildTown(POINT index)
+	{ 
+		_stateName = "건설";
+		_destIndex = index;
+	}
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
 };
@@ -171,7 +184,10 @@ private:
 	int _rotateNum;
 
 public:
-	unitCreateMotion() {}
+	unitCreateMotion() 
+	{
+		_stateName = "탄생";
+	}
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
 };
@@ -183,6 +199,7 @@ private:
 public:
 	unitRun(unit* avoidUnit)
 	{
+		_stateName = "도망";
 		_avoidUnit = avoidUnit;
 	}
 	virtual void enter(unit& me);
@@ -199,6 +216,7 @@ public:
 	unitFight() {}
 	unitFight(unit* enemy)
 	{
+		_stateName = "전투";
 		_enemyUnit = enemy;
 		_frameTimer = 0;
 	}
@@ -216,6 +234,7 @@ public:
 	unitDigObject() {}
 	unitDigObject(mncObjectBase* enemy)
 	{
+		_stateName = "파괴";
 		_nature = enemy;
 		_frameTimer = 0;
 	}
@@ -226,10 +245,13 @@ public:
 class unitMerge : public unitState
 {
 private:
+	vector2D _oldMergeUnitIndex;
 public:
 	unitMerge(unit* mergeUnit,unit& me)
 	{
+		_stateName = "머지";
 		me._mergeUnit = mergeUnit;
+
 	}
 	virtual void enter(unit& me);
 	virtual void update(unit & me);

@@ -13,7 +13,7 @@ unit* unit::isCanAttack()
 		if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) continue;
 		if (direct.y <0 || direct.y > WORLD->getMap()->getTileCount().y - 1) continue;
 
-		if (abs(WORLD->getMap()->getTile(_index.x, _index.y)->getHeight() - WORLD->getMap()->getTile(direct.x, direct.y)->getHeight()) > 2)
+		if (abs(WORLD->getMap()->getTile(_index.x, _index.y)->getHeight() - WORLD->getMap()->getTile(direct.x, direct.y)->getHeight()) > 1)
 			continue;
 		vector<unit*> emUnit = WORLD->getMap()->getTile(direct.x, direct.y)->getUnitOnTile();
 

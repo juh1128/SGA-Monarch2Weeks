@@ -24,11 +24,14 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 	_pos = _pos / CAMERA->getZoom();
 	_index = index;
-	_height = height;
+	//_height = height;
 	_hp = 100;
 	_isStarUnit = false;
 
-	WORLD->getMap()->getTile(_index.x, _index.y)->addUnitOnTile(this);
+	terrainTile* onTile = WORLD->getMap()->getTile(_index.x, _index.y);
+	_height = onTile->getHeight();
+	onTile->addUnitOnTile(this);
+	_myTiles.push_back(onTile);
 
 	_imageFrameX = 0;
 	_unitDirection = (UnitDirection::DIRECTION)(RND->getFromIntTo(0, 3));
@@ -77,8 +80,9 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	this->addCallback("원군", [&](tagMessage msg) {
 		
 		unit* target = (unit*)msg.targetList[0];
+		if (target == this) return;
 		this->moveAstar(target->getIndex().x, target->getIndex().y);
-		this->reserveState(new unitMerge(target,*this));
+		this->isCanMerge(target);
 		this->setAuto(true);
 		this->setUnitState(UnitState::Merge);
 		
@@ -90,8 +94,12 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 void unit::release()
 {
 	//유닛이 삭제될 때 자기가 서있는 타일에 등록 해제함.
-	syncIndexFromPos();
-	WORLD->getMap()->getTile(_index.x, _index.y)->deleteUnitOnTile(this);
+	//syncIndexFromPos();
+	//WORLD->getMap()->getTile(_index.x, _index.y)->deleteUnitOnTile(this);
+	for (size_t i = 0; i < _myTiles.size(); ++i)
+	{
+		_myTiles[i]->deleteUnitOnTile(this);
+	}
 
 	gameObject::release();
 }
@@ -141,7 +149,7 @@ void unit::update()
 	_unitState->update(*this);
 
 	//pos <-> 인덱스 동기화
-	syncIndexFromPos();
+	//syncIndexFromPos();
 
 	//Z오더 상 적절한 타일에게 렌더링을 요청한다.
 	requestRender();
@@ -210,6 +218,15 @@ void unit::changeState(unitState* newstate)
 void unit::reserveState(unitState * newstate)
 {
 	_reservedState.push_back(newstate);
+}
+
+void unit::removeReserveState()
+{
+	if (_reservedState.size() > 0)
+	{
+		delete _reservedState[0];
+		_reservedState.erase(_reservedState.begin());
+	}
 }
 
 vector2D unit::getDirectionVector(UnitDirection::DIRECTION dir)

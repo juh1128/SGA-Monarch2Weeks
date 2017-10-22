@@ -1,9 +1,16 @@
 #include "stdafx.h"
 #include "unit.h"
 
-void unit::setMergeUnit(unit * mergeUnit)
+unit* unit::isCanMerge(unit* mergeunit)
 {
-	_mergeUnit = mergeUnit;
+	_mergeUnit = mergeunit;
+	return _mergeUnit;
+
+
+
+
+	cout << "nullptr 반환" << endl;
+	return nullptr;
 }
 
 void unitMerge::enter(unit& me)
@@ -21,8 +28,10 @@ void unitMerge::enter(unit& me)
 		return me.changeState(new unitNoneState);
 	}
 
+
 	me.syncIndexFromPos();
 	me._mergeUnit->syncIndexFromPos();
+	
 	if (me._index.x == me._mergeUnit->_index.x && me._index.y == me._mergeUnit->_index.y)
 	{
 		//상대유닛이 행동중이면 상대한테 합쳐야한다
@@ -71,11 +80,11 @@ void unitMerge::enter(unit& me)
 			return;
 		}
 
-
 		////====================================
 		//// - 병합할 대상에게 추적하는 상황
 
 		//머지 상대의 인덱스가 바뀌는지 체크할것 코딩해야됨
+
 		me.moveAstar(me._mergeUnit->_index.x,me._mergeUnit->_index.y);
 
 		////방향정하기

@@ -56,7 +56,10 @@ void tileMap::render()
 		for (int j = 0; j < _tileCount.x; ++j)
 		{
 			if (_terrainTiles[i][j])
+			{
+				_terrainTiles[i][j]->mergeUnit();
 				_terrainTiles[i][j]->render(isStopedWorld);
+			}
 		}
 	}
 

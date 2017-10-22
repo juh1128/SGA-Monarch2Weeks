@@ -3,6 +3,10 @@
 
 void unit::moveAstar(int x, int y)
 {
+	for (int i = 0; i < _reservedState.size(); ++i)
+	{
+		delete _reservedState[i];
+	}
 	_reservedState.clear();
 
 	if (this->getCountryColor() != CountryColor::BLUE) return;

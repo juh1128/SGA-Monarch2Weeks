@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "unit.h"
-
+#include <algorithm>
 
 void unitOneStep::enter(unit & unit)
 {
@@ -30,9 +30,8 @@ void unitOneStep::enter(unit & unit)
 	else
 		cout << "유닛 방향 설정 오류" << endl;
 
-	WORLD->getMap()->getTile(_oldIndex.x, _oldIndex.y)->deleteUnitOnTile(&unit);
-	WORLD->getMap()->getTile(_destIndex.x, _destIndex.y)->addUnitOnTile(&unit);
 	unit._isMove = true;
+	_isFinish = false;
 }
 
 void unitOneStep::update(unit & me)
@@ -49,27 +48,34 @@ void unitOneStep::update(unit & me)
 		me._isMove = false;
 		me._pos = destPos;
 
+		//WORLD->getMap()->getTile(_oldIndex.x, _oldIndex.y)->deleteUnitOnTile(&me);
+		//WORLD->getMap()->getTile(_destIndex.x, _destIndex.y)->addUnitOnTile(&me);
+
 		//도착했는데 아군 유닛이 있을 경우 병합한다.
-		vector<unit*> unitList = _destTile->getUnitOnTile();
-		bool isMerge = false;
-		for (size_t i = 0; i < unitList.size(); ++i)
-		{
-			if (unitList[i]->isLive())
-			{
-				if (unitList[i] != &me && unitList[i]->getCountryColor() == me._unitColor)
-				{
-					me.changeState(new unitMerge(unitList[i],me));
-					isMerge = true;
-					return;
-				}
-			}
-		}
+		//vector<unit*> unitList = _destTile->getUnitOnTile();
+		//bool isMerge = false;
 
-		if(me._state == UnitState::Merge)
-			return me.changeState(new unitMerge(me._mergeUnit,me));
+		//sort(unitList.begin(), unitList.end(), [](unit* a, unit* b)
+		//{
+		//	if (a->getHealth() < b->getHealth())
+		//		return true;
+		//	return false;
+		//});
 
-		if(!isMerge)
-			return me.changeState(new unitNoneState);
+		//for (size_t i = 0; i < unitList.size(); ++i)
+		//{
+		//	if (unitList[i]->isLive())
+		//	{
+		//		if (unitList[i] != &me && unitList[i]->getCountryColor() == me._unitColor)
+		//		{
+		//			if (i == 0) continue;
+		//			unitList[i]->isCanMerge(unitList[0]);
+		//			isMerge = true;
+		//			
+		//		}
+		//	}
+		//}
+		return me.changeState(new unitNoneState);
 	}
 	//가는 중
 	else
@@ -79,7 +85,18 @@ void unitOneStep::update(unit & me)
 		//4로 나눈 이유는 타일 중점에서 옆타일 중점 이동의 절반이기 때문 => 타일사이즈백터 길이의 절반이 이동할 거리이다
 		if (length <= tileMap::getTileSize().getLength()*zoom*0.25f)
 		{
-			me._height = _destTile->getHeight(true);
+			if (_isFinish == false)
+			{
+				me._height = _destTile->getHeight(true);
+				me._index = _destTile->getIndex();
+
+				_destTile->addUnitOnTile(&me);
+				me._myTiles.push_back(_destTile);
+				me._myTiles[0]->deleteUnitOnTile(&me);
+				me._myTiles.erase(me._myTiles.begin());
+
+				_isFinish = true;
+			}
 		}
 	}
 

@@ -28,45 +28,82 @@ void unitNoneState::enter(unit & me)
 
 void unitNoneState::update(unit & me)
 {
-	//예약 상태 확인
-	if (me._reservedState.size() > 0)
-	{
-		//공격
-		unit* enemy = me.isCanAttack();
-		if (enemy != NULL)
-		{
-			return me.changeState(new unitFight(enemy));
-		}
+	////예약 상태 확인
+	//if (me._reservedState.size() > 0)
+	//{
+	//	unitState* reservedState = me._reservedState[0];
+	//	//조건 체크
+	//	bool check = false;
+	//	if (me._reservedState[0]->_stateName == "전투")
+	//	{
+	//		//공격
+	//		unit* enemy = me.isCanAttack();
+	//		if (enemy != NULL)
+	//		{
+	//			check = true;
+	//			//return me.changeState(new unitFight(enemy));
+	//		}
+	//	}
+	//	else if (me._reservedState[0]->_stateName == "머지")
+	//	{
+	//		if (me._mergeUnit != nullptr)
+	//		{
+	//			check = true;
+	//			//return me.changeState(new unitMerge(me._mergeUnit, me));
+	//		}
+	//	}
+	//	else if (me._reservedState[0]->_stateName == "파괴")
+	//	{
+	//		mncObjectBase* nature = me.isCanAttackNature();
+	//		if (nature != nullptr)
+	//		{
+	//			check = true;
+	//			//return me.changeState(new unitDigObject(nature));
+	//		}
 
-		if (me._mergeUnit == nullptr)
-			me._state = UnitState::Search;
+	//	}
+	//	//건설
+	//	else if (me._reservedState[0]->_stateName == "건설")
+	//	{
+	//		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
+	//		if (me.isBuildableTown(destIndex.toPoint()))
+	//		{
+	//			check = true;
+	//			//return me.changeState(new unitBuildTown(destIndex.toPoint()));
+	//		}
+	//	}
+	//	else if (me._reservedState[0]->_stateName == "한걸음")
+	//	{
+	//		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
+	//		if (me.isMoveable(destIndex.toPoint()))
+	//		{
+	//			check = true;
+	//		}
+	//	}
+	//	else if (me._reservedState[0]->_stateName == "NONE")
+	//	{
+	//		check = true;
+	//	}
 
-		mncObjectBase* nature = me.isCanAttackNature();
-		if (nature != nullptr)
-		{
-			return me.changeState(new unitDigObject(nature));
-		}
-		//건설
-		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
-		if (me.isBuildableTown(destIndex.toPoint()))
-		{
-			return me.changeState(new unitBuildTown(destIndex.toPoint()));
-		}
-
-		me.changeState(me._reservedState[0]);
-		me._reservedState.erase(me._reservedState.begin());
-		return;
-	}
+	//	if (check)
+	//	{
+	//		me.removeReserveState();
+	//	}
+	//	unitState* reservedState = me._reservedState[0];
+	//	me._reservedState.erase(me._reservedState.begin());
+	//	me.changeState(reservedState);		
+	//	return;
+	//}
 
 	if (me._isAuto)
 	{
 		//도망
-		unit* dangerousUnit = me.isCanRun();
-		if (dangerousUnit != NULL)
-		{
-			return me.changeState(new unitRun(dangerousUnit));
+		//unit* dangerousUnit = me.isCanRun();
+		//if (dangerousUnit != NULL)
+		//{
+		//	return me.changeState(new unitRun(dangerousUnit));
 
-		}
+		//}
 
 		//공격
 		unit* enemy = me.isCanAttack();
@@ -75,8 +112,12 @@ void unitNoneState::update(unit & me)
 			return me.changeState(new unitFight(enemy));
 		}
 
-		if(me._mergeUnit == nullptr)
-			me._state = UnitState::Search;
+		if (me._mergeUnit != nullptr)
+		{
+			return me.changeState(new unitMerge(me._mergeUnit,me));
+
+		}
+		me._state = UnitState::Search;
 
 		mncObjectBase* nature = me.isCanAttackNature();
 		if (nature != nullptr)

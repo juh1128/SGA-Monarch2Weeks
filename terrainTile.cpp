@@ -61,9 +61,9 @@ void terrainTile::deleteUnitOnTile(unit * onUnit)
 
 void terrainTile::addUnitOnTile(unit * onUnit)
 {
-	//중복 확인
 	for (size_t i = 0; i < _onUnitList.size(); ++i)
 	{
+		//내가 이미 등록되었으면 ㄴㄴ
 		if (onUnit == _onUnitList[i])
 		{
 			return;
@@ -90,6 +90,29 @@ gameObject * terrainTile::getObjectOnTile()
 void terrainTile::requestRender(unit * onUnit)
 {
 	_renderUnitList.push_back(onUnit);
+}
+
+void terrainTile::mergeUnit()
+{
+	int countryUnitList[CountryColor::END - 1] = { 0 };
+	unit* firstUnit[CountryColor::END - 1] = { NULL };
+	//병합
+	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	{
+		if (!_onUnitList[i]->isLive())
+		{
+			_onUnitList.erase(_onUnitList.begin() + i);
+			continue;
+		}
+
+		CountryColor::Enum color = _onUnitList[i]->getCountryColor();		
+		if (!firstUnit[color]) firstUnit[color] = _onUnitList[i];
+		else
+		{
+			firstUnit[color]->setHp(firstUnit[color]->getHealth() + _onUnitList[i]->getHealth());
+			_onUnitList[i]->setDestroy();
+		}
+	}
 }
 
 void terrainTile::release()
