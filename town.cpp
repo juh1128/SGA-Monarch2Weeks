@@ -32,6 +32,15 @@ HRESULT town::init(int xIndex, int yIndex, CountryColor::Enum color)
 
 void town::release()
 {
+	terrainTile* onTile = WORLD->getMap()->getTile(_index.x, _index.y);
+	vector<unit*> unitList = onTile->getUnitOnTile();
+	for (size_t i = 0; i < unitList.size(); ++i)
+	{
+		if (unitList[i]->isLive() && unitList[i]->getHeight() > 0)
+		{
+			unitList[i]->setHeight(unitList[i]->getHeight() - 1);
+		}
+	}
 	WORLD->getCountry(_countryColor)->removeTown();
 	mncObjectBase::release();
 }

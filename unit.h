@@ -97,6 +97,9 @@ public:
 	string getColorString();
 	vector2D getIndex() { return _index; }
 
+	int getHeight() { return _height; }
+	void setHeight(int set) { _height = set; }
+
 	bool isMoveable(POINT index);
 	bool isBuildableTown(POINT index);
 	unit* isCanRun();
