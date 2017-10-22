@@ -112,6 +112,7 @@
     <ClInclude Include="rock.h" />
     <ClInclude Include="sceneBase.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="selectScene.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="rock.cpp" />
     <ClCompile Include="sceneBase.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="selectScene.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

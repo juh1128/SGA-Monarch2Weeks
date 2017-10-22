@@ -168,6 +168,7 @@ void imageManager::drawText(int x, int y, wstring text, COLORREF rgb, float alph
 	range.startPosition = 0;
 	range.length = text.length();
 	_dwLayout->SetFontSize(size, range);
+	_dwLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	_dwLayout->SetTextAlignment(align);
 
 	//브러쉬 생성
@@ -198,6 +199,7 @@ void imageManager::drawTextField(int x, int y, wstring text, int size, int width
 	range.length = text.length();
 	_dwLayout->SetFontSize(size, range);
 
+	_dwLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	_dwLayout->SetTextAlignment(align);
 
 	_renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
@@ -223,6 +225,7 @@ void imageManager::drawTextField(int x, int y, wstring text, COLORREF rgb, int s
 	range.length = text.length();
 	_dwLayout->SetFontSize(size, range);
 
+	_dwLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	_dwLayout->SetTextAlignment(align);
 
 	//브러쉬 생성

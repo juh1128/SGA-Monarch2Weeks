@@ -25,6 +25,8 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 	_startBtn->init(_back);
 	_taxProgress = new taxProgress;
 	_taxProgress->init(_back, _playerCountry->getTaxRate());
+	_systemMessage = new systemMessage;
+	_systemMessage->init();
 
 	_commandWindow = new commandWindow;
 	_commandWindow->init(this);
@@ -48,6 +50,7 @@ void userInterface::update()
 	//인터페이스 업데이트
 	_taxProgress->update();
 	_startBtn->update();
+	_systemMessage->update();
 
 	//명령 인터페이스
 	_commandWindow->update();
@@ -55,6 +58,11 @@ void userInterface::update()
 
 	//동기화
 	_playerCountry->setTaxRate(_taxProgress->getTaxRate());
+}
+
+void userInterface::drawSystemText(string text, float displayTime, COLORREF color)
+{
+	_systemMessage->showMessage(text, displayTime, color);
 }
 
 void userInterface::render()
@@ -67,6 +75,9 @@ void userInterface::render()
 
 	//명령 인터페이스 렌더링
 	_commandWindow->render();
+
+	//시스템 메시지 렌더링
+	_systemMessage->render();
 
 	//드래그 UI 렌더링
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))

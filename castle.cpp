@@ -60,12 +60,21 @@ void castle::release()
 	//성벽 삭제
 	for (int i = 0; i < 8; ++i)
 	{
+		if (!_castleWall[i]) continue;
+
 		if (_castleWall[i]->isLive())
 		{
 			_castleWall[i]->release();
 			delete _castleWall[i];
 			_castleWall[i] = NULL;
 		}
+	}
+
+	//해당 국가 게임오버
+	country* cty = WORLD->getCountry(_countryColor);
+	if (cty)
+	{
+		cty->gameOver();
 	}
 
 	mncObjectBase::release();
@@ -81,6 +90,25 @@ void castle::update()
 	{
 		_frameTimer -= 0.5f;
 		_frameX = ++_frameX % 2;
+	}
+
+	//성문 업데이트
+	for (int i = 0; i < 8; ++i)
+	{
+		if (_castleWall[i])
+		{
+			if (_castleWall[i]->isLive())
+			{
+				_castleWall[i]->update();
+			}
+			else
+			{
+				_castleWall[i]->release();
+				delete _castleWall[i];
+				_castleWall[i]->setDestroy();
+				_castleWall[i] = NULL;
+			}
+		}
 	}
 }
 

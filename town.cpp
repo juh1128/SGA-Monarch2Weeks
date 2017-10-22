@@ -25,12 +25,14 @@ HRESULT town::init(int xIndex, int yIndex, CountryColor::Enum color)
 	_townIncomeTimer = 0;
 
 	_countryColor = color;
+	WORLD->getCountry(_countryColor)->addTown();
 
 	return S_OK;
 }
 
 void town::release()
 {
+	WORLD->getCountry(_countryColor)->removeTown();
 	mncObjectBase::release();
 }
 
