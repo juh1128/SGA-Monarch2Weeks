@@ -36,6 +36,10 @@ void unitBuildTown::update(unit& me)
 	{
 		return me.changeState(new unitNoneState);
 	}
+	if (objHp <= 0 || !_obj->isLive())
+	{
+		return me.changeState(new unitNoneState);
+	}
 }
 
 bool unit::isBuildableTown(POINT index)
