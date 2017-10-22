@@ -78,6 +78,9 @@ void castle::release()
 	}
 
 	mncObjectBase::release();
+
+	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
+	tile->setBuildable(false);
 }
 
 void castle::update()
@@ -173,6 +176,9 @@ HRESULT castleWall::init(int xIndex, int yIndex, bool isLeft, CountryColor::Enum
 void castleWall::release()
 {
 	mncObjectBase::release();
+
+	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
+	tile->setBuildable(false);
 }
 
 void castleWall::update()
