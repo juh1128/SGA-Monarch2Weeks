@@ -6,6 +6,7 @@ class taxProgress;
 class startButton;
 class interfaceBack;
 class commandWindow;
+class systemMessage;
 
 class userInterface : public gameObject
 {
@@ -21,6 +22,7 @@ private:
 	startButton*		_startBtn;
 	taxProgress*		_taxProgress;
 	commandWindow*		_commandWindow;
+	systemMessage*		_systemMessage;
 
 	//이미지
 	image*				_otherCountryInfo;
@@ -37,6 +39,8 @@ public:
 	void release();
 	void render();
 	void update();
+
+	void drawSystemText(string text, float displayTime, COLORREF color = RGB(255, 0, 0));
 
 	unit* getPickedUnit() { return _pickedUnit; }
 	country* getPlayerCountry() { return _playerCountry; }
@@ -149,4 +153,31 @@ public:
 	void release();
 	void update();
 	void render();
+};
+
+
+//시스템 메시지
+class systemMessage : gameObject
+{
+private:
+	enum state { hide, appear, show, disappear };
+
+	state _state;
+	string _text;
+	float _timer;
+	float _displayTime;
+	COLORREF  _color;
+
+	float _alpha;
+
+public:
+	systemMessage() {}
+	virtual ~systemMessage() {}
+
+	HRESULT init();
+	void release();
+	void update();
+	void render();
+
+	void showMessage(string text, float displayTime, COLORREF color = RGB(255, 0, 0));
 };

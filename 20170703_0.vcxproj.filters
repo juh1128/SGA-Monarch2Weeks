@@ -234,6 +234,9 @@
     <ClInclude Include="userInterface.h">
       <Filter>playGround\ui</Filter>
     </ClInclude>
+    <ClInclude Include="selectScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -388,6 +391,9 @@
     </ClCompile>
     <ClCompile Include="unitAstar.cpp">
       <Filter>playGround\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="selectScene.cpp">
+      <Filter>playGround\scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

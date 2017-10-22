@@ -44,7 +44,7 @@ public:
 	void addUnit(unit* newUnit, CountryColor::Enum countryColor);
 	country* getCountry(CountryColor::Enum color);
 
-	
+	void destroyCountryBuilding(CountryColor::Enum color);
 
 
 	//===============================================

@@ -429,3 +429,95 @@ bool commandWindow::setMenuList()
 	if (_menuList.size() > 0) return true;
 	return false;
 }
+
+
+
+
+
+
+
+
+
+
+//=====================================================
+// # 시스템 메시지
+
+HRESULT systemMessage::init()
+{
+	gameObject::init("시스템메시지");
+
+	_state = hide;
+	_timer = 0;
+	_displayTime = 0;
+	_alpha = 0;
+
+	return S_OK;
+}
+
+void systemMessage::release()
+{
+	gameObject::release();
+}
+
+void systemMessage::update()
+{
+	switch (_state)
+	{
+		case systemMessage::hide:
+		break;
+		case systemMessage::appear:
+		{
+			_alpha += 0.05f;
+			if (_alpha >= 1.0f)
+			{
+				_alpha = 1.0f;
+				_state = show; 
+				_timer = 0;
+			}
+		}
+		break;
+		case systemMessage::show:
+		{
+			_timer += TIMEMANAGER->getElapsedTime();
+			if (_timer >= _displayTime)
+			{
+				_state = disappear;
+			}
+		}
+		break;
+		case systemMessage::disappear:
+		{
+			_alpha -= 0.05f;
+			if (_alpha <= 0)
+			{
+				_state = hide;
+			}
+		}
+		break;
+	}
+}
+
+void systemMessage::render()
+{
+	if (_state != hide)
+	{
+		RECT rc = RectMakeCenter(WINSIZEX*0.5f, WINSIZEY*0.5f, WINSIZEX, WINSIZEY*0.2f);
+		float rectangleAlpha = _alpha;
+		if (rectangleAlpha >= 0.5f) rectangleAlpha = 0.5f;
+		IMAGEMANAGER->fillRectangle(rc, D2D1::ColorF::WhiteSmoke, rectangleAlpha);
+		IMAGEMANAGER->drawTextField(rc.left, rc.top, UTIL::string_to_wstring(_text), _color, 30, 
+			rc.right - rc.left, rc.bottom - rc.top, _alpha);
+	}
+}
+
+void systemMessage::showMessage(string text, float displayTime, COLORREF color)
+{
+	if (_state != hide) return;
+
+	_state = appear;
+	_text = text;
+	_displayTime = displayTime;
+	_timer = 0;
+	_color = color;
+	_alpha = 0;
+}
