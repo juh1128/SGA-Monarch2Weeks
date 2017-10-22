@@ -41,51 +41,59 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	_moveSpeed = 1.5f;
 	_frameTimer = 0;
 	_mergeUnit = NULL;
+
+	_commandDestTile = NULL;
+	_commandTargetUnit = NULL;
 	
 	changeState(new unitCreateMotion);
 
-	this->addCallback("대기", [&](tagMessage msg) {
-		terrainTile* tile = (terrainTile*)msg.targetList[0];
-		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
-		this->reserveState(new unitNoneState);
-		this->setAuto(false);
-	});
+	//this->addCallback("대기", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitNoneState);
+	//	this->setAuto(false);
+	//});
 
-	this->addCallback("자동", [&](tagMessage msg) {
-		terrainTile* tile = (terrainTile*)msg.targetList[0];
-		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
-		this->reserveState(new unitNoneState);
-		this->setAuto(true);
-	});
+	//this->addCallback("자동", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitNoneState);
+	//	this->setAuto(true);
+	//});
 
-	this->addCallback("마을 건축", [&](tagMessage msg) {
-		terrainTile* tile = (terrainTile*)msg.targetList[0];
-		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
-		this->reserveState(new unitBuildTown(msg.ptData));
-		this->setAuto(true);
-	});
-	this->addCallback("목책 건축", [&](tagMessage msg) {
-		terrainTile* tile = (terrainTile*)msg.targetList[0];
-		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
-		this->reserveState(new unitNoneState);
-		this->setAuto(true);
-	});
-	this->addCallback("다리 건설", [&](tagMessage msg) {
-		terrainTile* tile = (terrainTile*)msg.targetList[0];
-		this->moveAstar(tile->getIndex().x, tile->getIndex().y);
-		this->reserveState(new unitNoneState);
-		this->setAuto(true);
-	});
+	//this->addCallback("마을 건축", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitBuildTown(msg.ptData));
+	//	this->setAuto(true);
+	//});
+	//this->addCallback("목책 건축", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitNoneState);
+	//	this->setAuto(true);
+	//});
+	//this->addCallback("다리 건설", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitNoneState);
+	//	this->setAuto(true);
+	//});
 
 	this->addCallback("원군", [&](tagMessage msg) {
 		
 		unit* target = (unit*)msg.targetList[0];
+		if (target == this)
+		{
+			return;
+		}
+		this->setCommand(NULL, target, "원군");
+	});
+	this->addCallback("추적", [&](tagMessage msg) {
+
+		unit* target = (unit*)msg.targetList[0];
 		if (target == this) return;
-		this->moveAstar(target->getIndex().x, target->getIndex().y);
-		this->isCanMerge(target);
-		this->setAuto(true);
-		this->setUnitState(UnitState::Merge);
-		
+		this->setCommand(NULL, target, "추적");
 	});
 
 	return S_OK;
@@ -111,45 +119,15 @@ void unit::update()
 
 	imageFrame();
 
-	auto keyboardTest = [&](UnitDirection::DIRECTION dir)
+	if (_commandTargetUnit)
 	{
-		vector2D right = getDirectionVector(dir);
-		vector2D dest = _index + right;
-
-		gameObject* temp = WORLD->getMap()->getTile(dest.x, dest.y);
-
-		vector<gameObject*> vr;
-		vr.push_back(temp);
-
-		this->sendMessage("move", 0, 0, 0, dest.toPoint(), vr);
-		vr.clear();
-	};
-
-	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
-	{
-		keyboardTest(UnitDirection::UNIT_RIGHT);
+		if (!_commandTargetUnit->isLive())
+		{
+			resetCommand();
+		}
 	}
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
-	{
-		keyboardTest(UnitDirection::UNIT_LEFT);
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))
-	{
-		keyboardTest(UnitDirection::UNIT_UP);
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
-	{
-		keyboardTest(UnitDirection::UNIT_DOWN);
-	}
-	//if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-	//{
-		//vector2D temp = WORLD->getMap()->getPickedTile()->getIndex();
-		//moveAstar(temp.x, temp.y);
-	//}
+
 	_unitState->update(*this);
-
-	//pos <-> 인덱스 동기화
-	//syncIndexFromPos();
 
 	//Z오더 상 적절한 타일에게 렌더링을 요청한다.
 	requestRender();
@@ -174,7 +152,13 @@ void unit::render()
 
 		vector2D renderPos = _pos*zoom;
 		renderPos = CAMERA->getRelativeVector2D(renderPos);
-		if (_state == UnitState::Search)
+
+		if (_commandStateName != "")
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, UTIL::string_to_wstring(_commandStateName), 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+		else if (_state == UnitState::Search)
 		{
 			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"탐색", 14, DefaultBrush::white,
 				DWRITE_TEXT_ALIGNMENT_LEADING);
@@ -215,19 +199,6 @@ void unit::changeState(unitState* newstate)
 	_unitState->enter(*this);
 }
 
-void unit::reserveState(unitState * newstate)
-{
-	_reservedState.push_back(newstate);
-}
-
-void unit::removeReserveState()
-{
-	if (_reservedState.size() > 0)
-	{
-		delete _reservedState[0];
-		_reservedState.erase(_reservedState.begin());
-	}
-}
 
 vector2D unit::getDirectionVector(UnitDirection::DIRECTION dir)
 {

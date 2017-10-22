@@ -118,6 +118,10 @@ void unitFight::enter(unit & me)
 		me._unitDirection = UnitDirection::UNIT_UP;
 	else
 		cout << direction.x <<" , "<< direction.y <<"unitFight enter 방향설정 오류" << endl;
+
+	if (_enemyUnit->_commandStateName != "")
+		_enemyUnit->resetCommand();
+	
 }
 
 void unitFight::update(unit & me)

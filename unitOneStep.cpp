@@ -48,33 +48,6 @@ void unitOneStep::update(unit & me)
 		me._isMove = false;
 		me._pos = destPos;
 
-		//WORLD->getMap()->getTile(_oldIndex.x, _oldIndex.y)->deleteUnitOnTile(&me);
-		//WORLD->getMap()->getTile(_destIndex.x, _destIndex.y)->addUnitOnTile(&me);
-
-		//도착했는데 아군 유닛이 있을 경우 병합한다.
-		//vector<unit*> unitList = _destTile->getUnitOnTile();
-		//bool isMerge = false;
-
-		//sort(unitList.begin(), unitList.end(), [](unit* a, unit* b)
-		//{
-		//	if (a->getHealth() < b->getHealth())
-		//		return true;
-		//	return false;
-		//});
-
-		//for (size_t i = 0; i < unitList.size(); ++i)
-		//{
-		//	if (unitList[i]->isLive())
-		//	{
-		//		if (unitList[i] != &me && unitList[i]->getCountryColor() == me._unitColor)
-		//		{
-		//			if (i == 0) continue;
-		//			unitList[i]->isCanMerge(unitList[0]);
-		//			isMerge = true;
-		//			
-		//		}
-		//	}
-		//}
 		return me.changeState(new unitNoneState);
 	}
 	//가는 중

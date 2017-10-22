@@ -36,7 +36,7 @@ private:
 
 	UnitState::Enum		_state;
 	unitState*			_unitState;
-	vector<unitState*>	_reservedState;
+	//vector<unitState*>	_reservedState;
 
 	CountryColor::Enum _unitColor;
 
@@ -55,6 +55,11 @@ private:
 
 	unit* _mergeUnit;
 	vector<terrainTile*> _myTiles;//버그막기용 어쩔수없어
+
+	//유닛 명령 내리기
+	terrainTile* _commandDestTile;
+	unit*		 _commandTargetUnit;
+	string		 _commandStateName;
 
 	friend class unitCreateMotion;
 	friend class unitNoneState;
@@ -75,8 +80,8 @@ public:
 	void render();
 
 	void changeState(unitState* newstate);
-	void reserveState(unitState* newstate);
-	void removeReserveState();	//첫번째 예약된 상태 삭제
+	//void reserveState(unitState* newstate);
+	//void removeReserveState();	//첫번째 예약된 상태 삭제
 	void imageFrame(void);
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
@@ -114,6 +119,20 @@ public:
 	void setAuto(bool autounit) { _isAuto = autounit; }
 	
 	void setUnitState(UnitState::Enum state) { _state = state; }
+	void setCommand(terrainTile* destTile, unit* targetUnit, string stateName)
+	{
+		_commandDestTile = destTile;
+		_commandTargetUnit = targetUnit;
+		_commandStateName = stateName;
+	}
+	void resetCommand()
+	{
+		_commandDestTile = NULL;
+		_commandTargetUnit = NULL;
+		_commandStateName = "";
+	}
+
+
 };
 
 class unitState

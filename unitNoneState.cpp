@@ -31,68 +31,58 @@ void unitNoneState::update(unit & me)
 	////예약 상태 확인
 	//if (me._reservedState.size() > 0)
 	//{
-	//	unitState* reservedState = me._reservedState[0];
-	//	//조건 체크
-	//	bool check = false;
-	//	if (me._reservedState[0]->_stateName == "전투")
-	//	{
-	//		//공격
-	//		unit* enemy = me.isCanAttack();
-	//		if (enemy != NULL)
-	//		{
-	//			check = true;
-	//			//return me.changeState(new unitFight(enemy));
-	//		}
-	//	}
-	//	else if (me._reservedState[0]->_stateName == "머지")
-	//	{
-	//		if (me._mergeUnit != nullptr)
-	//		{
-	//			check = true;
-	//			//return me.changeState(new unitMerge(me._mergeUnit, me));
-	//		}
-	//	}
-	//	else if (me._reservedState[0]->_stateName == "파괴")
-	//	{
-	//		mncObjectBase* nature = me.isCanAttackNature();
-	//		if (nature != nullptr)
-	//		{
-	//			check = true;
-	//			//return me.changeState(new unitDigObject(nature));
-	//		}
+	//	
 
-	//	}
-	//	//건설
-	//	else if (me._reservedState[0]->_stateName == "건설")
-	//	{
-	//		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
-	//		if (me.isBuildableTown(destIndex.toPoint()))
-	//		{
-	//			check = true;
-	//			//return me.changeState(new unitBuildTown(destIndex.toPoint()));
-	//		}
-	//	}
-	//	else if (me._reservedState[0]->_stateName == "한걸음")
-	//	{
-	//		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
-	//		if (me.isMoveable(destIndex.toPoint()))
-	//		{
-	//			check = true;
-	//		}
-	//	}
-	//	else if (me._reservedState[0]->_stateName == "NONE")
-	//	{
-	//		check = true;
-	//	}
-
-	//	if (check)
-	//	{
-	//		me.removeReserveState();
-	//	}
-	//	unitState* reservedState = me._reservedState[0];
+	//	unitState* reserve = me._reservedState[0];
 	//	me._reservedState.erase(me._reservedState.begin());
-	//	me.changeState(reservedState);		
+	//	me.changeState(reserve);
 	//	return;
+	//}
+
+
+	if (me._commandTargetUnit)
+	{		
+		if (me._commandStateName == "추적")
+		{
+			vector2D distance = me._commandTargetUnit->_index - me._index;
+			if (distance.getLength() <= 1)
+			{
+				me.resetCommand();
+				return;
+			}
+		}
+		else
+		{
+			if (me._commandTargetUnit->_index == me._index)
+			{
+				me.resetCommand();
+				return;
+			}
+		}
+
+		deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y), 
+			WORLD->getMap()->getTile(me._commandTargetUnit->_index.x, me._commandTargetUnit->_index.y));
+		if (path.size() > 0)
+		{
+			vector2D pathIndex = path[0]->getIndex();
+			me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
+		}
+		else
+		{
+			cout << "길 못찾음" << endl;
+			me.resetCommand();
+		}
+		return;
+	}
+	//else if (me._commandDestTile)
+	//{
+	//	deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
+	//		WORLD->getMap()->getTile(me._commandDestTile->getIndex().x, me._commandDestTile->getIndex().y));
+	//	if (path.size() > 0)
+	//	{
+	//		vector2D pathIndex = path[0]->getIndex();
+	//		return me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
+	//	}
 	//}
 
 	if (me._isAuto)
