@@ -28,30 +28,22 @@ void unitNoneState::enter(unit & me)
 
 void unitNoneState::update(unit & me)
 {
-	////예약 상태 확인
-	//if (me._reservedState.size() > 0)
-	//{
-	//	
-
-	//	unitState* reserve = me._reservedState[0];
-	//	me._reservedState.erase(me._reservedState.begin());
-	//	me.changeState(reserve);
-	//	return;
-	//}
-
-
+	//플레이어로부터 받은 지시가 있을 경우
+	// - 유닛 관련 명령
 	if (me._commandTargetUnit)
 	{		
 		if (me._commandStateName == "추적")
 		{
 			vector2D distance = me._commandTargetUnit->_index - me._index;
+			//해당 유닛의 1칸 앞에 왔을 때
 			if (distance.getLength() <= 1)
 			{
+				me.changeState(new unitFight(me._commandTargetUnit));
 				me.resetCommand();
 				return;
 			}
 		}
-		else
+		else if(me._commandStateName == "원군")
 		{
 			if (me._commandTargetUnit->_index == me._index)
 			{
@@ -59,7 +51,15 @@ void unitNoneState::update(unit & me)
 				return;
 			}
 		}
+		
+		//싸울 수 있으면 싸운다.
+		unit* enemy = me.isCanAttack();
+		if (enemy != NULL)
+		{
+			return me.changeState(new unitFight(enemy));
+		}
 
+		//길찾기 (유닛 추적)
 		deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y), 
 			WORLD->getMap()->getTile(me._commandTargetUnit->_index.x, me._commandTargetUnit->_index.y));
 		if (path.size() > 0)
@@ -74,6 +74,7 @@ void unitNoneState::update(unit & me)
 		}
 		return;
 	}
+	// - 타일 관련 명령
 	//else if (me._commandDestTile)
 	//{
 	//	deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
@@ -85,6 +86,8 @@ void unitNoneState::update(unit & me)
 	//	}
 	//}
 
+
+	//지시가 없으면 자동모드
 	if (me._isAuto)
 	{
 		//도망
@@ -102,11 +105,11 @@ void unitNoneState::update(unit & me)
 			return me.changeState(new unitFight(enemy));
 		}
 
-		if (me._mergeUnit != nullptr)
-		{
-			return me.changeState(new unitMerge(me._mergeUnit,me));
+		//if (me._mergeUnit != nullptr)
+		//{
+		//	return me.changeState(new unitMerge(me._mergeUnit,me));
 
-		}
+		//}
 		me._state = UnitState::Search;
 
 		mncObjectBase* nature = me.isCanAttackNature();

@@ -118,7 +118,18 @@ void gameObject::update(void)
 		auto iter = _callbackList.find(_messageList[i].text);
 		if (iter != _callbackList.end())
 		{
-			iter->second(_messageList[i]);
+			iter->second.callbackFunc(_messageList[i]);
+
+			//해당 메시지 관찰자들에게 응답 메시지 전달
+			auto& observerList = iter->second.observerList;
+			size_t size = observerList.size();
+			vector<gameObject*> me;
+			me.push_back(this);
+
+			for (size_t i = 0; i < size; ++i)
+			{
+				observerList[i]->sendMessage("observed_" + _messageList[i].text, 0, 0, 0, POINT(), me);
+			}
 		}
 		_messageList.erase(_messageList.begin()+i);
 	}
@@ -182,14 +193,15 @@ void gameObject::setDestroy(float delayTime)
 void gameObject::sendMessage(string text, float delayTime, int data, float data2, POINT ptData, vector<gameObject*> targetList)
 {
 	//딜레이타임이 없으면 바로 메시지 벡터에 넣는다.
+	tagMessage msg(text, delayTime, data, data2, ptData, targetList);
 	if (delayTime == 0.0f)
 	{
-		_messageList.emplace_back(text, 0.0f, data, data2, ptData, targetList);
+		_messageList.push_back(msg);
 	}
 	//딜레이타임이 있으면 메시지 예약 리스트에 넣는다.
 	else
 	{
-		_reservedMessage.emplace_back(text, delayTime, data, data2, ptData, targetList);
+		_reservedMessage.push_back(msg);
 	}
 }
 
@@ -203,6 +215,51 @@ void gameObject::sendMessage(tagMessage msg)
 	{
 		_reservedMessage.emplace_back(msg);
 	}
+}
+
+void gameObject::addCallback(string msgName, std::function<void(tagMessage)> callbackFunc)
+{
+	auto& cbInfo = _callbackList[msgName];
+	cbInfo.callbackFunc = callbackFunc;
+}
+
+void gameObject::addObserver(string observeMessage, gameObject * observer)
+{	
+	auto& cbInfo = _callbackList[observeMessage];
+	//중복 체크
+	for (size_t i = 0; i < cbInfo.observerList.size(); ++i)
+	{
+		if (cbInfo.observerList[i] == observer)
+		{
+			return;
+		}
+	}
+	cbInfo.observerList.push_back(observer);
+}
+
+void gameObject::removeObserver(string observeMessage, gameObject * observer)
+{
+	auto& cbInfo = _callbackList[observeMessage];
+	//콜백 정보가 비어있다면 아무것도 안함.
+	if (cbInfo.observerList.size() == 0 && cbInfo.callbackFunc == NULL)
+	{
+		return;
+	}
+
+	size_t size = cbInfo.observerList.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		if (cbInfo.observerList[i] == observer)
+		{
+			cbInfo.observerList.erase(cbInfo.observerList.begin() + i);
+			break;
+		}
+	}
+}
+
+vector<gameObject*> gameObject::getObserverList(string observeMessage)
+{
+	return _callbackList[observeMessage].observerList;
 }
 
 void gameObject::setOriginSize()

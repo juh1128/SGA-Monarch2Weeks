@@ -24,7 +24,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 	_pos = _pos / CAMERA->getZoom();
 	_index = index;
-	//_height = height;
+
 	_hp = 100;
 	_isStarUnit = false;
 
@@ -80,20 +80,45 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	//	this->setAuto(true);
 	//});
 
-	this->addCallback("원군", [&](tagMessage msg) {
-		
+	//==================================================
+	// ## 원군 명령
+	this->addCallback("원군", [&](tagMessage msg) {	
 		unit* target = (unit*)msg.targetList[0];
 		if (target == this)
 		{
 			return;
 		}
-		this->setCommand(NULL, target, "원군");
-	});
-	this->addCallback("추적", [&](tagMessage msg) {
+		//대상에게 Merge 메시지가 발동하면, 나한테 알려달라고 등록한다.
+		//기존에 관찰자 등록을 했던 타겟이 있으면, 해제한다.
+		target->addObserver("Merge", this);
 
+		unit* oldTarget = this->getCommandTarget();
+		if (oldTarget)
+			oldTarget->removeObserver("Merge", this);
+
+		this->setCommand(NULL, target, "원군");
+
+	});
+	//==================================================
+	// ## 추적 명령
+	this->addCallback("추적", [&](tagMessage msg) {
 		unit* target = (unit*)msg.targetList[0];
-		if (target == this) return;
+		if (target == this) return;		
+
+		target->addObserver("Merge", this);
+		unit* oldTarget = this->getCommandTarget();
+		if (oldTarget)
+			oldTarget->removeObserver("Merge", this);
+
 		this->setCommand(NULL, target, "추적");
+	});
+	//==================================================
+	// ## 쫒아가던 유닛이 병합되어서 사라졌을 경우 처리
+	this->addCallback("observed_Merge", [this](tagMessage msg)
+	{
+		//자기가 쫒아가던 유닛이 병합되서 사라졌을 경우, 다른 대상으로 변경한다.
+		this->setCommand(NULL, (unit*)msg.targetList[0], this->getCommandName());
+		msg.targetList[0]->addObserver("Merge", this);
 	});
 
 	return S_OK;
@@ -102,8 +127,6 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 void unit::release()
 {
 	//유닛이 삭제될 때 자기가 서있는 타일에 등록 해제함.
-	//syncIndexFromPos();
-	//WORLD->getMap()->getTile(_index.x, _index.y)->deleteUnitOnTile(this);
 	for (size_t i = 0; i < _myTiles.size(); ++i)
 	{
 		_myTiles[i]->deleteUnitOnTile(this);
@@ -404,12 +427,3 @@ string unit::getColorString()
 	}
 	return color;
 }
-
-unit * unit::isCanCombin()
-{
-
-
-	return nullptr;
-}
-
-

@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "unit.h"
 
-void unit::moveAstar(int x, int y)
-{
+//void unit::moveAstar(int x, int y)
+//{
 	//for (int i = 0; i < _reservedState.size(); ++i)
 	//{
 	//	delete _reservedState[i];
@@ -19,4 +19,4 @@ void unit::moveAstar(int x, int y)
 	//{
 		//reserveState(new unitOneStep(path[i]->getIndex().x,path[i]->getIndex().y));
 	//}
-}
+//}

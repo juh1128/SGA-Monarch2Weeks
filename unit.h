@@ -26,6 +26,7 @@ namespace UnitState
 	};
 }
 
+
 class unit : public gameObject
 {
 private:
@@ -36,8 +37,6 @@ private:
 
 	UnitState::Enum		_state;
 	unitState*			_unitState;
-	//vector<unitState*>	_reservedState;
-
 	CountryColor::Enum _unitColor;
 
 	image* _lv[4];
@@ -54,9 +53,10 @@ private:
 	UnitDirection::DIRECTION _unitDirection;
 
 	unit* _mergeUnit;
-	vector<terrainTile*> _myTiles;//버그막기용 어쩔수없어
+	vector<terrainTile*> _myTiles;
 
 	//유닛 명령 내리기
+	float		 _commandTime;
 	terrainTile* _commandDestTile;
 	unit*		 _commandTargetUnit;
 	string		 _commandStateName;
@@ -80,8 +80,6 @@ public:
 	void render();
 
 	void changeState(unitState* newstate);
-	//void reserveState(unitState* newstate);
-	//void removeReserveState();	//첫번째 예약된 상태 삭제
 	void imageFrame(void);
 
 	vector2D getDirectionVector(UnitDirection::DIRECTION dir);
@@ -110,28 +108,35 @@ public:
 	unit* isCanRun();
 	unit* isCanAttack();
 	mncObjectBase* isCanAttackNature();
-	unit* isCanCombin();
 
 	unit* isCanMerge(unit* mergeunit);
-
-	void moveAstar(int x, int y);
 
 	void setAuto(bool autounit) { _isAuto = autounit; }
 	
 	void setUnitState(UnitState::Enum state) { _state = state; }
 	void setCommand(terrainTile* destTile, unit* targetUnit, string stateName)
 	{
+		_commandTime = TIMEMANAGER->getWorldTime();
 		_commandDestTile = destTile;
 		_commandTargetUnit = targetUnit;
 		_commandStateName = stateName;
 	}
 	void resetCommand()
 	{
+		_commandTime = 0;
 		_commandDestTile = NULL;
 		_commandTargetUnit = NULL;
 		_commandStateName = "";
 	}
-
+	//명령을 받은 시간을 반환한다. (명령이 없으면 false)
+	//명령이 원군일 경우 그냥 0.5가 반환된다.
+	float getCommandTime()
+	{
+		if (_commandStateName == "원군") return 0.5f;
+		return _commandTime;
+	}
+	string getCommandName() { return _commandStateName; }
+	unit* getCommandTarget() { return _commandTargetUnit; }
 
 };
 

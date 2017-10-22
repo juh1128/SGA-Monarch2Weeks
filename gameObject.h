@@ -10,6 +10,15 @@ namespace Direction
 	};
 }
 
+class gameObject;
+struct callbackInfo
+{
+	vector<gameObject*> observerList;	//관찰자 리스트
+	std::function<void(tagMessage)> callbackFunc;	//콜백 함수
+
+	callbackInfo() { callbackFunc = NULL; }
+};
+
 class gameObject : public gameNode
 {
 private:
@@ -20,7 +29,8 @@ private:
 	//메시지 처리 관련
 	vector<tagMessage> _reservedMessage;
 	vector<tagMessage> _messageList;
-	unordered_map<string, std::function<void(tagMessage)>> _callbackList;
+	//unordered_map<string, std::function<void(tagMessage)>> _callbackList;
+	unordered_map<string, callbackInfo> _callbackList;
 
 protected:
 	
@@ -63,10 +73,13 @@ public:
 	void sendMessage(string text, float delayTime = 0.0f, int data = 0, float data2 = 0.0f, POINT ptData = POINT(), vector<gameObject*> targetList = vector<gameObject*>());
 	void sendMessage(tagMessage msg);
 	//콜백 함수 저장
-	void addCallback(string msgName, std::function<void(tagMessage)> callbackFunc)
-	{
-		_callbackList.insert(make_pair(msgName, callbackFunc));
-	}
+	void addCallback(string msgName, std::function<void(tagMessage)> callbackFunc);
+	
+	//===============================
+	// ## 관찰자 패턴
+	void addObserver(string observeMessage, gameObject* observer);
+	void removeObserver(string observeMessage, gameObject* observer);
+	vector<gameObject*> getObserverList(string observeMessage);
 
 	//각종 이미지 처리
 	void setSize(int width, int height) { _size.x = width; _size.y = height; }

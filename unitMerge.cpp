@@ -85,7 +85,7 @@ void unitMerge::enter(unit& me)
 
 		//머지 상대의 인덱스가 바뀌는지 체크할것 코딩해야됨
 
-		me.moveAstar(me._mergeUnit->_index.x,me._mergeUnit->_index.y);
+		//me.moveAstar(me._mergeUnit->_index.x,me._mergeUnit->_index.y);
 
 		////방향정하기
 		//int xDistance = UTIL::getDistance(me._index.x, 0, me._mergeUnit->_index.x, 0);
