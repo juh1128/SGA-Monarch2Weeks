@@ -55,14 +55,14 @@ void world::update()
 	//terrainTile* tile = WORLD->getMap()->getPickedTile();
 	//if (tile)
 	//{
-	//	gameObject* obj = tile->getObjectOnTile();
-	//	if (obj)
-	//	{
-	//		if (obj->_name == "마을" || obj->_name == "성문")
-	//		{
-	//			((mncObjectBase*)obj)->addHp(-100);
-	//		}
-	//	}
+		//gameObject* obj = tile->getObjectOnTile();
+		//if (obj)
+		//{
+		//	if (obj->_name == "마을" || obj->_name == "성문")
+		//	{
+		//		((mncObjectBase*)obj)->addHp(-100);
+		//	}
+		//}
 	//}
 }
 
