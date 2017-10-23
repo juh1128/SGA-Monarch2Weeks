@@ -186,9 +186,6 @@
     <ClInclude Include="imageManager.h">
       <Filter>2DGameFramework\Manager\image</Filter>
     </ClInclude>
-    <ClInclude Include="animation.h">
-      <Filter>2DGameFramework\image\animation</Filter>
-    </ClInclude>
     <ClInclude Include="tileMap.h">
       <Filter>2DGameFramework\sceneBase\tileMap</Filter>
     </ClInclude>
@@ -227,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="startscene.h">
       <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="animation.h">
+      <Filter>2DGameFramework\image\animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -305,9 +305,6 @@
     <ClCompile Include="imageManager.cpp">
       <Filter>2DGameFramework\Manager\image</Filter>
     </ClCompile>
-    <ClCompile Include="animation.cpp">
-      <Filter>2DGameFramework\image\animation</Filter>
-    </ClCompile>
     <ClCompile Include="tileMap.cpp">
       <Filter>2DGameFramework\sceneBase\tileMap</Filter>
     </ClCompile>
@@ -376,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="startscene.cpp">
       <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="animation.cpp">
+      <Filter>2DGameFramework\image\animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

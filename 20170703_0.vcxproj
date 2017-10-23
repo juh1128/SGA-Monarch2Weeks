@@ -96,9 +96,6 @@
     <ClInclude Include="objectFactory.h" />
     <ClInclude Include="pathFinder.h" />
     <ClInclude Include="playGround.h" />
-    <ClInclude Include="progressBar.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="sceneBase.h" />
@@ -141,9 +138,6 @@
     <ClCompile Include="objectFactory.cpp" />
     <ClCompile Include="pathFinder.cpp" />
     <ClCompile Include="playGround.cpp" />
-    <ClCompile Include="progressBar.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="rock.cpp" />
     <ClCompile Include="sceneBase.cpp" />
     <ClCompile Include="sceneManager.cpp" />

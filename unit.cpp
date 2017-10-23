@@ -83,7 +83,10 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 			}
 		}
-		this->_commandDestIndex = moveableIndex[minIndex];
+		if (moveableIndex.size() > 0)
+			this->_commandDestIndex = moveableIndex[minIndex];
+		else
+			this->resetCommand();
 	});
 
 	this->addCallback("마을 건축", [&](tagMessage msg) {
@@ -122,7 +125,10 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 
 			}
 		}
-		this->_commandDestIndex = moveableIndex[minIndex];
+		if (moveableIndex.size() > 0)
+			this->_commandDestIndex = moveableIndex[minIndex];
+		else
+			this->resetCommand();
 	});
 
 	//수리
