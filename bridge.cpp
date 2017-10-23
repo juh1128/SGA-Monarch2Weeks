@@ -77,6 +77,6 @@ void bridge::render()
 
 	_image->setAlphaOption(_alpha);
 	_image->setScaleOption(vector2D(zoom, zoom));
-	_image->frameRender((_pos.x)*zoom, (_pos.y)*zoom + imageHalfHeight, renderFrame, 0, Pivot::CENTER);
+	_image->frameRender((_pos.x)*zoom, (_pos.y-10)*zoom + imageHalfHeight, renderFrame, 0, Pivot::CENTER);
 
 }

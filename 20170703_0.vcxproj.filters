@@ -111,9 +111,6 @@
     <ClInclude Include="progressBar.h">
       <Filter>2DGameFramework\progressBar</Filter>
     </ClInclude>
-    <ClInclude Include="attackHitbox.h">
-      <Filter>2DGameFramework\trigger</Filter>
-    </ClInclude>
     <ClInclude Include="testScene.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
@@ -126,14 +123,8 @@
     <ClInclude Include="tagMessage.h">
       <Filter>2DGameFramework\gameObject</Filter>
     </ClInclude>
-    <ClInclude Include="effect.h">
-      <Filter>2DGameFramework\image\effect</Filter>
-    </ClInclude>
     <ClInclude Include="cameraManager.h">
       <Filter>2DGameFramework\Manager\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="effectManager.h">
-      <Filter>2DGameFramework\Manager\effect</Filter>
     </ClInclude>
     <ClInclude Include="keyManager.h">
       <Filter>2DGameFramework\Manager\key</Filter>
@@ -158,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="timer.h">
       <Filter>2DGameFramework\timer</Filter>
-    </ClInclude>
-    <ClInclude Include="trigger.h">
-      <Filter>2DGameFramework\trigger</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>2DGameFramework\UTIL</Filter>
@@ -251,9 +239,6 @@
     <ClCompile Include="progressBar.cpp">
       <Filter>2DGameFramework\progressBar</Filter>
     </ClCompile>
-    <ClCompile Include="attackHitbox.cpp">
-      <Filter>2DGameFramework\trigger</Filter>
-    </ClCompile>
     <ClCompile Include="testScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
@@ -266,14 +251,8 @@
     <ClCompile Include="tagMessage.cpp">
       <Filter>2DGameFramework\gameObject</Filter>
     </ClCompile>
-    <ClCompile Include="effect.cpp">
-      <Filter>2DGameFramework\image\effect</Filter>
-    </ClCompile>
     <ClCompile Include="cameraManager.cpp">
       <Filter>2DGameFramework\Manager\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="effectManager.cpp">
-      <Filter>2DGameFramework\Manager\effect</Filter>
     </ClCompile>
     <ClCompile Include="keyManager.cpp">
       <Filter>2DGameFramework\Manager\key</Filter>
@@ -295,9 +274,6 @@
     </ClCompile>
     <ClCompile Include="timer.cpp">
       <Filter>2DGameFramework\timer</Filter>
-    </ClCompile>
-    <ClCompile Include="trigger.cpp">
-      <Filter>2DGameFramework\trigger</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>2DGameFramework\UTIL</Filter>

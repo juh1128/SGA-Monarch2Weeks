@@ -80,21 +80,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
-    <ClInclude Include="attackHitbox.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="bridge.h" />
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="castle.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="country.h" />
-    <ClInclude Include="effect.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="effectManager.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="image.h" />
@@ -125,9 +116,6 @@
     <ClInclude Include="timer.h" />
     <ClInclude Include="town.h" />
     <ClInclude Include="tree.h" />
-    <ClInclude Include="trigger.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="unit.h" />
     <ClInclude Include="userInterface.h" />
     <ClInclude Include="utils.h" />
@@ -137,20 +125,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
-    <ClCompile Include="attackHitbox.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="bridge.cpp" />
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="castle.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="country.cpp" />
-    <ClCompile Include="effect.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="effectManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="image.cpp" />
@@ -183,9 +162,6 @@
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="town.cpp" />
     <ClCompile Include="tree.cpp" />
-    <ClCompile Include="trigger.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unitBuildTown.cpp" />
     <ClCompile Include="unitMerge.cpp" />
