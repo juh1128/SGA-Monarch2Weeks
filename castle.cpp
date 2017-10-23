@@ -156,7 +156,7 @@ string castle::getSpriteKey(CountryColor::Enum color)
 // - 성문
 HRESULT castleWall::init(int xIndex, int yIndex, bool isLeft, CountryColor::Enum color)
 {
-	mncObjectBase::init("성문", "castle", xIndex, yIndex, 250, false);
+	mncObjectBase::init("성문", "castle", xIndex, yIndex, 500, false);
 
 	_countryColor = color;
 
@@ -185,6 +185,17 @@ void castleWall::release()
 void castleWall::update()
 {
 	mncObjectBase::update();
+
+	//성문 자동수리
+	if (_hp < _maxHp)
+	{
+		//국고에서 돈을 가져옴.
+		if (WORLD->getCountry(_countryColor)->getGold() >= 10)
+		{
+			WORLD->getCountry(_countryColor)->addGold(-10);
+			_hp += 10;
+		}
+	}
 }
 
 void castleWall::render()
