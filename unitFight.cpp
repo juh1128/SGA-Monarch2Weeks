@@ -39,8 +39,6 @@ unit* unit::isCanAttack()
 		return false;
 	});
 
-	if(this->getCountryColor() == CountryColor::BLUE)
-		cout << _index.x <<" , "<< _index.y << enemy[0]->getColorString() << endl;
 
 	vector2D direction = enemy[0]->_index - _index;
 

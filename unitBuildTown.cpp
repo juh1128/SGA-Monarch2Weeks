@@ -210,6 +210,15 @@ mncObjectBase* unit::searchObject()
 	vector2D tileCount = map->getTileCount();
 
 	
+	if (_commandStateName == "수리")
+	{
+		mncObjectBase* comobj = (mncObjectBase*)_commandDestTile->getObjectOnTile();
+		if (comobj)
+		{
+			return comobj;
+		}
+	}
+
 	for (int i = 0; i < 4; ++i)
 	{
 		vector2D direction = _index + getDirectionVector(UnitDirection::DIRECTION(i));
@@ -230,6 +239,13 @@ mncObjectBase* unit::searchObject()
 				mncObjectBase* obj = (mncObjectBase*)onObject;
 				// - 돌은 부술 수 없다.
 				if (onObject->_name == "목책")
+				{
+					if (obj->getHp() != obj->getMaxHp())
+					{
+						nature.push_back(obj);
+					}
+				}
+				if (onObject->_name == "다리")
 				{
 					if (obj->getHp() != obj->getMaxHp())
 					{

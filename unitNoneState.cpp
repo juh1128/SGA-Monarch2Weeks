@@ -149,7 +149,30 @@ void unitNoneState::update(unit & me)
 				return;
 			}
 		}
+		else if (me._commandStateName == "수리")
+		{
+			//목적지 타일에 이미 다리가 건설되었는지 확인
+			mncObjectBase* onObject = (mncObjectBase*)me._commandDestTile->getObjectOnTile();
+			if (!onObject)
+			{
+				return me.resetCommand();
+			}
+			else if (onObject)
+			{
+				if (!onObject->isLive() || onObject->getHp() == onObject->getMaxHp())
+				{
+					return me.resetCommand();
+				}
+			}
+			//도착!
+			if (me._commandDestIndex == me._index)
+			{
+				me.changeState(new unitRepair(onObject));
+				me.resetCommand();
+				return;
+			}
 
+		}
 		deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
 			WORLD->getMap()->getTile(me._commandDestIndex.x, me._commandDestIndex.y));
 		if (path.size() > 0)
