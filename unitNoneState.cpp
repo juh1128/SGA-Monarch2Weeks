@@ -83,7 +83,7 @@ void unitNoneState::update(unit & me)
 		}
 		else if (me._commandStateName == "파괴")
 		{
-			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
+			vector2D distance = vector2D(me._commandDestIndex.toPoint()) - me._index;
 			//해당 타일의 1칸 앞에 왔을 때
 			if (distance.getLength() <= 1)
 			{
@@ -95,46 +95,11 @@ void unitNoneState::update(unit & me)
 				me.resetCommand();
 				return;
 			}
-			//이동가능한 타일 담기
-			vector2D dest = me._commandDestTile->getIndex();
-			vector<vector2D> moveableIndex;
-			for (int i = 0; i < 4; ++i)
-			{
-				vector2D direct = dest + me.getDirectionVector((UnitDirection::DIRECTION)i);
-				if (me.isMoveable(direct.toPoint()))
-					moveableIndex.push_back(direct);
-			}
-			//담은 타일에서 가장 가까운 곳을 넘김
-			int minIndex = 0;
-			if (moveableIndex.size() > 0)
-			{
-				for (int i = 1; i < moveableIndex.size(); ++i)
-				{
-					if (moveableIndex[i].getLength() < moveableIndex[minIndex].getLength())
-					{
-						minIndex = i;
-					}
-
-				}
-			}
-
-			deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
-				WORLD->getMap()->getTile(moveableIndex[minIndex].x, moveableIndex[minIndex].y));
-			if (path.size() > 0)
-			{
-				vector2D pathIndex = path[0]->getIndex();
-				return me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
-			}
-			else if (path.size() == 0)
-			{
-				me.resetCommand();
-			}
-			return;
 		}
 		else if (me._commandStateName == "마을 건축")
 		{
 			//목적지 타일이 건설 가능한 지를 확인
-			if (!me.isBuildableTown(me._commandDestTile->getIndex())) return me.resetCommand();
+			if (!me.isBuildableTown(me._commandDestIndex.toPoint())) return me.resetCommand();
 
 			//목적지 타일과의 거리 계산
 			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
@@ -150,7 +115,7 @@ void unitNoneState::update(unit & me)
 		{
 
 			//목적지 타일이 건설 가능한 지를 확인
-			if (!me.isBuildableTown(me._commandDestTile->getIndex())) return me.resetCommand();
+			if (!me.isBuildableTown(me._commandDestIndex.toPoint())) return me.resetCommand();
 
 			//목적지 타일과의 거리 계산
 			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
@@ -175,7 +140,7 @@ void unitNoneState::update(unit & me)
 			}
 
 			//목적지 타일과의 거리 계산
-			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
+			vector2D distance = vector2D(me._commandDestIndex.toPoint()) - me._index;
 			//해당 타일의 1칸 앞에 왔을 때
 			if (distance.getLength() <= 1)
 			{
@@ -183,50 +148,18 @@ void unitNoneState::update(unit & me)
 				me.resetCommand();
 				return;
 			}
-			//이동가능한 타일 담기
-			vector2D dest = me._commandDestTile->getIndex();
-			vector<vector2D> moveableIndex;
-			for (int i = 0; i < 4; ++i)
-			{
-				vector2D direct = dest + me.getDirectionVector((UnitDirection::DIRECTION)i);
-				if (me.isMoveable(direct.toPoint()))
-					moveableIndex.push_back(direct);
-			}
-			//담은 타일에서 가장 가까운 곳을 넘김
-			int minIndex = 0;
-			if (moveableIndex.size() > 0)
-			{
-				for (int i = 1; i < moveableIndex.size(); ++i)
-				{
-					if (moveableIndex[i].getLength() < moveableIndex[minIndex].getLength())
-					{
-						minIndex = i;
-					}
-
-				}
-			}
-
-			deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
-				WORLD->getMap()->getTile(moveableIndex[minIndex].x, moveableIndex[minIndex].y));
-			if (path.size() > 0)
-			{
-				vector2D pathIndex = path[0]->getIndex();
-				return me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
-			}
-			else if (path.size() == 0)
-			{
-				me.resetCommand();
-			}
-			return;
-
 		}
 
 		deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
-			WORLD->getMap()->getTile(me._commandDestTile->getIndex().x, me._commandDestTile->getIndex().y));
+			WORLD->getMap()->getTile(me._commandDestIndex.x, me._commandDestIndex.y));
 		if (path.size() > 0)
 		{
 			vector2D pathIndex = path[0]->getIndex();
 			return me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
+		}
+		else
+		{
+			me.resetCommand();
 		}
 	}
 

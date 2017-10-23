@@ -41,10 +41,13 @@ void startscene::update()
 	else (click = false);
 	
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && click == true && PtInRect(&rc_1, _ptMouse))
+	{
 		SCENEMANAGER->pushScene(new testScene);
+		SOUNDMANAGER->stop("titleBgm");
+	}
 	
 
-	if(_frame < 30)
+	if(_frame < 22)
 		_frame = ++_frame;
 
 }
@@ -55,7 +58,7 @@ void startscene::render()
 
 	IMAGEMANAGER->findImage("titleBack")->setSizeOption(vector2D(WINSIZEX, WINSIZEY));
 	IMAGEMANAGER->findImage("titleBack")->render(0, 0, Pivot::LEFT_TOP, false);
-	IMAGEMANAGER->findImage("title")->frameRender(WINSIZEX/2, 100, 0, _frame, Pivot::CENTER, false);
+	IMAGEMANAGER->findImage("title")->frameRender(WINSIZEX/2, 250, 0, _frame, Pivot::CENTER, false);
 
 	if (word == true)
 	{

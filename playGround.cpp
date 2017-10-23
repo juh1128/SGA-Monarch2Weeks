@@ -40,7 +40,7 @@ HRESULT playGround::init(void)
 	objectFactory::initUnitImage();
 
 	// - 오브젝트
-	IMAGEMANAGER->addFrameImage("bridge", L"resource/object/bridge.png", 2, 1);
+	IMAGEMANAGER->addFrameImage("bridge", L"resource/object/bridge.png", 4, 1);
 	IMAGEMANAGER->addFrameImage("castle", L"resource/object/castle.png", 4, 1);
 	IMAGEMANAGER->addFrameImage("farmLand", L"resource/object/farmLand.png", 4, 1);
 	IMAGEMANAGER->addFrameImage("town", L"resource/object/town.png", 4, 1);
@@ -54,7 +54,7 @@ HRESULT playGround::init(void)
 	SOUNDMANAGER->addSound("titleBgm", "resource/bgm/select.mp3", true, true);
 
 	//op 
-	IMAGEMANAGER->addFrameImage("title", L"resource/startscene/O_001.png", 1, 50, false);
+	IMAGEMANAGER->addFrameImage("title", L"resource/startscene/O_001.png", 1, 23, false);
 
 
 

@@ -60,6 +60,30 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	this->addCallback("파괴", [&](tagMessage msg) {
 		terrainTile* tile = (terrainTile*)msg.targetList[0];
 		this->setCommand(tile, NULL, "파괴");
+
+		//이동가능한 타일 담기
+		vector2D dest = this->_commandDestTile->getIndex();
+		vector<vector2D> moveableIndex;
+		for (int i = 0; i < 4; ++i)
+		{
+			vector2D direct = dest + this->getDirectionVector((UnitDirection::DIRECTION)i);
+			if (this->isMoveable(direct.toPoint()))
+				moveableIndex.push_back(direct);
+		}
+		//담은 타일에서 가장 가까운 곳을 넘김
+		int minIndex = 0;
+		if (moveableIndex.size() > 0)
+		{
+			for (int i = 1; i < moveableIndex.size(); ++i)
+			{
+				if (moveableIndex[i].getLength() < moveableIndex[minIndex].getLength())
+				{
+					minIndex = i;
+				}
+
+			}
+		}
+		this->_commandDestIndex = moveableIndex[minIndex];
 	});
 
 	this->addCallback("마을 건축", [&](tagMessage msg) {
@@ -75,6 +99,30 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	this->addCallback("다리 건설", [&](tagMessage msg) {
 		terrainTile* tile = (terrainTile*)msg.targetList[0];
 		this->setCommand(tile, NULL, "다리 건설");
+
+		//이동가능한 타일 담기
+		vector2D dest = this->_commandDestTile->getIndex();
+		vector<vector2D> moveableIndex;
+		for (int i = 0; i < 4; ++i)
+		{
+			vector2D direct = dest + this->getDirectionVector((UnitDirection::DIRECTION)i);
+			if (this->isMoveable(direct.toPoint()))
+				moveableIndex.push_back(direct);
+		}
+		//담은 타일에서 가장 가까운 곳을 넘김
+		int minIndex = 0;
+		if (moveableIndex.size() > 0)
+		{
+			for (int i = 1; i < moveableIndex.size(); ++i)
+			{
+				if (moveableIndex[i].getLength() < moveableIndex[minIndex].getLength())
+				{
+					minIndex = i;
+				}
+
+			}
+		}
+		this->_commandDestIndex = moveableIndex[minIndex];
 	});
 
 	//==================================================
@@ -147,7 +195,7 @@ void unit::update()
 			resetCommand();
 		}
 	}
-	else if (_commandDestTile)
+	if (_commandDestTile)
 	{
 		gameObject* obj = _commandDestTile->getObjectOnTile();
 		if (obj)

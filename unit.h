@@ -57,6 +57,7 @@ private:
 
 	//유닛 명령 내리기
 	float		 _commandTime;
+	vector2D	 _commandDestIndex;
 	terrainTile* _commandDestTile;
 	unit*		 _commandTargetUnit;
 	string		 _commandStateName;
@@ -123,6 +124,9 @@ public:
 		_commandDestTile = destTile;
 		_commandTargetUnit = targetUnit;
 		_commandStateName = stateName;
+		
+		if (destTile)
+			_commandDestIndex = destTile->getIndex();
 	}
 	void resetCommand()
 	{
@@ -130,6 +134,8 @@ public:
 		_commandDestTile = NULL;
 		_commandTargetUnit = NULL;
 		_commandStateName = "";
+		_commandDestIndex.x = 0;
+		_commandDestIndex.y = 0;
 	}
 	//명령을 받은 시간을 반환한다. (명령이 없으면 false)
 	//명령이 원군일 경우 그냥 0.5가 반환된다.
