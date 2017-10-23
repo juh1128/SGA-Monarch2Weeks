@@ -19,10 +19,10 @@ HRESULT town::init(int xIndex, int yIndex, CountryColor::Enum color)
 	mncObjectBase::init("¸¶À»", "town", xIndex, yIndex, 50, true);
 	_frame = color;
 
-	_hp = 50;
 	_farmTimer = 0;
 	_taxTimer = 0;
 	_townIncomeTimer = 0;
+	_cost = 100;
 
 	_countryColor = color;
 	WORLD->getCountry(_countryColor)->addTown();

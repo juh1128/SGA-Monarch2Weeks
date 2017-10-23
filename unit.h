@@ -22,7 +22,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		Stop, Search, CreateMotion, Fight, Destroy, Run, BuildTown, Merge, End
+		Stop, Search, CreateMotion, Fight, Destroy, Run, BuildTown, NoMoney, Merge, End
 	};
 }
 
@@ -65,6 +65,7 @@ private:
 	friend class unitNoneState;
 	friend class unitOneStep;
 	friend class unitBuildTown;
+	friend class unitBuildObject;
 	friend class unitRun;
 	friend class unitFight;
 	friend class unitMerge;
@@ -204,6 +205,24 @@ public:
 	virtual void update(unit& me);
 };
 
+class unitBuildObject : public unitState
+{
+private:
+	terrainTile* _destTile;
+	string _key;
+	mncObjectBase* _obj;
+	int _frameTimer;
+public:
+	unitBuildObject(terrainTile* tile, string objectKey)
+	{
+		_destTile = tile;
+		_key = objectKey;
+		_stateName = "°Ç¼³";
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
+};
+
 class unitCreateMotion : public unitState
 {
 private:
@@ -252,6 +271,7 @@ public:
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
 };
+
 class unitDigObject : public unitState
 {
 private:
@@ -270,6 +290,7 @@ public:
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
 };
+
 class unitMerge : public unitState
 {
 private:

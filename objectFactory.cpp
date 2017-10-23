@@ -40,15 +40,45 @@ gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 		newObj = new town;
 		((town*)newObj)->init(xIndex, yIndex, CountryColor::GREEN);
 	}
-	else if (name == "bridge")
+	//다리
+	else if (name == "redBridge")
+	{
+		//((bridge*)newObj)->setMaxHp(150);
+	}
+	else if (name == "blueBridge")
 	{
 
 	}
-	else if (name == "wall")
+	else if (name == "whiteBridge")
+	{
+
+	}
+	else if (name == "greenBridge")
+	{
+
+	}
+	//목책
+	else if (name == "redWall")
 	{
 		newObj = new wall;
-		((wall*)newObj)->init(xIndex, yIndex);
+		((wall*)newObj)->init(xIndex, yIndex, CountryColor::RED);
 	}
+	else if (name == "blueWall")
+	{
+		newObj = new wall;
+		((wall*)newObj)->init(xIndex, yIndex, CountryColor::BLUE);
+	}
+	else if (name == "whiteWall")
+	{
+		newObj = new wall;
+		((wall*)newObj)->init(xIndex, yIndex, CountryColor::WHITE);
+	}
+	else if (name == "greenWall")
+	{
+		newObj = new wall;
+		((wall*)newObj)->init(xIndex, yIndex, CountryColor::GREEN);
+	}
+	//기타
 	else if (name == "tree")
 	{
 		newObj = new tree;

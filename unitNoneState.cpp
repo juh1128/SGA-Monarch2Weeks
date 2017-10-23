@@ -95,6 +95,36 @@ void unitNoneState::update(unit & me)
 				return;
 			}
 		}
+		else if (me._commandStateName == "마을 건축")
+		{
+			//목적지 타일이 건설 가능한 지를 확인
+			if (!me._commandDestTile->isBuildable()) return me.resetCommand();
+
+			//목적지 타일과의 거리 계산
+			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
+			//해당 타일의 1칸 앞에 왔을 때
+			if (distance.getLength() <= 1)
+			{
+				me.changeState(new unitBuildTown(me._commandDestTile->getIndex()));
+				me.resetCommand();
+				return;
+			}
+		}
+		else if (me._commandStateName == "목책 건축")
+		{
+			//목적지 타일이 건설 가능한 지를 확인
+			if (!me._commandDestTile->isBuildable()) return me.resetCommand();
+
+			//목적지 타일과의 거리 계산
+			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
+			//해당 타일의 1칸 앞에 왔을 때
+			if (distance.getLength() <= 1)
+			{
+				me.changeState(new unitBuildObject(me._commandDestTile,"Wall"));
+				me.resetCommand();
+				return;
+			}
+		}
 
 		deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
 			WORLD->getMap()->getTile(me._commandDestTile->getIndex().x, me._commandDestTile->getIndex().y));
@@ -114,7 +144,6 @@ void unitNoneState::update(unit & me)
 		//if (dangerousUnit != NULL)
 		//{
 		//	return me.changeState(new unitRun(dangerousUnit));
-
 		//}
 
 		//공격

@@ -5,6 +5,8 @@ HRESULT mncObjectBase::init(string name, string key, int xIndex, int yIndex, int
 {
 	_index.x = xIndex;
 	_index.y = yIndex;
+	_maxHp = hp;
+	_cost = hp;
 
 	_countryColor = CountryColor::NATURE;
 

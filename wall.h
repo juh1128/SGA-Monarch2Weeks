@@ -11,7 +11,7 @@ public:
 	wall() {}
 	virtual ~wall() {}
 
-	HRESULT init(int xIndex, int yIndex);
+	HRESULT init(int xIndex, int yIndex, CountryColor::Enum color);
 	void release();
 	void update();
 	void render();

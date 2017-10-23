@@ -2,6 +2,7 @@
 #include "unit.h"
 #include "objectFactory.h"
 #include "mncObjectBase.h"
+#include "country.h"
 
 
 void unitBuildTown::enter(unit& me)
@@ -22,24 +23,36 @@ void unitBuildTown::update(unit& me)
 	int health = me.getHealth();
 	int objHp = _obj->getHp();
 
-	if (_frameTimer % 2 == 0)
+	//돈이 있는지 체크
+	int cost = _obj->getCost() / _obj->getMaxHp(); //hp+1당 필요 골드
+	country* cty = WORLD->getCountry(me._unitColor);
+	if (cty->getGold() >= cost)
 	{
+		cty->addGold(-cost);
+
 		objHp += 1;
 		_obj->setHp(objHp);
 		health -= 1;
 		me.setHp(health);
-
-		_frameTimer = 0;
-	}	
-
-	if (objHp >= 50)
+	}
+	//돈이 없으면 건설 중단
+	else
 	{
 		return me.changeState(new unitNoneState);
 	}
+
+	//건설 완료
+	if (objHp >= _obj->getMaxHp())
+	{
+		_obj->setHp(_obj->getMaxHp());
+		return me.changeState(new unitNoneState);
+	}
+	//건설 중 오브젝트가 파괴됬을 경우 건설 취소.
 	if (objHp <= 0 || !_obj->isLive())
 	{
 		return me.changeState(new unitNoneState);
 	}
+	
 }
 
 bool unit::isBuildableTown(POINT index)
@@ -78,4 +91,76 @@ bool unit::isBuildableTown(POINT index)
 	}
 
 	return true;
+}
+
+
+
+
+
+
+
+
+
+//===================================================
+// ## 오브젝트 건설
+void unitBuildObject::enter(unit& me)
+{
+	me._state = UnitState::BuildTown;
+	_frameTimer = 0;
+
+	vector2D destIndex = _destTile->getIndex();
+	objectFactory factory;
+	WORLD->addObject(factory.createObject(destIndex.x, destIndex.y, me.getColorString() + _key));
+	_obj = (mncObjectBase*)WORLD->getMap()->getTile(destIndex.x, destIndex.y)->getObjectOnTile();
+
+	//만약 오브젝트가 생성되지 않았으면 건설을 취소.
+	if (!_obj)
+	{
+		me.resetCommand();
+		me.changeState(new unitNoneState);
+		return;
+	}
+
+	_obj->setHp(1);
+}
+
+void unitBuildObject::update(unit& me)
+{
+	_frameTimer++;
+
+	int health = me.getHealth();
+	int objHp = _obj->getHp();
+
+	if (_frameTimer % 2 == 0)
+	{
+		//돈이 있는지 체크
+		int cost = _obj->getCost() / _obj->getMaxHp(); //hp+1당 필요 골드
+		country* cty = WORLD->getCountry(me._unitColor);
+		if (cty->getGold() >= cost)
+		{
+			cty->addGold(-cost);
+
+			objHp += 1;
+			_obj->setHp(objHp);
+			health -= 1;
+			me.setHp(health);
+		}
+		else
+		{
+			me._state = UnitState::NoMoney;
+		}
+		_frameTimer = 0;
+	}
+
+	//건설 완료
+	if (objHp >= _obj->getMaxHp())
+	{
+		_obj->setHp(_obj->getMaxHp());
+		return me.changeState(new unitNoneState);
+	}
+	//건설 중 오브젝트가 파괴됬을 경우 건설 취소.
+	if (objHp <= 0 || !_obj->isLive())
+	{
+		return me.changeState(new unitNoneState);
+	}
 }
