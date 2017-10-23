@@ -17,12 +17,7 @@ HRESULT startscene::init()
 	rc_1 = RectMakeCenter(60+80, 75+500, 150, 20);
 	rc_2 = RectMakeCenter(60+80, 105+500, 150, 20);
 
-	
-
 	_frame = 0;
-
-	
-	
 	return S_OK;
 }
 
@@ -66,9 +61,9 @@ void startscene::render()
 	{
 
 		char buf[128] = "처음부터";
-		IMAGEMANAGER->drawText(rc_1.left, rc_1.top, UTIL::string_to_wstring(buf), 20, DefaultBrush::gray);
+		IMAGEMANAGER->drawText(rc_1.left, rc_1.top, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
 		char buf1[128] = "종료";
-		IMAGEMANAGER->drawText(rc_2.left, rc_2.top, UTIL::string_to_wstring(buf1), 20, DefaultBrush::gray);
+		IMAGEMANAGER->drawText(rc_2.left, rc_2.top, UTIL::string_to_wstring(buf1), 20, DefaultBrush::black);
 
 		//
 
