@@ -22,7 +22,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		Stop, Search, CreateMotion, Fight, Run, BuildTown, Merge, End
+		Stop, Search, CreateMotion, Fight, Destroy, Run, BuildTown, Merge, End
 	};
 }
 
@@ -133,6 +133,7 @@ public:
 	float getCommandTime()
 	{
 		if (_commandStateName == "원군") return 0.5f;
+		else if (_commandStateName == "대기") return 0.75f;
 		return _commandTime;
 	}
 	string getCommandName() { return _commandStateName; }

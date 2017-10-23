@@ -55,44 +55,73 @@ unit* unit::isCanAttack()
 }
 mncObjectBase* unit::isCanAttackNature()
 {
-
 	vector<mncObjectBase*> nature;
+	tileMap* map = WORLD->getMap();
+	vector2D tileCount = map->getTileCount();
 
-	nature.clear();
-
-	vector2D direct = _index + getDirectionVector(_unitDirection);
-
-	vector2D kingCheck[2];
-	//string str = "군주";
-	kingCheck[0] = _index + getDirectionVector(UnitDirection::UNIT_LEFT);
-	kingCheck[1] = _index + getDirectionVector(UnitDirection::UNIT_RIGHT);
-	for (int i = 0; i < 2; i++)
+	//자기 주변 4방향에서 파괴 할 수 있는 오브젝트가 있는지 체크한다.
+	for (int i = 0; i < 4; ++i)
 	{
-		if (WORLD->getMap()->getTile(kingCheck[i].x, kingCheck[i].y) != nullptr)
+		vector2D direction = _index + getDirectionVector(UnitDirection::DIRECTION(i));
+		//인덱스 오버플로우 체크
+		if (direction.x < 0 || direction.x >= tileCount.x || direction.y < 0 || direction.y >= tileCount.y)
+			continue;
+
+		terrainTile* tile = map->getTile(direction.x, direction.y);
+		//해당 타일과의 높이 체크
+		if (abs(tile->getHeight() - _height) > 1) continue;
+
+		gameObject* onObject = tile->getObjectOnTile();
+		//파괴 할 수 있는 오브젝트가 있는지?
+		if (onObject)
 		{
-			mncObjectBase* king = (mncObjectBase*)WORLD->getMap()->getTile(kingCheck[i].x, kingCheck[i].y)->getObjectOnTile();
-			if (king == nullptr) continue;
-			if (king->_name == "군주") return king;
+			if (onObject->isLive())
+			{
+				mncObjectBase* obj = (mncObjectBase*)onObject;
+				// - 아군의 건물이면 ㄴㄴ
+				if (obj->getCountryColor() == _unitColor) continue;
+				// - 돌은 부술 수 없다.
+				if (onObject->_name == "돌") continue;
+
+				nature.push_back(obj);
+			}
 		}
 	}
-	if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) return nullptr;
-	if (direct.y <0 || direct.y > WORLD->getMap()->getTileCount().y - 1) return nullptr;
 
-	mncObjectBase* obj = (mncObjectBase*)WORLD->getMap()->getTile(direct.x, direct.y)->getObjectOnTile();
-	if(obj)
-		nature.push_back(obj);
+	if (nature.size() > 0)
+	{
+		//파괴 가능한 오브젝트가 있으면, 랜덤으로 골라서 반환한다.
+		return nature[RND->getFromIntTo(0, nature.size() - 1)];
+	}
+	return NULL;
 
-	if (nature.size() <= 0) return nullptr;
-	if (nature[0]->getCountryColor() == this->getCountryColor()) return nullptr;
-	if (nature[0]->_name == "돌") return nullptr;
-	if (!nature[0]->isLive()) return nullptr;
+	//vector2D direct = _index + getDirectionVector(_unitDirection);
 
-	return nature[0];
+	//vector2D kingCheck[2];
+	//kingCheck[0] = _index + getDirectionVector(UnitDirection::UNIT_LEFT);
+	//kingCheck[1] = _index + getDirectionVector(UnitDirection::UNIT_RIGHT);
+	//for (int i = 0; i < 2; i++)
+	//{
+	//	if (WORLD->getMap()->getTile(kingCheck[i].x, kingCheck[i].y) != nullptr)
+	//	{
+	//		mncObjectBase* king = (mncObjectBase*)WORLD->getMap()->getTile(kingCheck[i].x, kingCheck[i].y)->getObjectOnTile();
+	//		if (king == nullptr) continue;
+	//		if (king->_name == "군주") return king;
+	//	}
+	//}
+	//if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) return nullptr;
+	//if (direct.y <0 || direct.y > WORLD->getMap()->getTileCount().y - 1) return nullptr;
 
+	//mncObjectBase* obj = (mncObjectBase*)WORLD->getMap()->getTile(direct.x, direct.y)->getObjectOnTile();
+	//if(obj)
+	//	nature.push_back(obj);
 
-	cout << "isCanAttackNature 버그 있어욤" << endl;
+	//if (nature.size() <= 0) return nullptr;
+	//if (nature[0]->getCountryColor() == this->getCountryColor()) return nullptr;
+	//if (nature[0]->_name == "돌") return nullptr;
+	//if (!nature[0]->isLive()) return nullptr;
 
-	return nullptr;
+	//return nature[0];
 }
 
 void unitFight::enter(unit & me)
@@ -169,14 +198,13 @@ void unitFight::update(unit & me)
 }
 void unitDigObject::enter(unit& me)
 {
-	me._state = UnitState::Fight;
+	me._state = UnitState::Destroy;
 
-	if (_nature->_name == "군주")
-	{
+	//if (_nature->_name == "군주")
+	//{
 		vector2D direction = _nature->getIndex() - me._index;
 
 		int length = direction.getLength();
-
 		if (length> 1 || length == 0)
 		{
 			return me.changeState(new unitNoneState);
@@ -193,7 +221,7 @@ void unitDigObject::enter(unit& me)
 		else
 			cout << direction.x << " , " << direction.y << "unitDigObject enter 방향설정 오류" << endl;
 
-	}
+	//}
 
 }
 void unitDigObject::update(unit& me)

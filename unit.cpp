@@ -47,19 +47,20 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	
 	changeState(new unitCreateMotion);
 
-	//this->addCallback("대기", [&](tagMessage msg) {
-	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
-	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
-	//	this->reserveState(new unitNoneState);
-	//	this->setAuto(false);
-	//});
+	this->addCallback("대기", [&](tagMessage msg) {
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->setCommand(tile, NULL, "대기");
+	});
 
-	//this->addCallback("자동", [&](tagMessage msg) {
-	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
-	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
-	//	this->reserveState(new unitNoneState);
-	//	this->setAuto(true);
-	//});
+	this->addCallback("자동", [&](tagMessage msg) {
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->setCommand(tile, NULL, "자동");
+	});
+
+	this->addCallback("파괴", [&](tagMessage msg) {
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->setCommand(tile, NULL, "파괴");
+	});
 
 	//this->addCallback("마을 건축", [&](tagMessage msg) {
 	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
@@ -142,11 +143,21 @@ void unit::update()
 
 	imageFrame();
 
+	//명령 대상이 살아있는지 체크
 	if (_commandTargetUnit)
 	{
 		if (!_commandTargetUnit->isLive())
 		{
 			resetCommand();
+		}
+	}
+	else if (_commandDestTile)
+	{
+		gameObject* obj = _commandDestTile->getObjectOnTile();
+		if (obj)
+		{
+			if (!obj->isLive())
+				resetCommand();
 		}
 	}
 
@@ -194,6 +205,11 @@ void unit::render()
 		else if (_state == UnitState::Fight)
 		{
 			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"전투", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+		else if (_state == UnitState::Destroy)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"파괴", 14, DefaultBrush::white,
 				DWRITE_TEXT_ALIGNMENT_LEADING);
 		}
 		else if (_state == UnitState::Stop)

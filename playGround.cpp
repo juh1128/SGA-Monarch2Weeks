@@ -30,6 +30,10 @@ HRESULT playGround::init(void)
 	IMAGEMANAGER->addFrameImage("blueLv1", L"resource/unit/blueLv1.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("blueLv2", L"resource/unit/blueLv2.png", 2, 4, false);
 	IMAGEMANAGER->addFrameImage("blueLv3", L"resource/unit/blueLv3.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("whiteKing", L"resource/unit/whiteKing.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("whiteLv1", L"resource/unit/whiteLv1.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("whiteLv2", L"resource/unit/whiteLv2.png", 2, 4, false);
+	IMAGEMANAGER->addFrameImage("whiteLv3", L"resource/unit/whiteLv3.png", 2, 4, false);
 	//오브젝트 팩토리 초기화
 	objectFactory::initUnitImage();
 

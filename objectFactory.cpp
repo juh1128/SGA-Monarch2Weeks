@@ -82,10 +82,10 @@ gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 	}
 	else if (name == "whiteStartUnit")
 	{
-		//unit* newUnit = new unit;
-		//newUnit->init(vector2D(xIndex, yIndex), 0, CountryColor::WHITE);
-		//newUnit->setHp(500);
-		//WORLD->addUnit(newUnit, CountryColor::WHITE);
+		unit* newUnit = new unit;
+		newUnit->init(vector2D(xIndex, yIndex), 0, CountryColor::WHITE);
+		newUnit->setHp(500);
+		WORLD->addUnit(newUnit, CountryColor::WHITE);
 	}
 	else
 	{
