@@ -94,6 +94,37 @@ void unitNoneState::update(unit & me)
 				me.resetCommand();
 				return;
 			}
+			//이동가능한 타일 담기
+			vector2D dest = me._commandDestTile->getIndex();
+			vector<vector2D> moveableIndex;
+			for (int i = 0; i < 4; ++i)
+			{
+				vector2D direct = dest + me.getDirectionVector((UnitDirection::DIRECTION)i);
+				if (me.isMoveable(direct.toPoint()))
+					moveableIndex.push_back(direct);
+			}
+			//담은 타일에서 가장 가까운 곳을 넘김
+			int minIndex = 0;
+			if (moveableIndex.size() > 0)
+			{
+				for (int i = 1; i < moveableIndex.size(); ++i)
+				{
+					if (moveableIndex[i].getLength() <= moveableIndex[minIndex].getLength())
+					{
+						minIndex = i;
+					}
+
+				}
+			}
+
+			deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
+				WORLD->getMap()->getTile(moveableIndex[minIndex].x, moveableIndex[minIndex].y));
+			if (path.size() > 0)
+			{
+				vector2D pathIndex = path[0]->getIndex();
+				return me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
+			}
+			return;
 		}
 		else if (me._commandStateName == "마을 건축")
 		{
@@ -166,6 +197,12 @@ void unitNoneState::update(unit & me)
 		if (me.isBuildableTown(destIndex.toPoint()))
 		{
 			return me.changeState(new unitBuildTown(destIndex.toPoint()));
+		}
+		//수리 
+		mncObjectBase* obj = me.searchObject();
+		if (obj)
+		{
+			return me.changeState(new unitRepair(obj));
 		}
 
 		//이동 (계속 이동만하고 딱히 행동을 할게 없으면 가장 가까운 유닛에게 병합한다.)

@@ -22,7 +22,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		Stop, Search, CreateMotion, Fight, Destroy, Run, BuildTown, NoMoney, Merge, End
+		Stop, Search, CreateMotion, Fight, Destroy, Run, BuildTown, NoMoney, Merge, Repair, End
 	};
 }
 
@@ -70,6 +70,7 @@ private:
 	friend class unitFight;
 	friend class unitMerge;
 	friend class unitDigObject;
+	friend class unitRepair;
 
 public:
 	unit();
@@ -109,6 +110,7 @@ public:
 	unit* isCanRun();
 	unit* isCanAttack();
 	mncObjectBase* isCanAttackNature();
+	mncObjectBase* searchObject();
 
 	unit* isCanMerge(unit* mergeunit);
 
@@ -304,4 +306,22 @@ public:
 	}
 	virtual void enter(unit& me);
 	virtual void update(unit & me);
+};
+
+class unitRepair : public unitState
+{
+private:
+	mncObjectBase* _repairObj;
+	int _frameTimer;
+
+public:
+	unitRepair(mncObjectBase* obj)
+	{
+		_repairObj = obj;
+		_frameTimer = 0;
+		_stateName = "¼ö¸®";
+
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
 };

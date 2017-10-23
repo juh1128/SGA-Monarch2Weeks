@@ -230,6 +230,11 @@ void unit::render()
 			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"돈이없어!!", 14, DefaultBrush::white,
 				DWRITE_TEXT_ALIGNMENT_LEADING);
 		}
+		else if (_state == UnitState::Repair)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"수리", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
 
 	}
 }

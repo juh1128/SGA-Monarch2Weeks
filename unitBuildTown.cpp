@@ -193,3 +193,116 @@ void unitBuildObject::update(unit& me)
 		return me.changeState(new unitNoneState);
 	}
 }
+
+mncObjectBase* unit::searchObject()
+{
+	vector<mncObjectBase*> nature;
+	tileMap* map = WORLD->getMap();
+	vector2D tileCount = map->getTileCount();
+
+	
+	for (int i = 0; i < 4; ++i)
+	{
+		vector2D direction = _index + getDirectionVector(UnitDirection::DIRECTION(i));
+		//인덱스 오버플로우 체크
+		if (direction.x < 0 || direction.x >= tileCount.x || direction.y < 0 || direction.y >= tileCount.y)
+			continue;
+
+		terrainTile* tile = map->getTile(direction.x, direction.y);
+		//해당 타일과의 높이 체크
+		if (abs(tile->getHeight() - _height) > 1) continue;
+
+		gameObject* onObject = tile->getObjectOnTile();
+		//파괴 할 수 있는 오브젝트가 있는지?
+		if (onObject)
+		{
+			if (onObject->isLive())
+			{
+				mncObjectBase* obj = (mncObjectBase*)onObject;
+				// - 아군의 건물이면 ㄴㄴ
+				if (obj->getCountryColor() == _unitColor) continue;
+				// - 돌은 부술 수 없다.
+				if (onObject->_name == "목책")
+				{
+					if (obj->getHp() != obj->getMaxHp())
+					{
+						nature.push_back(obj);
+					}
+				}
+
+			}
+		}
+	}
+
+	if (nature.size() > 0)
+	{
+		return nature[RND->getFromIntTo(0, nature.size() - 1)];
+	}
+	return NULL;
+
+
+}
+void unitRepair::enter(unit& me)
+{
+	me._state = UnitState::Repair;
+	_frameTimer = 0;
+
+	vector2D destIndex = _repairObj->getIndex();
+
+
+	vector2D direction = destIndex - me._index;
+
+	if (direction.x == 1)
+		me._unitDirection = UnitDirection::UNIT_RIGHT;
+	else if (direction.x == -1)
+		me._unitDirection = UnitDirection::UNIT_LEFT;
+	else if (direction.y == 1)
+		me._unitDirection = UnitDirection::UNIT_DOWN;
+	else if (direction.y == -1)
+		me._unitDirection = UnitDirection::UNIT_UP;
+	else
+		cout << direction.x << " , " << direction.y << "unitBuild enter 방향설정 오류" << endl;
+
+
+}
+void unitRepair::update(unit& me)
+{
+	int health = me.getHealth();
+	int objHp = _repairObj->getHp();
+	int objMaxHp = _repairObj->getMaxHp();
+
+	if (_frameTimer % 2 == 0)
+	{
+		//돈이 있는지 체크
+		int cost = _repairObj->getCost() / _repairObj->getMaxHp(); //hp+1당 필요 골드
+		country* cty = WORLD->getCountry(me._unitColor);
+		if (cty->getGold() >= cost)
+		{
+			cty->addGold(-cost);
+
+			objHp += 1;
+			_repairObj->setHp(objHp);
+			health -= 1;
+			me.setHp(health);
+		}
+		else
+		{
+			me._state = UnitState::NoMoney;
+		}
+		_frameTimer = 0;
+	}
+	_frameTimer++;
+
+	//건설 완료
+	if (objHp >= objMaxHp)
+	{
+		_repairObj->setHp(objMaxHp);
+		return me.changeState(new unitNoneState);
+	}
+	//건설 중 오브젝트가 파괴됬을 경우 건설 취소.
+	if (objHp <= 0 || !_repairObj->isLive())
+	{
+		return me.changeState(new unitNoneState);
+	}
+
+}

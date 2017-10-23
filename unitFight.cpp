@@ -59,6 +59,15 @@ mncObjectBase* unit::isCanAttackNature()
 	tileMap* map = WORLD->getMap();
 	vector2D tileCount = map->getTileCount();
 
+	if (_commandStateName == "파괴")
+	{
+		mncObjectBase* comobj = (mncObjectBase*)_commandDestTile->getObjectOnTile();
+		if (comobj)
+		{
+			return comobj;
+		}
+	}
+
 	//자기 주변 4방향에서 파괴 할 수 있는 오브젝트가 있는지 체크한다.
 	for (int i = 0; i < 4; ++i)
 	{
@@ -78,10 +87,14 @@ mncObjectBase* unit::isCanAttackNature()
 			if (onObject->isLive())
 			{
 				mncObjectBase* obj = (mncObjectBase*)onObject;
+
 				// - 아군의 건물이면 ㄴㄴ
-				if (obj->getCountryColor() == _unitColor) continue;
+				if (obj->getCountryColor() == _unitColor)continue;
 				// - 돌은 부술 수 없다.
 				if (onObject->_name == "돌") continue;
+
+				if (onObject->_name == "다리") continue;
+
 
 				nature.push_back(obj);
 			}

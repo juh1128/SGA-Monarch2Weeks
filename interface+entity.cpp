@@ -345,15 +345,11 @@ bool commandWindow::setMenuList()
 		//아군을 찍었을 경우 => 대기, 자동, 원군
 		if (_parent->getPlayerCountry()->getColor() == _destUnit->getCountryColor())
 		{
-			_menuList.push_back("대기");
-			_menuList.push_back("자동");
 			_menuList.push_back("원군");
 		}
 		//적 유닛을 찍었을 경우 => 대기, 자동, 추적
 		else
 		{
-			_menuList.push_back("대기");
-			_menuList.push_back("자동");
 			_menuList.push_back("추적");
 		}
 	}
