@@ -25,12 +25,23 @@ HRESULT town::init(int xIndex, int yIndex, CountryColor::Enum color)
 	_townIncomeTimer = 0;
 
 	_countryColor = color;
+	WORLD->getCountry(_countryColor)->addTown();
 
 	return S_OK;
 }
 
 void town::release()
 {
+	terrainTile* onTile = WORLD->getMap()->getTile(_index.x, _index.y);
+	vector<unit*> unitList = onTile->getUnitOnTile();
+	for (size_t i = 0; i < unitList.size(); ++i)
+	{
+		if (unitList[i]->isLive() && unitList[i]->getHeight() > 0)
+		{
+			unitList[i]->setHeight(unitList[i]->getHeight() - 1);
+		}
+	}
+	WORLD->getCountry(_countryColor)->removeTown();
 	mncObjectBase::release();
 }
 
@@ -66,7 +77,7 @@ void town::update()
 	_farmTimer += TIMEMANAGER->getElapsedTime();
 	if (_farmTimer >= FARM_CREATE_TIME)
 	{
-		if (_hp > 30)
+		if (_hp > 10)
 		{
 			// - 1. ¿⁄±‚ ¡÷∫Ø 8ƒ≠ ∞°¡Æø».
 			terrainTile* tiles[8];
@@ -87,7 +98,7 @@ void town::update()
 							farm->init(tiles[i]->getIndex().x, tiles[i]->getIndex().y, _countryColor);
 							WORLD->addObject(farm);
 
-							_hp -= 30;
+							_hp -= 10;
 						}
 						break;
 					}
@@ -122,7 +133,7 @@ void town::render()
 // - ≥Û¿Â
 HRESULT farmLand::init(int xIndex, int yIndex, CountryColor::Enum color)
 {
-	mncObjectBase::init("≥Û¿Â", "farmLand", xIndex, yIndex, 30, true);
+	mncObjectBase::init("≥Û¿Â", "farmLand", xIndex, yIndex, 10, true);
 
 	_frame = color;
 	_countryColor = color;

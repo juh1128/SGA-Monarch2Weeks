@@ -9,7 +9,7 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 
 	//인터페이스 리소스 로드
 	IMAGEMANAGER->addImage("interfaceBack", L"resource/interface/myInterfaceBack.png");
-	IMAGEMANAGER->addFrameImage("autoBtn", L"resource/interface/autoButton.png", 2, 1);
+	IMAGEMANAGER->addFrameImage("startBtn", L"resource/interface/startButton.png", 2, 1);
 	IMAGEMANAGER->addFrameImage("taxProgress", L"resource/interface/taxProgress.png", 1, 2);
 	_otherCountryInfo = IMAGEMANAGER->addImage("otherCountry", L"resource/interface/otherCountry.png");
 	_countryColorSprite = IMAGEMANAGER->addFrameImage("countryColor", L"resource/interface/countryColor.png", 4, 1);
@@ -21,10 +21,15 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 	//인터페이스 객체 생성
 	_back = new interfaceBack;
 	_back->init();
-	_autoBtn = new autoButton;
-	_autoBtn->init(_back);
+	_startBtn = new startButton;
+	_startBtn->init(_back);
 	_taxProgress = new taxProgress;
 	_taxProgress->init(_back, _playerCountry->getTaxRate());
+	_systemMessage = new systemMessage;
+	_systemMessage->init();
+
+	_commandWindow = new commandWindow;
+	_commandWindow->init(this);
 
 	return S_OK;
 }
@@ -44,17 +49,46 @@ void userInterface::update()
 
 	//인터페이스 업데이트
 	_taxProgress->update();
-	_autoBtn->update();
+	_startBtn->update();
+	_systemMessage->update();
+
+	//명령 인터페이스
+	_commandWindow->update();
+	clickedMouse();
 
 	//동기화
 	_playerCountry->setTaxRate(_taxProgress->getTaxRate());
 }
 
+void userInterface::drawSystemText(string text, float displayTime, COLORREF color)
+{
+	_systemMessage->showMessage(text, displayTime, color);
+}
+
 void userInterface::render()
 {
+	//피킹 정보 렌더링
 	renderPickInfo();
 
+	//국가 정보 렌더링
 	renderCountryInfo();
+
+	//명령 인터페이스 렌더링
+	_commandWindow->render();
+
+	//시스템 메시지 렌더링
+	_systemMessage->render();
+
+	//드래그 UI 렌더링
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+	{
+		RECT backInterfaceRC = RectMake(0, 0, 300, 70);
+		if (!PtInRect(&backInterfaceRC, _clickedPos.toPoint()))
+		{
+			RECT rc = RectMake(_clickedPos.x, _clickedPos.y, _ptMouse.x - _clickedPos.x, _ptMouse.y - _clickedPos.y);
+			IMAGEMANAGER->drawRectangle(rc, D2D1::ColorF::BurlyWood, 1.0f, 2);
+		}
+	}
 }
 
 void userInterface::moveCamera()
@@ -114,20 +148,6 @@ void userInterface::pickUnit()
 			}		
 		}
 	}
-
-	//_unitPickingTimer += TIMEMANAGER->getElapsedTime();
-	//if (_pickedUnit)
-	//{
-	//	if (_unitPickingTimer >= 0.5f)
-	//	{
-	//		SCENEMANAGER->getNowScene()->sendMessage("disableWorld");
-	//		_unitPickingTimer = 0;
-	//	}
-	//}
-	//else
-	//{
-	//	SCENEMANAGER->getNowScene()->sendMessage("enableWorld");
-	//}
 }
 
 void userInterface::renderPickInfo()
@@ -177,7 +197,7 @@ void userInterface::renderCountryInfo()
 {
 	//인터페이스 렌더링
 	_back->render();
-	_autoBtn->render();
+	_startBtn->render();
 
 	_taxProgress->render();
 
@@ -232,4 +252,49 @@ void userInterface::renderCountryInfo()
 		_playerCountry->getCountryPower());
 	IMAGEMANAGER->drawText(_back->_pos.x + 84, _back->_pos.y + 40, UTIL::string_to_wstring(buf), 11, DefaultBrush::black,
 		DWRITE_TEXT_ALIGNMENT_LEADING);
+}
+
+
+
+
+void userInterface::clickedMouse()
+{
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		_clickedPos = _ptMouse;
+	}
+	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+	{
+		//클릭
+		if ((_clickedPos - vector2D(_ptMouse)).getLength() < 10)
+		{
+			if (_pickedUnit)
+			{
+				if (_pickedUnit->getCountryColor() == _playerCountry->getColor())
+					_commandWindow->show(_pickedUnit);
+			}
+		}
+		//드래그
+		else
+		{
+			float left = (_clickedPos.x <= _ptMouse.x)? _clickedPos.x : _ptMouse.x;
+			float top = (_clickedPos.y <= _ptMouse.y) ? _clickedPos.y : _ptMouse.y;
+			RECT rc = RectMake(left, top, abs(_ptMouse.x - _clickedPos.x), abs(_ptMouse.y - _clickedPos.y));
+			//아군 유닛과 충돌체크
+			auto unitList = _playerCountry->getUnitList();
+			vector<unit*> targetList;
+			float zoom = CAMERA->getZoom();
+			for (size_t i = 0; i < unitList->size(); ++i)
+			{
+				vector2D pos = CAMERA->getRelativeVector2D(unitList->at(i)->_pos*zoom);
+				if (PtInRect(&rc, pos.toPoint()))
+				{
+					targetList.push_back(unitList->at(i));
+				}
+			}
+			
+			if(targetList.size() > 0)
+				_commandWindow->show(targetList);
+		}
+	}
 }

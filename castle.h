@@ -6,8 +6,6 @@
 class castleWall : public mncObjectBase
 {
 private:
-	CountryColor::Enum	_countryColor;
-
 	int						_frame;
 	bool					_isLeft;
 

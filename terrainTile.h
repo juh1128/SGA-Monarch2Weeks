@@ -60,4 +60,5 @@ public:
 
 	void requestRender(unit* onUnit);
 	
+	void mergeUnit();
 };

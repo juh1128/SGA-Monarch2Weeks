@@ -3,8 +3,10 @@
 
 class unit;
 class taxProgress;
-class autoButton;
+class startButton;
 class interfaceBack;
+class commandWindow;
+class systemMessage;
 
 class userInterface : public gameObject
 {
@@ -17,10 +19,17 @@ private:
 
 	//인터페이스 객체들...
 	interfaceBack*		_back;
-	autoButton*			_autoBtn;
+	startButton*		_startBtn;
 	taxProgress*		_taxProgress;
+	commandWindow*		_commandWindow;
+	systemMessage*		_systemMessage;
+
+	//이미지
 	image*				_otherCountryInfo;
 	image*				_countryColorSprite;
+
+	//드래그 중인지 확인용
+	vector2D			_clickedPos;
 
 public:
 	userInterface() {}
@@ -31,12 +40,17 @@ public:
 	void render();
 	void update();
 
+	void drawSystemText(string text, float displayTime, COLORREF color = RGB(255, 0, 0));
+
+	unit* getPickedUnit() { return _pickedUnit; }
+	country* getPlayerCountry() { return _playerCountry; }
+
 	//카메라 이동
 	void moveCamera();
 	//유닛 피킹
 	void pickUnit();
-
-
+	//클릭 시 처리
+	void clickedMouse();
 
 	//피킹된 타일 위의 오브젝트 정보 표시
 	void renderPickInfo();
@@ -44,6 +58,53 @@ public:
 	void renderCountryInfo();
 };
 
+namespace commandWindowState
+{
+	enum Enum
+	{
+		Where, What, Hide, End
+	};
+}
+
+//명령 창
+class commandWindow : public gameObject
+{
+private:
+	userInterface*		_parent;
+
+	commandWindowState::Enum		_state;
+	vector<unit*>					_targetList;
+	vector<string>					_menuList;
+	
+	image*				_whatwhereImage;
+	terrainTile*		_destTile;
+	unit*				_destUnit;
+	vector2D			_renderPos;
+
+	//메뉴
+	int					_chooseIndex;
+	gameObject*			_chooseObject;
+	int					_menuWidth;
+	int					_menuHeight;
+
+	//드래그 중인지 확인용
+	vector2D			_clickedPos;
+
+public:
+	commandWindow() {}
+	virtual ~commandWindow() {}
+
+	HRESULT init(userInterface* parent);
+	void release();
+	void update();
+	void render();
+
+	void show(unit* target);
+	void show(vector<unit*> targetList);
+	void hide();
+
+	bool setMenuList();
+};
 
 class interfaceBack : public gameObject
 {
@@ -78,22 +139,45 @@ public:
 	float getTaxRate() { return _taxRate; }
 };
 
-class autoButton : public gameObject
+class startButton : public gameObject
 {
 private:
 	gameObject* _parent;
 	vector2D _relativePos;
 
-	bool	_auto;
-
 public:
-	autoButton() {}
-	virtual ~autoButton() {}
+	startButton() {}
+	virtual ~startButton() {}
 
 	HRESULT init(gameObject* parent);
 	void release();
 	void update();
 	void render();
+};
 
-	bool getAutoState() { return _auto; }
+
+//시스템 메시지
+class systemMessage : gameObject
+{
+private:
+	enum state { hide, appear, show, disappear };
+
+	state _state;
+	string _text;
+	float _timer;
+	float _displayTime;
+	COLORREF  _color;
+
+	float _alpha;
+
+public:
+	systemMessage() {}
+	virtual ~systemMessage() {}
+
+	HRESULT init();
+	void release();
+	void update();
+	void render();
+
+	void showMessage(string text, float displayTime, COLORREF color = RGB(255, 0, 0));
 };

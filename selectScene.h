@@ -1,13 +1,10 @@
 #pragma once
 #include "sceneBase.h"
-#include "unit.h"
 
-class userInterface;
-
-class testScene : public sceneBase
+class selectScene : public sceneBase
 {
 private:
-	userInterface* _ui;
+	
 
 public:
 	virtual HRESULT init();
@@ -17,6 +14,4 @@ public:
 
 	virtual void update();
 	virtual void render();
-
-	userInterface* getUI() { return _ui; }
 };

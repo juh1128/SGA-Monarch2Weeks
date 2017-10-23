@@ -6,7 +6,7 @@ void unitRun::enter(unit& me)
 	me._state = UnitState::Run;
 
 	//도망가는 함수
-	cout << "run" << endl;
+	//cout << "run" << endl;
 	terrainTile* destTile;
 	POINT destIndex;
 	destIndex.x = me._index.x;
@@ -77,13 +77,15 @@ void unitRun::enter(unit& me)
 					break;
 				}
 			}
-			cout << "대각이동으로 도망" << endl;
+			//cout << "대각이동으로 도망" << endl;
 			me.changeState(new unitOneStep(index.x, index.y));
+			return;
 		}
 		else
 		{
-			cout << "대각이동으로 도망" << endl;
+			//cout << "대각이동으로 도망" << endl;
 			me.changeState(new unitOneStep(destIndex.x, destIndex.y));
+			return;
 		}
 	}
 
@@ -103,8 +105,9 @@ void unitRun::enter(unit& me)
 		//갈수있다면
 		if (me.isMoveable(destIndex))
 		{
-			cout << "좌우이동으로 도망" << endl;
+			//cout << "좌우이동으로 도망" << endl;
 			me.changeState(new unitOneStep(destIndex.x,destIndex.y));
+			return;
 		}
 		//갈수없다면
 		else
@@ -118,8 +121,9 @@ void unitRun::enter(unit& me)
 					return;
 				}
 			}
-			cout << "좌우이동으로 도망" << endl;
+			//cout << "좌우이동으로 도망" << endl;
 			me.changeState(new unitOneStep(index.x, index.y));
+			return;
 		}
 	}
 
@@ -140,8 +144,9 @@ void unitRun::enter(unit& me)
 		//갈수있다면
 		if (me.isMoveable(destIndex))
 		{
-			cout << "상하이동으로 도망" << endl;
+			//cout << "상하이동으로 도망" << endl;
 			me.changeState(new unitOneStep(destIndex.x,destIndex.y));
+			return;
 		}
 		//못간다면
 		else if (!me.isMoveable(destIndex))
@@ -155,8 +160,9 @@ void unitRun::enter(unit& me)
 					return;
 				}
 			}
-			cout << "상하이동으로 도망" << endl;
+			//cout << "상하이동으로 도망" << endl;
 			me.changeState(new unitOneStep(index.x, index.y));
+			return;
 		}
 
 	}

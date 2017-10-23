@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "unit.h"
-
+#include "mncObjectBase.h"
+#include "objectFactory.h"
 
 unit::unit()
 {
@@ -18,14 +19,19 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	string color = getColorString();
 
 	gameObject::init("unit", color + "Lv1", tileMap::getTilePosFromIndex(index, height), Pivot::CENTER);
+	this->setImage(objectFactory::getUnitImage(country, 1), objectFactory::getUnitImage(country, 2),
+		objectFactory::getUnitImage(country, 3));
 
 	_pos = _pos / CAMERA->getZoom();
 	_index = index;
-	_height = height;
+
 	_hp = 100;
 	_isStarUnit = false;
 
-	WORLD->getMap()->getTile(_index.x, _index.y)->addUnitOnTile(this);
+	terrainTile* onTile = WORLD->getMap()->getTile(_index.x, _index.y);
+	_height = onTile->getHeight();
+	onTile->addUnitOnTile(this);
+	_myTiles.push_back(onTile);
 
 	_imageFrameX = 0;
 	_unitDirection = (UnitDirection::DIRECTION)(RND->getFromIntTo(0, 3));
@@ -34,9 +40,86 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	_unitState = new unitNoneState;
 	_moveSpeed = 1.5f;
 	_frameTimer = 0;
+	_mergeUnit = NULL;
+
+	_commandDestTile = NULL;
+	_commandTargetUnit = NULL;
 	
 	changeState(new unitCreateMotion);
 
+	//this->addCallback("대기", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitNoneState);
+	//	this->setAuto(false);
+	//});
+
+	//this->addCallback("자동", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitNoneState);
+	//	this->setAuto(true);
+	//});
+
+	//this->addCallback("마을 건축", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitBuildTown(msg.ptData));
+	//	this->setAuto(true);
+	//});
+	//this->addCallback("목책 건축", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitNoneState);
+	//	this->setAuto(true);
+	//});
+	//this->addCallback("다리 건설", [&](tagMessage msg) {
+	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
+	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
+	//	this->reserveState(new unitNoneState);
+	//	this->setAuto(true);
+	//});
+
+	//==================================================
+	// ## 원군 명령
+	this->addCallback("원군", [&](tagMessage msg) {	
+		unit* target = (unit*)msg.targetList[0];
+		if (target == this)
+		{
+			return;
+		}
+		//대상에게 Merge 메시지가 발동하면, 나한테 알려달라고 등록한다.
+		//기존에 관찰자 등록을 했던 타겟이 있으면, 해제한다.
+		target->addObserver("Merge", this);
+
+		unit* oldTarget = this->getCommandTarget();
+		if (oldTarget)
+			oldTarget->removeObserver("Merge", this);
+
+		this->setCommand(NULL, target, "원군");
+
+	});
+	//==================================================
+	// ## 추적 명령
+	this->addCallback("추적", [&](tagMessage msg) {
+		unit* target = (unit*)msg.targetList[0];
+		if (target == this) return;		
+
+		target->addObserver("Merge", this);
+		unit* oldTarget = this->getCommandTarget();
+		if (oldTarget)
+			oldTarget->removeObserver("Merge", this);
+
+		this->setCommand(NULL, target, "추적");
+	});
+	//==================================================
+	// ## 쫒아가던 유닛이 병합되어서 사라졌을 경우 처리
+	this->addCallback("observed_Merge", [this](tagMessage msg)
+	{
+		//자기가 쫒아가던 유닛이 병합되서 사라졌을 경우, 다른 대상으로 변경한다.
+		this->setCommand(NULL, (unit*)msg.targetList[0], this->getCommandName());
+		msg.targetList[0]->addObserver("Merge", this);
+	});
 
 	return S_OK;
 }
@@ -44,8 +127,10 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 void unit::release()
 {
 	//유닛이 삭제될 때 자기가 서있는 타일에 등록 해제함.
-	syncIndexFromPos();
-	WORLD->getMap()->getTile(_index.x, _index.y)->deleteUnitOnTile(this);
+	for (size_t i = 0; i < _myTiles.size(); ++i)
+	{
+		_myTiles[i]->deleteUnitOnTile(this);
+	}
 
 	gameObject::release();
 }
@@ -57,41 +142,15 @@ void unit::update()
 
 	imageFrame();
 
-	auto keyboardTest = [&](UnitDirection::DIRECTION dir)
+	if (_commandTargetUnit)
 	{
-		vector2D right = getDirectionVector(dir);
-		vector2D dest = _index + right;
-
-		gameObject* temp = WORLD->getMap()->getTile(dest.x, dest.y);
-
-		vector<gameObject*> vr;
-		vr.push_back(temp);
-
-		this->sendMessage("move", 0, 0, 0, dest.toPoint(), vr);
-		vr.clear();
-	};
-
-	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
-	{
-		keyboardTest(UnitDirection::UNIT_RIGHT);
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
-	{
-		keyboardTest(UnitDirection::UNIT_LEFT);
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))
-	{
-		keyboardTest(UnitDirection::UNIT_UP);
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
-	{
-		keyboardTest(UnitDirection::UNIT_DOWN);
+		if (!_commandTargetUnit->isLive())
+		{
+			resetCommand();
+		}
 	}
 
 	_unitState->update(*this);
-
-	//pos <-> 인덱스 동기화
-	syncIndexFromPos();
 
 	//Z오더 상 적절한 타일에게 렌더링을 요청한다.
 	requestRender();
@@ -106,15 +165,23 @@ void unit::render()
 	if (_image)
 	{
 		float zoom = CAMERA->getZoom();
+		float imageHalfHeight = _image->getFrameSize(_imageFrameX).y * zoom * 0.5f;
+
 		_scale = vector2D(zoom, zoom);
 
 		_image->setAlphaOption(_alpha);
 		_image->setScaleOption(_scale);
-		_image->frameRender(_pos.x*zoom, _pos.y*zoom, _imageFrameX, _unitDirection, _pivot);
+		_image->frameRender(_pos.x*zoom, _pos.y*zoom + imageHalfHeight-10, _imageFrameX, _unitDirection, _pivot);
 
 		vector2D renderPos = _pos*zoom;
 		renderPos = CAMERA->getRelativeVector2D(renderPos);
-		if (_state == UnitState::Search)
+
+		if (_commandStateName != "")
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, UTIL::string_to_wstring(_commandStateName), 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+		else if (_state == UnitState::Search)
 		{
 			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"탐색", 14, DefaultBrush::white,
 				DWRITE_TEXT_ALIGNMENT_LEADING);
@@ -134,6 +201,17 @@ void unit::render()
 			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"대기", 14, DefaultBrush::white,
 				DWRITE_TEXT_ALIGNMENT_LEADING);
 		}
+		else if (_state == UnitState::BuildTown)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"건설", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+		else if (_state == UnitState::Merge)
+		{
+			IMAGEMANAGER->drawText(renderPos.x, renderPos.y, L"원군", 14, DefaultBrush::white,
+				DWRITE_TEXT_ALIGNMENT_LEADING);
+		}
+
 	}
 }
 
@@ -143,6 +221,7 @@ void unit::changeState(unitState* newstate)
 	_unitState = newstate;
 	_unitState->enter(*this);
 }
+
 
 vector2D unit::getDirectionVector(UnitDirection::DIRECTION dir)
 {
@@ -170,6 +249,8 @@ void unit::syncIndexFromPos()
 
 void unit::requestRender()
 {
+	_image = setUnitLvImage(_hp);
+
 	//가만히 서있을 경우 다른 연산 필요없음
 	if (!_isMove)
 	{
@@ -180,8 +261,10 @@ void unit::requestRender()
 	//이동 중일 경우 캐릭터 이미지 LEFT, TOP, RIGHT, BOTTOM 부분 검사 후
 	//가장 적당한 타일에 렌더링을 요청한다.
 	float zoom = CAMERA->getZoom();
+	vector2D frameSize = _image->getFrameSize(_imageFrameX);
+	float imageHalfHeight = frameSize.y * zoom * 0.5f;
 	vector2D zoomedPos = _pos * zoom;
-	RECT rc = RectMakeCenter(zoomedPos.x, zoomedPos.y, _size.x*zoom, _size.y*zoom);
+	RECT rc = RectMakeCenter(zoomedPos.x, zoomedPos.y + imageHalfHeight - 10, frameSize.x*zoom, frameSize.y*zoom);
 
 	vector2D top = vector2D(zoomedPos.x, (float)rc.top);
 	vector2D right = vector2D((float)rc.right, zoomedPos.y);
@@ -204,6 +287,26 @@ void unit::requestRender()
 	}
 
 	WORLD->getMap()->getTile(maxIndex.x, maxIndex.y)->requestRender(this);
+}
+
+image* unit::setUnitLvImage(int health)
+{
+	if (health < 1000)
+		return  _lv[1];
+	else if (health < 10000)
+		return  _lv[2];
+	else if (health >= 10000)
+		return _lv[3];
+	else
+	{
+		cout << "setUnitLvImage오류 " << endl;
+	}
+}
+void unit::setImage(image* lv1, image* lv2, image* lv3)
+{
+	_lv[1] = lv1;
+	_lv[2] = lv2;
+	_lv[3] = lv3;
 }
 
 bool unit::isMoveable(POINT index)

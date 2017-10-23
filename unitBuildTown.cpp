@@ -7,18 +7,39 @@
 void unitBuildTown::enter(unit& me)
 {
 	me._state = UnitState::BuildTown;
-
+	_frameTimer = 0;
 	//마을이 없으면 지을 수 있음.
 	objectFactory factory;
 	WORLD->addObject(factory.createObject(_destIndex.x, _destIndex.y, me.getColorString() + "Town"));
-	me._hp -= 50;
-
-	me.changeState(new unitNoneState);
+	_obj = (mncObjectBase*)WORLD->getMap()->getTile(_destIndex.x, _destIndex.y)->getObjectOnTile();
+	_obj->setHp(1);
 }
 
 void unitBuildTown::update(unit& me)
 {
+	_frameTimer++;		
+	
+	int health = me.getHealth();
+	int objHp = _obj->getHp();
 
+	if (_frameTimer % 2 == 0)
+	{
+		objHp += 1;
+		_obj->setHp(objHp);
+		health -= 1;
+		me.setHp(health);
+
+		_frameTimer = 0;
+	}	
+
+	if (objHp >= 50)
+	{
+		return me.changeState(new unitNoneState);
+	}
+	if (objHp <= 0 || !_obj->isLive())
+	{
+		return me.changeState(new unitNoneState);
+	}
 }
 
 bool unit::isBuildableTown(POINT index)

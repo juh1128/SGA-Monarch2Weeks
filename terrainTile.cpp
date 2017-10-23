@@ -61,9 +61,9 @@ void terrainTile::deleteUnitOnTile(unit * onUnit)
 
 void terrainTile::addUnitOnTile(unit * onUnit)
 {
-	//중복 확인
 	for (size_t i = 0; i < _onUnitList.size(); ++i)
 	{
+		//내가 이미 등록되었으면 ㄴㄴ
 		if (onUnit == _onUnitList[i])
 		{
 			return;
@@ -90,6 +90,55 @@ gameObject * terrainTile::getObjectOnTile()
 void terrainTile::requestRender(unit * onUnit)
 {
 	_renderUnitList.push_back(onUnit);
+}
+
+void terrainTile::mergeUnit()
+{
+	int countryUnitList[CountryColor::END - 1] = { 0 };
+	unit* firstUnit[CountryColor::END - 1] = { NULL };
+	//병합
+	for (size_t i = 0; i < _onUnitList.size(); ++i)
+	{
+		if (!_onUnitList[i]->isLive())
+		{
+			_onUnitList.erase(_onUnitList.begin() + i);
+			continue;
+		}
+
+		CountryColor::Enum color = _onUnitList[i]->getCountryColor();		
+		if (!firstUnit[color]) firstUnit[color] = _onUnitList[i];
+		//병합한다.
+		else
+		{
+			//firstUnit과 다른 유닛이 명령을 수행 중인지 확인 후, 
+			//수행 중이라면 더 나중에 명령을 받은 유닛을 firstUnit으로 교체한다.
+			//단, 원군은 다른 명령보다 우선순위가 낮음. ( 명령없음 < 원군 < 다른명령  )
+			float firstUnitCommandTime = firstUnit[color]->getCommandTime();
+			float secondUnitCommandTime = _onUnitList[i]->getCommandTime();
+			if (firstUnitCommandTime < secondUnitCommandTime)
+			{
+				unit* temp = firstUnit[color];
+				firstUnit[color] = _onUnitList[i];
+				_onUnitList[i] = temp;
+			}
+
+			//병합
+			firstUnit[color]->setHp(firstUnit[color]->getHealth() + _onUnitList[i]->getHealth());
+			_onUnitList[i]->sendMessage("Merge");
+			_onUnitList[i]->setDestroy();
+
+			//이 유닛이 Merge됬을 때 알려달라고 등록한 관찰자들을 받아온다.
+			auto& observerList = _onUnitList[i]->getObserverList("Merge");
+			vector<gameObject*> otherUnit;
+			otherUnit.push_back(firstUnit[color]);
+			for (size_t i = 0; i < observerList.size(); ++i)
+			{
+				//관찰자들에게 Merge되었음을 알리고, 다른 유닛을 보내준다.
+				if(observerList[i]->isLive())
+					observerList[i]->sendMessage("observed_Merge", 0, 0, 0, POINT(), otherUnit);
+			}
+		}
+	}
 }
 
 void terrainTile::release()

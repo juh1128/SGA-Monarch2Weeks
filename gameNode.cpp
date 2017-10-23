@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "gameNode.h"
 
-
 gameNode::gameNode()
 {
 }

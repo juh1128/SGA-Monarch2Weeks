@@ -60,6 +60,8 @@ void castle::release()
 	//성벽 삭제
 	for (int i = 0; i < 8; ++i)
 	{
+		if (!_castleWall[i]) continue;
+
 		if (_castleWall[i]->isLive())
 		{
 			_castleWall[i]->release();
@@ -68,7 +70,17 @@ void castle::release()
 		}
 	}
 
+	//해당 국가 게임오버
+	country* cty = WORLD->getCountry(_countryColor);
+	if (cty)
+	{
+		cty->gameOver();
+	}
+
 	mncObjectBase::release();
+
+	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
+	tile->setBuildable(false);
 }
 
 void castle::update()
@@ -82,11 +94,35 @@ void castle::update()
 		_frameTimer -= 0.5f;
 		_frameX = ++_frameX % 2;
 	}
+
+	//성문 업데이트
+	for (int i = 0; i < 8; ++i)
+	{
+		if (_castleWall[i])
+		{
+			if (_castleWall[i]->isLive())
+			{
+				_castleWall[i]->update();
+			}
+			else
+			{
+				_castleWall[i]->release();
+				delete _castleWall[i];
+				_castleWall[i]->setDestroy();
+				_castleWall[i] = NULL;
+			}
+		}
+	}
 }
 
 void castle::render()
 {
-	mncObjectBase::frameRender(_frameX,_frameY);
+	float zoom = CAMERA->getZoom();
+	float imageHalfHeight = _image->getFrameSize(_frameX).y * zoom * 0.5f;
+
+	_image->setAlphaOption(_alpha);
+	_image->setScaleOption(vector2D(zoom, zoom));
+	_image->frameRender(_pos.x*zoom, _pos.y*zoom + imageHalfHeight - 10, _frameX, _frameY, _pivot);
 }
 
 string castle::getSpriteKey(CountryColor::Enum color)
@@ -140,6 +176,9 @@ HRESULT castleWall::init(int xIndex, int yIndex, bool isLeft, CountryColor::Enum
 void castleWall::release()
 {
 	mncObjectBase::release();
+
+	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
+	tile->setBuildable(false);
 }
 
 void castleWall::update()

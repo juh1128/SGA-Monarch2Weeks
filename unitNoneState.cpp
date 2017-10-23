@@ -28,15 +28,75 @@ void unitNoneState::enter(unit & me)
 
 void unitNoneState::update(unit & me)
 {
+	//플레이어로부터 받은 지시가 있을 경우
+	// - 유닛 관련 명령
+	if (me._commandTargetUnit)
+	{		
+		if (me._commandStateName == "추적")
+		{
+			vector2D distance = me._commandTargetUnit->_index - me._index;
+			//해당 유닛의 1칸 앞에 왔을 때
+			if (distance.getLength() <= 1)
+			{
+				me.changeState(new unitFight(me._commandTargetUnit));
+				me.resetCommand();
+				return;
+			}
+		}
+		else if(me._commandStateName == "원군")
+		{
+			if (me._commandTargetUnit->_index == me._index)
+			{
+				me.resetCommand();
+				return;
+			}
+		}
+		
+		//싸울 수 있으면 싸운다.
+		unit* enemy = me.isCanAttack();
+		if (enemy != NULL)
+		{
+			return me.changeState(new unitFight(enemy));
+		}
+
+		//길찾기 (유닛 추적)
+		deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y), 
+			WORLD->getMap()->getTile(me._commandTargetUnit->_index.x, me._commandTargetUnit->_index.y));
+		if (path.size() > 0)
+		{
+			vector2D pathIndex = path[0]->getIndex();
+			me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
+		}
+		else
+		{
+			cout << "길 못찾음" << endl;
+			me.resetCommand();
+		}
+		return;
+	}
+	// - 타일 관련 명령
+	//else if (me._commandDestTile)
+	//{
+	//	deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
+	//		WORLD->getMap()->getTile(me._commandDestTile->getIndex().x, me._commandDestTile->getIndex().y));
+	//	if (path.size() > 0)
+	//	{
+	//		vector2D pathIndex = path[0]->getIndex();
+	//		return me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
+	//	}
+	//}
+
+
+	//지시가 없으면 자동모드
 	if (me._isAuto)
 	{
 		//도망
 		//unit* dangerousUnit = me.isCanRun();
 		//if (dangerousUnit != NULL)
-		{
-			//return me.changeState(new unitRun(dangerousUnit));
+		//{
+		//	return me.changeState(new unitRun(dangerousUnit));
 
-		}
+		//}
 
 		//공격
 		unit* enemy = me.isCanAttack();
@@ -45,8 +105,18 @@ void unitNoneState::update(unit & me)
 			return me.changeState(new unitFight(enemy));
 		}
 
+		//if (me._mergeUnit != nullptr)
+		//{
+		//	return me.changeState(new unitMerge(me._mergeUnit,me));
+
+		//}
 		me._state = UnitState::Search;
 
+		mncObjectBase* nature = me.isCanAttackNature();
+		if (nature != nullptr)
+		{
+			return me.changeState(new unitDigObject(nature));
+		}
 		//건설
 		vector2D destIndex = me._index + me.getDirectionVector(me._unitDirection);
 		if (me.isBuildableTown(destIndex.toPoint()))

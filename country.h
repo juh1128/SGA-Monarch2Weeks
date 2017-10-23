@@ -20,6 +20,11 @@ private:
 	vector<unit*>				_unitList; //유닛리스트
 	int							_countryPower; //전투력
 
+	bool						_isLive;
+
+	float						_timer;
+	int							_townCount;
+
 public:
 	country() {}
 	~country() {}
@@ -42,4 +47,17 @@ public:
 	//- 기타
 	int getCountryPower() { return _countryPower; }
 	CountryColor::Enum getColor() { return _countryColor; }
+	void addTown() { _townCount++; }
+	void removeTown() 
+	{ 
+		_townCount--;
+		if (_townCount <= 0 && _timer >= 10.0f)
+		{
+			gameOver();
+		}
+	}
+
+	//- 국가 게임오버
+	void gameOver();
+	bool isLive() { return _isLive; }
 };

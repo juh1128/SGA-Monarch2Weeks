@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "world.h"
 #include "unit.h"
+#include "mncObjectBase.h"
 
 void world::init()
 {
@@ -49,6 +50,20 @@ void world::update()
 			}
 		}
 	}
+
+	//테스트
+	//terrainTile* tile = WORLD->getMap()->getPickedTile();
+	//if (tile)
+	//{
+		//gameObject* obj = tile->getObjectOnTile();
+		//if (obj)
+		//{
+		//	if (obj->_name == "마을" || obj->_name == "성문")
+		//	{
+		//		((mncObjectBase*)obj)->addHp(-100);
+		//	}
+		//}
+	//}
 }
 
 void world::render()
@@ -133,6 +148,25 @@ void world::addUnit(unit * newUnit, CountryColor::Enum countryColor)
 country * world::getCountry(CountryColor::Enum color)
 {
 	return _country[color];
+}
+
+void world::destroyCountryBuilding(CountryColor::Enum color)
+{
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		for (unsigned int j = 0; j < _objectList[i].size(); ++j)
+		{
+			gameObject* object = _objectList[i][j];
+			if (object->isLive())
+			{
+				if (object->_name == "마을" || object->_name == "농장" || object->_name == "군주")
+				{
+					if(((mncObjectBase*)object)->getCountryColor() == color)
+						object->setDestroy();
+				}
+			}
+		}
+	}
 }
 
 void world::release()
