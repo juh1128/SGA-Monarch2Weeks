@@ -320,8 +320,8 @@ void commandWindow::render()
 			{
 				RECT rc = RectMake(_renderPos.x, _renderPos.y + i * _menuHeight, _menuWidth, _menuHeight);
 				IMAGEMANAGER->fillRectangle(rc, DefaultBrush::white);
-				IMAGEMANAGER->drawRectangle(rc);
-				IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * _menuHeight, UTIL::string_to_wstring(_menuList[i]), 14, _menuWidth, _menuHeight);
+IMAGEMANAGER->drawRectangle(rc);
+IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * _menuHeight, UTIL::string_to_wstring(_menuList[i]), 14, _menuWidth, _menuHeight);
 			}
 			//선택 메뉴 렌더링
 			if (_chooseIndex >= 0)
@@ -411,11 +411,26 @@ bool commandWindow::setMenuList()
 			{
 				_menuList.push_back("대기");
 				_menuList.push_back("자동");
+
+				//다리일 경우 수리
+				if (objectOnTile->_name == "다리")
+				{
+					_menuList.push_back("수리");
+				}
+
 				_menuList.push_back("파괴");
 			}
 			//오브젝트가 있는데 이동 불가능한 오브젝트일 경우 => 파괴
 			else
 			{
+				//아군의 목책일 경우 수리
+				if (objectOnTile->_name == "목책")
+				{
+					if(((mncObjectBase*)objectOnTile)->getCountryColor() == CountryColor::BLUE)
+					{
+						_menuList.push_back("수리");
+					}
+				}
 				if (objectOnTile->_name != "돌")
 					_menuList.push_back("파괴");
 			}
