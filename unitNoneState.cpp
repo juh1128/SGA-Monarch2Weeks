@@ -99,7 +99,7 @@ void unitNoneState::update(unit & me)
 		else if (me._commandStateName == "마을 건축")
 		{
 			//목적지 타일이 건설 가능한 지를 확인
-			if (!me._commandDestTile->isBuildable()) return me.resetCommand();
+			if (!me.isBuildableTown(me._commandDestTile->getIndex())) return me.resetCommand();
 
 			//목적지 타일과의 거리 계산
 			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
@@ -113,8 +113,9 @@ void unitNoneState::update(unit & me)
 		}
 		else if (me._commandStateName == "목책 건축")
 		{
+
 			//목적지 타일이 건설 가능한 지를 확인
-			if (!me._commandDestTile->isBuildable()) return me.resetCommand();
+			if (!me.isBuildableTown(me._commandDestTile->getIndex())) return me.resetCommand();
 
 			//목적지 타일과의 거리 계산
 			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;

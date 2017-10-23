@@ -13,6 +13,22 @@ void unitBuildTown::enter(unit& me)
 	objectFactory factory;
 	WORLD->addObject(factory.createObject(_destIndex.x, _destIndex.y, me.getColorString() + "Town"));
 	_obj = (mncObjectBase*)WORLD->getMap()->getTile(_destIndex.x, _destIndex.y)->getObjectOnTile();
+	
+	vector2D desttileindex(_destIndex);
+	vector2D direction = desttileindex - me._index;
+
+	if (direction.x == 1)
+		me._unitDirection = UnitDirection::UNIT_RIGHT;
+	else if (direction.x == -1)
+		me._unitDirection = UnitDirection::UNIT_LEFT;
+	else if (direction.y == 1)
+		me._unitDirection = UnitDirection::UNIT_DOWN;
+	else if (direction.y == -1)
+		me._unitDirection = UnitDirection::UNIT_UP;
+	else
+		cout << direction.x << " , " << direction.y << "unitBuild enter 방향설정 오류" << endl;
+
+
 	_obj->setHp(1);
 }
 
@@ -120,6 +136,19 @@ void unitBuildObject::enter(unit& me)
 		me.changeState(new unitNoneState);
 		return;
 	}
+
+	vector2D direction = destIndex - me._index;
+
+	if (direction.x == 1)
+		me._unitDirection = UnitDirection::UNIT_RIGHT;
+	else if (direction.x == -1)
+		me._unitDirection = UnitDirection::UNIT_LEFT;
+	else if (direction.y == 1)
+		me._unitDirection = UnitDirection::UNIT_DOWN;
+	else if (direction.y == -1)
+		me._unitDirection = UnitDirection::UNIT_UP;
+	else
+		cout << direction.x << " , " << direction.y << "unitBuild enter 방향설정 오류" << endl;
 
 	_obj->setHp(1);
 }
