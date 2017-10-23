@@ -84,15 +84,7 @@ void startscene::render()
 		}
 
 		//	
-
-
-		if (PtInRect(&rc_2, _ptMouse) && word == true)
-		{
-			char buf3[128] = "??";
-			IMAGEMANAGER->drawText(130, 100, UTIL::string_to_wstring(buf3), 20, DefaultBrush::gray);
-
-		}
-
+	
 		if (PtInRect(&rc_3, _ptMouse) && click == true )
 		{
 			exit(0);
