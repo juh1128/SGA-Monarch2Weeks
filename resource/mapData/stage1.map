@@ -243,7 +243,7 @@
         {
             "key": "ISO_Tile_Water_01.png",
             "height": 0,
-            "walkable": true,
+            "walkable": false,
             "moveRatio": 1.0,
             "isBuild": false
         },
