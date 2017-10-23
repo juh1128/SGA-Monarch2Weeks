@@ -140,11 +140,11 @@ void unitNoneState::update(unit & me)
 	if (me._isAuto)
 	{
 		//µµ¸Á
-		//unit* dangerousUnit = me.isCanRun();
-		//if (dangerousUnit != NULL)
-		//{
-		//	return me.changeState(new unitRun(dangerousUnit));
-		//}
+		unit* dangerousUnit = me.isCanRun();
+		if (dangerousUnit != NULL)
+		{
+			return me.changeState(new unitRun(dangerousUnit));
+		}
 
 		//°ø°Ý
 		unit* enemy = me.isCanAttack();
@@ -153,11 +153,6 @@ void unitNoneState::update(unit & me)
 			return me.changeState(new unitFight(enemy));
 		}
 
-		//if (me._mergeUnit != nullptr)
-		//{
-		//	return me.changeState(new unitMerge(me._mergeUnit,me));
-
-		//}
 		me._state = UnitState::Search;
 
 		mncObjectBase* nature = me.isCanAttackNature();
