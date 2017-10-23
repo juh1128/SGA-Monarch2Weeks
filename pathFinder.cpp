@@ -73,7 +73,6 @@ void pathFinder::addOpenList()
 		//이동 불가 타일도 아니고, passList에도 없는 타일은 openList에 추가한다.
 		_openList.push_back(getChildNode(_currentNode, tile));
 	};
-
 	
 
 	add(- 1, 0); //좌

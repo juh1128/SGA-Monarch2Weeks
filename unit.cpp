@@ -18,7 +18,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 	_unitColor = country;
 	string color = getColorString();
 
-	gameObject::init("병사", color + "Lv1", tileMap::getTilePosFromIndex(index, height), Pivot::CENTER);
+	gameObject::init("unit", color + "Lv1", tileMap::getTilePosFromIndex(index, height), Pivot::CENTER);
 	this->setImage(objectFactory::getUnitImage(country, 1), objectFactory::getUnitImage(country, 2),
 		objectFactory::getUnitImage(country, 3));
 
@@ -72,12 +72,10 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 		this->setCommand(tile, NULL, "목책 건축");
 	});
 
-	//this->addCallback("다리 건설", [&](tagMessage msg) {
-	//	terrainTile* tile = (terrainTile*)msg.targetList[0];
-	//	this->moveAstar(tile->getIndex().x, tile->getIndex().y);
-	//	this->reserveState(new unitNoneState);
-	//	this->setAuto(true);
-	//});
+	this->addCallback("다리 건설", [&](tagMessage msg) {
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->setCommand(tile, NULL, "다리 건설");
+	});
 
 	//==================================================
 	// ## 원군 명령

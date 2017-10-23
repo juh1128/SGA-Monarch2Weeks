@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "playGround.h"
 #include "testScene.h"
+#include "startscene.h"
 #include "objectFactory.h"
+
 
 playGround::playGround()
 {
@@ -51,8 +53,15 @@ HRESULT playGround::init(void)
 	SOUNDMANAGER->addSound("bgm", "resource/bgm/field.mp3", true, true);
 
 
+	//op 
+	IMAGEMANAGER->addFrameImage("OP_1", L"resource/startscene/O_000.png", 1, 50, false);
+	IMAGEMANAGER->addFrameImage("title", L"resource/startscene/O_001.png", 1, 50, false);
+
+
+
 	//초기 시작 씬 생성
-	SCENEMANAGER->pushScene(new testScene);
+	SCENEMANAGER->pushScene(new startscene);
+	
 
 	return S_OK;
 }

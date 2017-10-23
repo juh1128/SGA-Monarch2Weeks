@@ -41,21 +41,10 @@ gameObject* objectFactory::createObject(int xIndex, int yIndex, string name)
 		((town*)newObj)->init(xIndex, yIndex, CountryColor::GREEN);
 	}
 	//다리
-	else if (name == "redBridge")
+	else if (name == "bridge")
 	{
-		//((bridge*)newObj)->setMaxHp(150);
-	}
-	else if (name == "blueBridge")
-	{
-
-	}
-	else if (name == "whiteBridge")
-	{
-
-	}
-	else if (name == "greenBridge")
-	{
-
+		newObj = new bridge;
+		((bridge*)newObj)->init(xIndex, yIndex);
 	}
 	//목책
 	else if (name == "redWall")
