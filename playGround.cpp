@@ -51,10 +51,9 @@ HRESULT playGround::init(void)
 
 	// - ¹è°æÀ½¾Ç
 	SOUNDMANAGER->addSound("bgm", "resource/bgm/field.mp3", true, true);
-
+	SOUNDMANAGER->addSound("titleBgm", "resource/bgm/select.mp3", true, true);
 
 	//op 
-	IMAGEMANAGER->addFrameImage("OP_1", L"resource/startscene/O_000.png", 1, 50, false);
 	IMAGEMANAGER->addFrameImage("title", L"resource/startscene/O_001.png", 1, 50, false);
 
 

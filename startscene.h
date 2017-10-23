@@ -13,6 +13,8 @@ class startscene : public sceneBase
 		RECT rc_3; 
 
 		float x,y; 
+
+		int _frame;
 		
 
 	public:

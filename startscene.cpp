@@ -7,18 +7,19 @@ startscene::~startscene(){}
 HRESULT startscene::init()
 {
 	sceneBase::init();
-	// SOUNDMANAGER->play(*,0.5f)
-	word = false; 
+	SOUNDMANAGER->play("titleBgm", 0.5f);
+
+	word = true; 
 	click = false; 
+
+	IMAGEMANAGER->addImage("titleBack", L"resource/tiles/background/background2.png");
 	
-	
-	rc_1 = RectMakeCenter(60, 75, 150, 20);
-	rc_2 = RectMakeCenter(60, 105, 150, 20);
-	rc_3 = RectMakeCenter(60, 135, 100, 20); 
+	rc_1 = RectMakeCenter(60+80, 75+500, 150, 20);
+	rc_2 = RectMakeCenter(60+80, 105+500, 150, 20);
 
 	
 
-	
+	_frame = 0;
 
 	
 	
@@ -48,8 +49,8 @@ void startscene::update()
 		SCENEMANAGER->pushScene(new testScene);
 	
 
-	
-
+	if(_frame < 30)
+		_frame = ++_frame;
 
 }
 
@@ -57,35 +58,32 @@ void startscene::render()
 {
 	sceneBase::render();
 
+	IMAGEMANAGER->findImage("titleBack")->setSizeOption(vector2D(WINSIZEX, WINSIZEY));
+	IMAGEMANAGER->findImage("titleBack")->render(0, 0, Pivot::LEFT_TOP, false);
+	IMAGEMANAGER->findImage("title")->frameRender(WINSIZEX/2, 100, 0, _frame, Pivot::CENTER, false);
+
 	if (word == true)
 	{
 
 		char buf[128] = "처음부터";
-		IMAGEMANAGER->drawText(50, 70, UTIL::string_to_wstring(buf), 20, DefaultBrush::gray);
-		char buf1[128] = "이어하기";
-		IMAGEMANAGER->drawText(50, 100, UTIL::string_to_wstring(buf1), 20, DefaultBrush::gray);
-		char buf2[128] = "종료";
-		IMAGEMANAGER->drawText(50, 130, UTIL::string_to_wstring(buf2), 20, DefaultBrush::gray);
+		IMAGEMANAGER->drawText(rc_1.left, rc_1.top, UTIL::string_to_wstring(buf), 20, DefaultBrush::gray);
+		char buf1[128] = "종료";
+		IMAGEMANAGER->drawText(rc_2.left, rc_2.top, UTIL::string_to_wstring(buf1), 20, DefaultBrush::gray);
 
 		//
 
 		if (PtInRect(&rc_1, _ptMouse))
 		{
-			IMAGEMANAGER->drawText(50, 70, UTIL::string_to_wstring(buf), 20, DefaultBrush::white);
+			IMAGEMANAGER->drawText(rc_1.left, rc_1.top, UTIL::string_to_wstring(buf), 20, DefaultBrush::white);
 		}
 		if (PtInRect(&rc_2, _ptMouse))
 		{
-			IMAGEMANAGER->drawText(50, 100, UTIL::string_to_wstring(buf1), 20, DefaultBrush::white);
-		}
-
-		if (PtInRect(&rc_3, _ptMouse))
-		{
-			IMAGEMANAGER->drawText(50, 130, UTIL::string_to_wstring(buf2), 20, DefaultBrush::white);
+			IMAGEMANAGER->drawText(rc_2.left, rc_2.top, UTIL::string_to_wstring(buf1), 20, DefaultBrush::white);
 		}
 
 		//	
 	
-		if (PtInRect(&rc_3, _ptMouse) && click == true )
+		if (PtInRect(&rc_2, _ptMouse) && click == true )
 		{
 			exit(0);
 		}
