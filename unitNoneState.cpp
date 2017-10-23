@@ -113,9 +113,11 @@ void unitNoneState::update(unit & me)
 		}
 		else if (me._commandStateName == "목책 건축")
 		{
+			//index 오버플로우, 높이 체크, 적 유닛이 있는지 체크	
+			if (!me.isMoveable(me._commandDestTile->getIndex())) return me.resetCommand();
 
-			//목적지 타일이 건설 가능한 지를 확인
-			if (!me.isBuildableTown(me._commandDestIndex.toPoint())) return me.resetCommand();
+			//건설 가능한지 체크
+			if (!me._commandDestTile->isBuildable()) return me.resetCommand();
 
 			//목적지 타일과의 거리 계산
 			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
