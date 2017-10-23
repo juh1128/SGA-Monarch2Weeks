@@ -13,6 +13,7 @@ void country::init(CountryColor::Enum color)
 	_countryPower = 0;
 	_townCount = 0;
 	_timer = 0;
+	_frameTimer = 0;
 
 	_isLive = true;
 }
@@ -55,6 +56,14 @@ void country::update()
 			_unitList.erase(_unitList.begin() + i);
 			--i;
 		}
+	}
+
+	//인공지능 국가 골드 보너스
+	if (_countryColor != CountryColor::BLUE)
+	{
+		_frameTimer = ++_frameTimer % 60;
+		if(_frameTimer == 0)
+			_gold += 1;
 	}
 
 }
@@ -105,8 +114,37 @@ void country::gameOver()
 			break;
 		}
 	};
-
 	char buffer[128] = "";
-	wsprintf(buffer, "%s 국가가 멸망하였다...", getCountryName(_countryColor));
-	((testScene*)SCENEMANAGER->getNowScene())->getUI()->drawSystemText(buffer, 3.0f, RGB(0, 0, 0));
+
+	//게임 승패 판단
+	userInterface* ui = ((testScene*)SCENEMANAGER->getNowScene())->getUI();
+	if (!ui) return;
+
+	if (_countryColor == CountryColor::BLUE)
+	{
+		wsprintf(buffer, "당신의 국가가 멸망했습니다..", getCountryName(_countryColor));
+		ui->drawSystemText(buffer, 2.0f, RGB(0, 0, 0));
+		SCENEMANAGER->getNowScene()->sendMessage("popScene", 5.0f);
+	}
+	else
+	{
+		int livedCountry = 0;
+		for (int i = 0; i < CountryColor::END - 1; ++i)
+		{
+			livedCountry += WORLD->getCountry(CountryColor::Enum(i))->isLive();
+		}
+
+		if (livedCountry <= 1)
+		{
+			//플레이어 승리
+			wsprintf(buffer, "배트랜드 국가의 승리입니다!");
+			ui->drawSystemText(buffer, 2.0f, RGB(0, 0, 0));
+			SCENEMANAGER->getNowScene()->sendMessage("popScene", 5.0f);
+		}
+		else
+		{
+			wsprintf(buffer, "%s 국가가 멸망하였다...", getCountryName(_countryColor));
+			ui->drawSystemText(buffer, 2.0f, RGB(0, 0, 0));
+		}
+	}
 }

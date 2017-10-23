@@ -5,7 +5,7 @@ class farmLand : public mncObjectBase
 {
 private:
 	int				_frame;
-	float				_incomeTimer;
+	float			_incomeTimer;
 
 public:
 	farmLand() {}

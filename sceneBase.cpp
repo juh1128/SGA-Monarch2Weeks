@@ -95,5 +95,9 @@ void sceneBase::registCallback()
 	{
 		this->enableWorld(false);
 	});
+	this->addCallback("popScene", [this](tagMessage msg)
+	{
+		SCENEMANAGER->popScene();
+	});
 }
 

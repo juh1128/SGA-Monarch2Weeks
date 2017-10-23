@@ -52,18 +52,29 @@ void world::update()
 	}
 
 	//테스트
-	//terrainTile* tile = WORLD->getMap()->getPickedTile();
-	//if (tile)
-	//{
-		//gameObject* obj = tile->getObjectOnTile();
-		//if (obj)
-		//{
-		//	if (obj->_name == "마을" || obj->_name == "성문")
-		//	{
-		//		((mncObjectBase*)obj)->addHp(-100);
-		//	}
-		//}
-	//}
+	if (_tileMap)
+	{
+		if (KEYMANAGER->isOnceKeyDown('D'))
+		{
+			terrainTile* tile = _tileMap->getPickedTile();
+			cout << "Stop" << endl;
+		}
+		if (KEYMANAGER->isOnceKeyDown('K'))
+		{
+			terrainTile* tile = _tileMap->getPickedTile();
+			if (tile)
+			{
+				gameObject* obj = tile->getObjectOnTile();
+				if (obj)
+				{
+					if (obj->_name == "군주")
+					{
+						((mncObjectBase*)obj)->addHp(-100);
+					}
+				}
+			}
+		}
+	}
 }
 
 void world::render()

@@ -76,7 +76,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 		{
 			for (int i = 1; i < moveableIndex.size(); ++i)
 			{
-				if (moveableIndex[i].getLength() < moveableIndex[minIndex].getLength())
+				if ((moveableIndex[i] - this->_index).getLength() < (moveableIndex[minIndex] - this->_index).getLength())
 				{
 					minIndex = i;
 				}
@@ -115,7 +115,7 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 		{
 			for (int i = 1; i < moveableIndex.size(); ++i)
 			{
-				if (moveableIndex[i].getLength() < moveableIndex[minIndex].getLength())
+				if ((moveableIndex[i] - this->_index).getLength() < (moveableIndex[minIndex] - this->_index).getLength())
 				{
 					minIndex = i;
 				}

@@ -84,8 +84,8 @@ void unitNoneState::update(unit & me)
 		else if (me._commandStateName == "파괴")
 		{
 			vector2D distance = vector2D(me._commandDestIndex.toPoint()) - me._index;
-			//해당 타일의 1칸 앞에 왔을 때
-			if (distance.getLength() <= 1)
+			//도착!
+			if (me._commandDestIndex == me._index)
 			{
 				mncObjectBase* nature = me.isCanAttackNature();
 				if (nature != nullptr)
@@ -141,10 +141,8 @@ void unitNoneState::update(unit & me)
 				}
 			}
 
-			//목적지 타일과의 거리 계산
-			vector2D distance = vector2D(me._commandDestIndex.toPoint()) - me._index;
-			//해당 타일의 1칸 앞에 왔을 때
-			if (distance.getLength() <= 1)
+			//도착!
+			if (me._commandDestIndex == me._index)
 			{
 				me.changeState(new unitBuildObject(me._commandDestTile, "bridge"));
 				me.resetCommand();

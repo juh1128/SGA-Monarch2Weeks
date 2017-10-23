@@ -74,11 +74,9 @@ void bridge::render()
 
 	float zoom = CAMERA->getZoom();
 	float imageHalfHeight = _image->getFrameSize(0).y * zoom * 0.5f;
-	
-	_scale = vector2D(zoom, zoom);
 
 	_image->setAlphaOption(_alpha);
-	_image->setScaleOption(_scale);
-	_image->frameRender((_pos.x)*zoom , (_pos.y-10)*zoom+ imageHalfHeight , renderFrame, 0, Pivot::CENTER);
+	_image->setScaleOption(vector2D(zoom, zoom));
+	_image->frameRender((_pos.x)*zoom, (_pos.y)*zoom + imageHalfHeight, renderFrame, 0, Pivot::CENTER);
 
 }
