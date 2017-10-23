@@ -320,8 +320,8 @@ void commandWindow::render()
 			{
 				RECT rc = RectMake(_renderPos.x, _renderPos.y + i * _menuHeight, _menuWidth, _menuHeight);
 				IMAGEMANAGER->fillRectangle(rc, DefaultBrush::white);
-IMAGEMANAGER->drawRectangle(rc);
-IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * _menuHeight, UTIL::string_to_wstring(_menuList[i]), 14, _menuWidth, _menuHeight);
+				IMAGEMANAGER->drawRectangle(rc);
+				IMAGEMANAGER->drawTextField(_renderPos.x, _renderPos.y + i * _menuHeight, UTIL::string_to_wstring(_menuList[i]), 14, _menuWidth, _menuHeight);
 			}
 			//선택 메뉴 렌더링
 			if (_chooseIndex >= 0)

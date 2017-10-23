@@ -12,7 +12,7 @@ HRESULT startscene::init()
 	word = true; 
 	click = false; 
 
-	IMAGEMANAGER->addImage("titleBack", L"resource/tiles/background/background2.png");
+	IMAGEMANAGER->addImage("titleBack", L"resource/startscene/title.png");
 	
 	rc_1 = RectMakeCenter(60+80, 75+500, 150, 20);
 	rc_2 = RectMakeCenter(60+80, 105+500, 150, 20);
@@ -37,12 +37,12 @@ void startscene::update()
 {
 	sceneBase::update();
 	
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)) word = true; 
+	//if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)) word = true; 
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)) click = true;
-	else (click = false);
+	//if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)) click = true;
+	//else (click = false);
 	
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && click == true && PtInRect(&rc_1, _ptMouse))
+	if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 	{
 		SCENEMANAGER->pushScene(new testScene);
 		SOUNDMANAGER->stop("titleBgm");
@@ -58,36 +58,37 @@ void startscene::render()
 {
 	sceneBase::render();
 
-	IMAGEMANAGER->findImage("titleBack")->setSizeOption(vector2D(WINSIZEX, WINSIZEY));
 	IMAGEMANAGER->findImage("titleBack")->render(0, 0, Pivot::LEFT_TOP, false);
 	IMAGEMANAGER->findImage("title")->frameRender(WINSIZEX/2, 250, 0, _frame, Pivot::CENTER, false);
 
-	if (word == true)
-	{
+	IMAGEMANAGER->drawTextField(0, 673, L"게임을 시작하려면 엔터를 누르세요.", 30, 1024, 80);
 
-		char buf[128] = "처음부터";
-		IMAGEMANAGER->drawText(rc_1.left, rc_1.top, UTIL::string_to_wstring(buf), 20, DefaultBrush::black);
-		char buf1[128] = "종료";
-		IMAGEMANAGER->drawText(rc_2.left, rc_2.top, UTIL::string_to_wstring(buf1), 20, DefaultBrush::black);
+	//if (word == true)
+	//{
 
-		//
+	//	char buf[128] = "처음부터";
+	//	IMAGEMANAGER->drawText(rc_1.left, rc_1.top, UTIL::string_to_wstring(buf), 20, DefaultBrush::white);
+	//	char buf1[128] = "종료";
+	//	IMAGEMANAGER->drawText(rc_2.left, rc_2.top, UTIL::string_to_wstring(buf1), 20, DefaultBrush::white);
 
-		if (PtInRect(&rc_1, _ptMouse))
-		{
-			IMAGEMANAGER->drawText(rc_1.left, rc_1.top, UTIL::string_to_wstring(buf), 20, DefaultBrush::white);
-		}
-		if (PtInRect(&rc_2, _ptMouse))
-		{
-			IMAGEMANAGER->drawText(rc_2.left, rc_2.top, UTIL::string_to_wstring(buf1), 20, DefaultBrush::white);
-		}
+	//	//
 
-		//	
-	
-		if (PtInRect(&rc_2, _ptMouse) && click == true )
-		{
-			exit(0);
-		}
-	}
+	//	if (PtInRect(&rc_1, _ptMouse))
+	//	{
+	//		IMAGEMANAGER->drawText(rc_1.left, rc_1.top, UTIL::string_to_wstring(buf), 20, DefaultBrush::white);
+	//	}
+	//	if (PtInRect(&rc_2, _ptMouse))
+	//	{
+	//		IMAGEMANAGER->drawText(rc_2.left, rc_2.top, UTIL::string_to_wstring(buf1), 20, DefaultBrush::white);
+	//	}
+
+	//	//	
+	//
+	//	if (PtInRect(&rc_2, _ptMouse) && click == true )
+	//	{
+	//		exit(0);
+	//	}
+	//}
 	//
 	
 	

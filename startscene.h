@@ -15,7 +15,7 @@ class startscene : public sceneBase
 		float x,y; 
 
 		int _frame;
-		
+		float _alpha;
 
 	public:
 	virtual HRESULT init();
