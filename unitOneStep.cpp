@@ -4,11 +4,9 @@
 
 void unitOneStep::enter(unit & unit)
 {
-	//if (unit._state != UnitState::Merge) unit._state = UnitState::Search;
 	// - 이동거리 체크 (인덱스 차이가 2칸 이상 일 경우 이동하지 않음)
 	vector2D distance = _destIndex - unit._index;
-	if (_destIndex == unit._index) 
-		cout << "왜 자기 타일을 찍냐" << endl;
+
 	float length = distance.getLength();
 	if (length <= 0 || length > 1)
 	{

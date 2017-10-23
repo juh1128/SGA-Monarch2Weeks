@@ -5,7 +5,8 @@
 class bridge : public mncObjectBase
 {
 private:
-	int						_frame;
+	int				_frame;
+	int				_direction;
 public:
 	bridge() {}
 	virtual ~bridge() {}

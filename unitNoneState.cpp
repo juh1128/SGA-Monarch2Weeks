@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "unit.h"
+#include "mncObjectBase.h"
 
 
 void unitNoneState::enter(unit & me)
@@ -121,6 +122,28 @@ void unitNoneState::update(unit & me)
 			if (distance.getLength() <= 1)
 			{
 				me.changeState(new unitBuildObject(me._commandDestTile,"Wall"));
+				me.resetCommand();
+				return;
+			}
+		}
+		else if (me._commandStateName == "다리 건설")
+		{
+			//목적지 타일에 이미 다리가 건설되었는지 확인
+			mncObjectBase* onObject = (mncObjectBase*)me._commandDestTile->getObjectOnTile();
+			if (onObject)
+			{
+				if (onObject->_name == "다리")
+				{
+					return me.resetCommand();
+				}
+			}
+
+			//목적지 타일과의 거리 계산
+			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
+			//해당 타일의 1칸 앞에 왔을 때
+			if (distance.getLength() <= 1)
+			{
+				me.changeState(new unitBuildObject(me._commandDestTile, "Bridge"));
 				me.resetCommand();
 				return;
 			}
