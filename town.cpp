@@ -6,7 +6,7 @@
 // - 밸런스 설정값
 
 #define FARM_CREATE_TIME 3.0f		//농장 생성 시간
-#define PAY_TAX_TIME 1.5f			//세금 납부 시간
+#define PAY_TAX_TIME 1.0f			//세금 납부 시간
 
 #define TOWN_INCOME_TIME 1.0f		//마을 수익 시간
 #define FARM_INCOME_TIME 2.0f		//농장 수익 시간
@@ -33,6 +33,8 @@ HRESULT town::init(int xIndex, int yIndex, CountryColor::Enum color)
 void town::release()
 {
 	terrainTile* onTile = WORLD->getMap()->getTile(_index.x, _index.y);
+
+	//마을 위 유닛들 높이 1 빼주기.
 	vector<unit*> unitList = onTile->getUnitOnTile();
 	for (size_t i = 0; i < unitList.size(); ++i)
 	{
@@ -42,7 +44,9 @@ void town::release()
 		}
 	}
 	WORLD->getCountry(_countryColor)->removeTown();
+
 	mncObjectBase::release();
+	onTile->setWalkable(true);
 }
 
 void town::update()
@@ -112,10 +116,15 @@ void town::update()
 	//유닛 생성
 	if (_hp > 100)
 	{
-		_hp -= 100;
-		unit* noyae = new unit;
-		noyae->init(_index, _height+1, _countryColor);
-		WORLD->addUnit(noyae, _countryColor);
+		//골드 확인
+		if (WORLD->getCountry(_countryColor)->getGold() >= 30)
+		{
+			_hp -= 100;
+			WORLD->getCountry(_countryColor)->addGold(-30);
+			unit* noyae = new unit;
+			noyae->init(_index, _height + 1, _countryColor);
+			WORLD->addUnit(noyae, _countryColor);
+		}
 	}
 
 	if (_hp <= 0)
@@ -145,6 +154,8 @@ HRESULT farmLand::init(int xIndex, int yIndex, CountryColor::Enum color)
 void farmLand::release()
 {
 	mncObjectBase::release();
+	terrainTile* tile = WORLD->getMap()->getTile(_index.x, _index.y);
+	tile->setWalkable(true);
 }
 
 void farmLand::update()

@@ -35,8 +35,25 @@ HRESULT userInterface::init(CountryColor::Enum playerColor)
 }
 
 void userInterface::release()
-{
+{	
+	_back->release();
+	SAFE_DELETE(_back);
+
+	_startBtn->release();
+	SAFE_DELETE(_startBtn);
+
+	_taxProgress->release();
+	SAFE_DELETE(_taxProgress);
+
+	_systemMessage->release();
+	SAFE_DELETE(_systemMessage);
+
+	_commandWindow->release();
+	SAFE_DELETE(_commandWindow);
+
 	gameObject::release();
+
+
 }
 
 void userInterface::update()
@@ -62,7 +79,8 @@ void userInterface::update()
 
 void userInterface::drawSystemText(string text, float displayTime, COLORREF color)
 {
-	_systemMessage->showMessage(text, displayTime, color);
+	if(_systemMessage)
+		_systemMessage->showMessage(text, displayTime, color);
 }
 
 void userInterface::render()

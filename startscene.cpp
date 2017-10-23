@@ -29,6 +29,8 @@ void startscene::release()
 
 void startscene::resume()
 {
+	SOUNDMANAGER->stop("bgm");
+	SOUNDMANAGER->play("titleBgm", 0.5f);
 }
 
 void startscene::update()

@@ -25,6 +25,8 @@ private:
 	float						_timer;
 	int							_townCount;
 
+	int							_frameTimer;
+
 public:
 	country() {}
 	~country() {}

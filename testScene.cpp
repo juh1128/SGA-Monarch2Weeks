@@ -28,6 +28,7 @@ void testScene::release()
 {
 	_ui->release();
 	delete _ui;
+	_ui = NULL;
 
 	sceneBase::release();
 }

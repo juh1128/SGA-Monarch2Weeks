@@ -95,7 +95,6 @@ mncObjectBase* unit::isCanAttackNature()
 
 				if (onObject->_name == "다리") continue;
 
-
 				nature.push_back(obj);
 			}
 		}
@@ -107,34 +106,6 @@ mncObjectBase* unit::isCanAttackNature()
 		return nature[RND->getFromIntTo(0, nature.size() - 1)];
 	}
 	return NULL;
-
-	//vector2D direct = _index + getDirectionVector(_unitDirection);
-
-	//vector2D kingCheck[2];
-	//kingCheck[0] = _index + getDirectionVector(UnitDirection::UNIT_LEFT);
-	//kingCheck[1] = _index + getDirectionVector(UnitDirection::UNIT_RIGHT);
-	//for (int i = 0; i < 2; i++)
-	//{
-	//	if (WORLD->getMap()->getTile(kingCheck[i].x, kingCheck[i].y) != nullptr)
-	//	{
-	//		mncObjectBase* king = (mncObjectBase*)WORLD->getMap()->getTile(kingCheck[i].x, kingCheck[i].y)->getObjectOnTile();
-	//		if (king == nullptr) continue;
-	//		if (king->_name == "군주") return king;
-	//	}
-	//}
-	//if (direct.x <0 || direct.x > WORLD->getMap()->getTileCount().x - 1) return nullptr;
-	//if (direct.y <0 || direct.y > WORLD->getMap()->getTileCount().y - 1) return nullptr;
-
-	//mncObjectBase* obj = (mncObjectBase*)WORLD->getMap()->getTile(direct.x, direct.y)->getObjectOnTile();
-	//if(obj)
-	//	nature.push_back(obj);
-
-	//if (nature.size() <= 0) return nullptr;
-	//if (nature[0]->getCountryColor() == this->getCountryColor()) return nullptr;
-	//if (nature[0]->_name == "돌") return nullptr;
-	//if (!nature[0]->isLive()) return nullptr;
-
-	//return nature[0];
 }
 
 void unitFight::enter(unit & me)

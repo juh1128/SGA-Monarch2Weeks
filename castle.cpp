@@ -74,6 +74,7 @@ void castle::release()
 	country* cty = WORLD->getCountry(_countryColor);
 	if (cty)
 	{
+		if(cty->isLive())
 		cty->gameOver();
 	}
 
