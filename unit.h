@@ -22,7 +22,7 @@ namespace UnitState
 {
 	enum Enum
 	{
-		Stop, Search, CreateMotion, Fight, Run, BuildTown, Merge, End
+		Stop, Search, CreateMotion, Fight, Destroy, Run, BuildTown, NoMoney, Merge, End
 	};
 }
 
@@ -65,6 +65,7 @@ private:
 	friend class unitNoneState;
 	friend class unitOneStep;
 	friend class unitBuildTown;
+	friend class unitBuildObject;
 	friend class unitRun;
 	friend class unitFight;
 	friend class unitMerge;
@@ -133,6 +134,7 @@ public:
 	float getCommandTime()
 	{
 		if (_commandStateName == "원군") return 0.5f;
+		else if (_commandStateName == "대기") return 0.75f;
 		return _commandTime;
 	}
 	string getCommandName() { return _commandStateName; }
@@ -203,6 +205,24 @@ public:
 	virtual void update(unit& me);
 };
 
+class unitBuildObject : public unitState
+{
+private:
+	terrainTile* _destTile;
+	string _key;
+	mncObjectBase* _obj;
+	int _frameTimer;
+public:
+	unitBuildObject(terrainTile* tile, string objectKey)
+	{
+		_destTile = tile;
+		_key = objectKey;
+		_stateName = "건설";
+	}
+	virtual void enter(unit& me);
+	virtual void update(unit& me);
+};
+
 class unitCreateMotion : public unitState
 {
 private:
@@ -251,6 +271,7 @@ public:
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
 };
+
 class unitDigObject : public unitState
 {
 private:
@@ -269,6 +290,7 @@ public:
 	virtual void enter(unit& me);
 	virtual void update(unit& me);
 };
+
 class unitMerge : public unitState
 {
 private:

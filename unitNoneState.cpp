@@ -4,25 +4,6 @@
 
 void unitNoneState::enter(unit & me)
 {
-	//me._state = UnitState::None;
-	//if (me._isAuto)
-	//{
-		//방향에 따른 타일 두칸검출
-		//terrainTile* tile[2];
-		//vector2D direction = me.getDirectionVector(me._unitDirection);
-		//vector2D temp = me._index + direction;
-		//vector2D temp2 = me._index + direction * 2;
-
-		//tile[0] = WORLD->getMap()->getTile(temp.x, temp.y);
-		//tile[1] = WORLD->getMap()->getTile(temp2.x, temp2.y);
-
-		//순서 도망->건설->공격
-
-		//도망가는 상황
-		//자신으로부터 25칸(상하좌우대각으로 2칸씩)
-		//주변에 두마리이상이 있을경우 가장 체력이 높은애로부터 도망감
-
-	//}
 }
 
 
@@ -75,28 +56,96 @@ void unitNoneState::update(unit & me)
 		return;
 	}
 	// - 타일 관련 명령
-	//else if (me._commandDestTile)
-	//{
-	//	deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
-	//		WORLD->getMap()->getTile(me._commandDestTile->getIndex().x, me._commandDestTile->getIndex().y));
-	//	if (path.size() > 0)
-	//	{
-	//		vector2D pathIndex = path[0]->getIndex();
-	//		return me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
-	//	}
-	//}
+	else if (me._commandDestTile)
+	{
+		//싸울 수 있으면 싸운다.
+		unit* enemy = me.isCanAttack();
+		if (enemy != NULL)
+		{
+			return me.changeState(new unitFight(enemy));
+		}
+
+		if (me._commandStateName == "대기")
+		{
+			if (vector2D(me._commandDestTile->getIndex()) == me._index)
+			{
+				return;
+			}
+		}
+		else if (me._commandStateName == "자동")
+		{
+			if (vector2D(me._commandDestTile->getIndex()) == me._index)
+			{
+				me.resetCommand();
+				return;
+			}
+		}
+		else if (me._commandStateName == "파괴")
+		{
+			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
+			//해당 타일의 1칸 앞에 왔을 때
+			if (distance.getLength() <= 1)
+			{
+				mncObjectBase* nature = me.isCanAttackNature();
+				if (nature != nullptr)
+				{
+					me.changeState(new unitDigObject(nature));
+				}
+				me.resetCommand();
+				return;
+			}
+		}
+		else if (me._commandStateName == "마을 건축")
+		{
+			//목적지 타일이 건설 가능한 지를 확인
+			if (!me.isBuildableTown(me._commandDestTile->getIndex())) return me.resetCommand();
+
+			//목적지 타일과의 거리 계산
+			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
+			//해당 타일의 1칸 앞에 왔을 때
+			if (distance.getLength() <= 1)
+			{
+				me.changeState(new unitBuildTown(me._commandDestTile->getIndex()));
+				me.resetCommand();
+				return;
+			}
+		}
+		else if (me._commandStateName == "목책 건축")
+		{
+
+			//목적지 타일이 건설 가능한 지를 확인
+			if (!me.isBuildableTown(me._commandDestTile->getIndex())) return me.resetCommand();
+
+			//목적지 타일과의 거리 계산
+			vector2D distance = vector2D(me._commandDestTile->getIndex()) - me._index;
+			//해당 타일의 1칸 앞에 왔을 때
+			if (distance.getLength() <= 1)
+			{
+				me.changeState(new unitBuildObject(me._commandDestTile,"Wall"));
+				me.resetCommand();
+				return;
+			}
+		}
+
+		deque<terrainTile*> path = PATHFINDER->getPath(WORLD->getMap()->getTile(me._index.x, me._index.y),
+			WORLD->getMap()->getTile(me._commandDestTile->getIndex().x, me._commandDestTile->getIndex().y));
+		if (path.size() > 0)
+		{
+			vector2D pathIndex = path[0]->getIndex();
+			return me.changeState(new unitOneStep(pathIndex.x, pathIndex.y));
+		}
+	}
 
 
 	//지시가 없으면 자동모드
 	if (me._isAuto)
 	{
 		//도망
-		//unit* dangerousUnit = me.isCanRun();
-		//if (dangerousUnit != NULL)
-		//{
-		//	return me.changeState(new unitRun(dangerousUnit));
-
-		//}
+		unit* dangerousUnit = me.isCanRun();
+		if (dangerousUnit != NULL)
+		{
+			return me.changeState(new unitRun(dangerousUnit));
+		}
 
 		//공격
 		unit* enemy = me.isCanAttack();
@@ -105,11 +154,6 @@ void unitNoneState::update(unit & me)
 			return me.changeState(new unitFight(enemy));
 		}
 
-		//if (me._mergeUnit != nullptr)
-		//{
-		//	return me.changeState(new unitMerge(me._mergeUnit,me));
-
-		//}
 		me._state = UnitState::Search;
 
 		mncObjectBase* nature = me.isCanAttackNature();

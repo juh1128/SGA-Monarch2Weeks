@@ -118,7 +118,7 @@ void unitRun::enter(unit& me)
 				index = me._index + me.getDirectionVector(UnitDirection::DIRECTION(i));
 				if (me.isMoveable(index.toPoint()))
 				{
-					return;
+					break;
 				}
 			}
 			//cout << "ÁÂ¿ìÀÌµ¿À¸·Î µµ¸Á" << endl;
@@ -157,7 +157,7 @@ void unitRun::enter(unit& me)
 				index = me._index + me.getDirectionVector(UnitDirection::DIRECTION(i));
 				if (me.isMoveable(index.toPoint()))
 				{
-					return;
+					break;
 				}
 			}
 			//cout << "»óÇÏÀÌµ¿À¸·Î µµ¸Á" << endl;
