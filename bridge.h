@@ -11,7 +11,7 @@ public:
 	bridge() {}
 	virtual ~bridge() {}
 
-	HRESULT init(int xIndex, int yIndex, CountryColor::Enum color);
+	HRESULT init(int xIndex, int yIndex);
 	void release();
 	void update();
 	void render();

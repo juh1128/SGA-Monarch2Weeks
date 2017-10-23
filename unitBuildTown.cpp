@@ -126,8 +126,17 @@ void unitBuildObject::enter(unit& me)
 
 	vector2D destIndex = _destTile->getIndex();
 	objectFactory factory;
-	WORLD->addObject(factory.createObject(destIndex.x, destIndex.y, me.getColorString() + _key));
-	_obj = (mncObjectBase*)WORLD->getMap()->getTile(destIndex.x, destIndex.y)->getObjectOnTile();
+
+	if (_key == "Wall")
+	{
+		WORLD->addObject(factory.createObject(destIndex.x, destIndex.y, me.getColorString() + _key));
+		_obj = (mncObjectBase*)WORLD->getMap()->getTile(destIndex.x, destIndex.y)->getObjectOnTile();
+	}
+	else
+	{
+		WORLD->addObject(factory.createObject(destIndex.x, destIndex.y, _key));
+		_obj = (mncObjectBase*)WORLD->getMap()->getTile(destIndex.x, destIndex.y)->getObjectOnTile();
+	}
 
 	//만약 오브젝트가 생성되지 않았으면 건설을 취소.
 	if (!_obj)
