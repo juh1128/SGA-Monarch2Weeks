@@ -228,8 +228,6 @@ mncObjectBase* unit::searchObject()
 			if (onObject->isLive())
 			{
 				mncObjectBase* obj = (mncObjectBase*)onObject;
-				// - 아군의 건물이면 ㄴㄴ
-				if (obj->getCountryColor() == _unitColor) continue;
 				// - 돌은 부술 수 없다.
 				if (onObject->_name == "목책")
 				{
@@ -308,7 +306,7 @@ void unitRepair::update(unit& me)
 		_repairObj->setHp(objMaxHp);
 		return me.changeState(new unitNoneState);
 	}
-	//건설 중 오브젝트가 파괴됬을 경우 건설 취소.
+	//수리 중 오브젝트가 파괴됬을 경우 수리 취소.
 	if (objHp <= 0 || !_repairObj->isLive())
 	{
 		return me.changeState(new unitNoneState);

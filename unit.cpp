@@ -125,6 +125,36 @@ HRESULT unit::init(vector2D index, int height,CountryColor::Enum country)
 		this->_commandDestIndex = moveableIndex[minIndex];
 	});
 
+	//수리
+	this->addCallback("수리", [&](tagMessage msg) {
+		terrainTile* tile = (terrainTile*)msg.targetList[0];
+		this->setCommand(tile, NULL, "수리");
+
+		//이동가능한 타일 담기
+		vector2D dest = this->_commandDestTile->getIndex();
+		vector<vector2D> moveableIndex;
+		for (int i = 0; i < 4; ++i)
+		{
+			vector2D direct = dest + this->getDirectionVector((UnitDirection::DIRECTION)i);
+			if (this->isMoveable(direct.toPoint()))
+				moveableIndex.push_back(direct);
+		}
+		//담은 타일에서 가장 가까운 곳을 넘김
+		int minIndex = 0;
+		if (moveableIndex.size() > 0)
+		{
+			for (int i = 1; i < moveableIndex.size(); ++i)
+			{
+				if ((moveableIndex[i] - this->_index).getLength() < (moveableIndex[minIndex] - this->_index).getLength())
+				{
+					minIndex = i;
+				}
+
+			}
+		}
+		this->_commandDestIndex = moveableIndex[minIndex];
+	});
+
 	//==================================================
 	// ## 원군 명령
 	this->addCallback("원군", [&](tagMessage msg) {	
